@@ -1,0 +1,27 @@
+#!/usr/bin/env python2
+
+
+from gnuradio import gr, blocks, analog
+from gnuradio import filter
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('srcfile')
+parser.add_argument('dstfile')
+
+args = parser.parse_args()
+
+fg = gr.top_block()
+
+src = blocks.file_source(gr.sizeof_gr_complex, args.srcfile)
+dst = blocks.file_sink(gr.sizeof_float, args.dstfile)
+
+demod = analog.quadrature_demod_cf(0.5)
+
+
+fg.connect(src, demod)
+fg.connect(demod, dst)
+
+
+fg.run()
+

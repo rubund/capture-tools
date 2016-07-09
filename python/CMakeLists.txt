@@ -1,0 +1,4 @@
+install(PROGRAMS ct_shiftandfilter DESTINATION bin)
+install(PROGRAMS ct_visualize DESTINATION bin)
+install(PROGRAMS ct_visualize_single DESTINATION bin)
+install(PROGRAMS ct_quaddemod DESTINATION bin)
