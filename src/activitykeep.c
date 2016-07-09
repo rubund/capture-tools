@@ -19,6 +19,7 @@ int main(int argc, char **argv)
 	float max;
 	int counter;
 	float relation;
+	char filename[100];
 	int read=0;
 	relation = 0.1;
 
@@ -48,18 +49,31 @@ int main(int argc, char **argv)
 	float keepabove = max * relation;
 	char keeping = 0;
 	int written = 0;
+	int filenum = 0;
+	counter = 0;
+	int lcounter;
 
-	out = fopen(argv[2],"w");
 	in = fopen(argv[1],"r");
 	max = 0;
 	while(fread(&tmp, 4, 1, in)){
 		fread(&tmp2, 4, 1, in);
 		mag2 = sqrt(pow(tmp,2) + pow(tmp2,2));
 		if (mag2 > keepabove) {
+			if(!keeping){
+				snprintf(filename,99,"%s%03d",argv[2],filenum);
+				printf("%s\n",filename);
+				filenum++;
+				out = fopen(filename,"w");
+				lcounter = 0;
+			}
 			keeping = 1;
 			counter = keepafter;
 		}
 		else if (counter == 0){
+			if(keeping) {
+				fclose(out);
+				printf("  %d\n", lcounter);
+			}
 			keeping = 0;
 		}
 		else {
@@ -69,10 +83,10 @@ int main(int argc, char **argv)
 			fwrite(&tmp, 4, 1, out);
 			fwrite(&tmp2, 4, 1, out);
 			written++;
+			lcounter++;
 		}
 	}
 	fclose(in);
-	fclose(out);
 	printf("Read:    %d\n", read);
 	printf("Written: %d\n", written);
 
