@@ -1,0 +1,34 @@
+#!/usr/bin/env python2
+
+
+from gnuradio import gr, blocks
+from gnuradio import filter
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('srcfile')
+parser.add_argument('dstfile')
+parser.add_argument('bw', type=float)
+parser.add_argument('-r', '--rate', default=2e6, type=float)
+parser.add_argument('-d', '--decimation', default=1, type=int)
+
+args = parser.parse_args()
+
+print("Rate:                  %f" % (args.rate))
+print("Filtering bandwidth:   %f" % (args.bw))
+
+fg = gr.top_block()
+
+src = blocks.file_source(gr.sizeof_float, args.srcfile)
+dst = blocks.file_sink(gr.sizeof_float, args.dstfile)
+
+channel_coeffs =  filter.firdes.low_pass (1.0, args.rate, args.bw, args.bw/10, filter.firdes.WIN_HAMMING)
+selectfrequency = filter.fir_filter_fff (args.decimation, channel_coeffs)
+
+
+fg.connect(src, selectfrequency)
+fg.connect(selectfrequency, dst)
+
+
+fg.run()
+
