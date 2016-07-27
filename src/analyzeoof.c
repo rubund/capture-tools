@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 	int read=0;
 	relation = 0.1;
 
-	if (argc >= 4){
+	if (argc == 4){
 		relation = atof(argv[3]);
 	}
 	printf("Relation: %f\n", relation);
@@ -36,10 +36,10 @@ int main(int argc, char **argv)
 	in = fopen(argv[1],"r");
 	max = 0;
 	while(fread(&tmp, 4, 1, in)){
-		fread(&tmp2, 4, 1, in);
+		//fread(&tmp2, 4, 1, in);
 		mag2 = sqrt(pow(tmp,2) + pow(tmp2,2));
-		if (mag2 > max) {
-			max = mag2;
+		if (tmp > max) {
+			max = tmp;
 		}
 		read++;
 	}
