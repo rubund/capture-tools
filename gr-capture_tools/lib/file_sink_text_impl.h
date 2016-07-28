@@ -30,6 +30,10 @@ namespace gr {
     {
      private:
       // Nothing to declare in this block.
+		int d_size;
+		int d_nelem;
+		std::string d_filename;
+		int d_counter;
 
      public:
       file_sink_text_impl(int size, int nelem, std::string filename);

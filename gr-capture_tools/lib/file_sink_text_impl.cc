@@ -42,7 +42,12 @@ namespace gr {
       : gr::sync_block("file_sink_text",
               gr::io_signature::make(1, 1, size*nelem),
               gr::io_signature::make(0, 0, 0))
-    {}
+    {
+		d_size = size;
+		d_nelem = nelem;
+		d_filename = filename;
+		d_counter = 1;
+	}
 
     /*
      * Our virtual destructor.
@@ -60,7 +65,23 @@ namespace gr {
       const float *fin = (const float *) input_items[0];
       const gr_complex *cin = (const gr_complex *) input_items[0];
 
-      // Do <+signal processing+>
+		
+		for(int i=0; i<noutput_items; i++){
+			std::cout << d_counter << ":" << std::endl;
+			std::cout << "[";
+			for(int j=0; j<d_nelem; j++){
+				if(d_size == 1)
+					std::cout << (bin[i*d_nelem+j]);
+				if(d_size == 4)
+					std::cout << (fin[i*d_nelem+j]);
+				if(d_size == 8)
+					std::cout << (cin[i*d_nelem+j]);
+				if (j != d_nelem-1)
+					std::cout << ", ";
+			}
+			std::cout << "]" << std::endl << std::endl;
+			d_counter++;
+		}
 
       // Tell runtime system how many output items we produced.
       return noutput_items;
