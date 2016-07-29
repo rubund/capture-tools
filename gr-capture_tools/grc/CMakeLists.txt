@@ -18,5 +18,6 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    capture_tools_file_sink_text.xml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_file_sink_text.xml
+    capture_tools_one_then_zero.xml DESTINATION share/gnuradio/grc/blocks
 )

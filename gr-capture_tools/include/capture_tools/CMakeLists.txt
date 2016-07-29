@@ -22,5 +22,6 @@
 ########################################################################
 install(FILES
     api.h
-    file_sink_text.h DESTINATION include/capture_tools
+    file_sink_text.h
+    one_then_zero.h DESTINATION include/capture_tools
 )
