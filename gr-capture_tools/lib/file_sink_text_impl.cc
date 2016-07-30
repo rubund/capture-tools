@@ -72,7 +72,7 @@ namespace gr {
 				std::cout << "[";
 				for(int j=0; j<d_nelem; j++){
 					if(d_size == 1)
-						std::cout << (bin[i*d_nelem+j]);
+						std::cout << ((int)(bin[i*d_nelem+j]));
 					if(d_size == 4)
 						std::cout << (fin[i*d_nelem+j]);
 					if(d_size == 8)
@@ -83,10 +83,12 @@ namespace gr {
 				std::cout << "]" << std::endl << std::endl;
 			}
 			else {
-				if(d_size == 1)
-					std::cout << bin[i] << std::endl;
-				else if(d_size == 4)
+				if(d_size == 1){
+					std::cout << ((int)bin[i]) << std::endl;
+				}
+				else if(d_size == 4) {
 					std::cout << fin[i] << std::endl;
+				}
 				else if(d_size == 8)
 					std::cout << cin[i] << std::endl;
 			}
