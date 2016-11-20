@@ -28,6 +28,8 @@ link_directories(${Boost_LIBRARY_DIRS})
 list(APPEND capture_tools_sources
     file_sink_text_impl.cc
     one_then_zero_impl.cc
+    file_sink_on_message_impl.cc
+    level_alert_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)
@@ -38,6 +40,7 @@ endif(NOT capture_tools_sources)
 
 add_library(gnuradio-capture_tools SHARED ${capture_tools_sources})
 target_link_libraries(gnuradio-capture_tools ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
+target_link_libraries(gnuradio-capture_tools gnuradio-blocks)
 set_target_properties(gnuradio-capture_tools PROPERTIES DEFINE_SYMBOL "gnuradio_capture_tools_EXPORTS")
 
 if(APPLE)

@@ -41,3 +41,5 @@ include(GrTest)
 
 set(GR_TEST_TARGET_DEPS gnuradio-capture_tools)
 set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig)
+GR_ADD_TEST(qa_file_sink_on_message ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_file_sink_on_message.py)
+GR_ADD_TEST(qa_level_alert ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_level_alert.py)

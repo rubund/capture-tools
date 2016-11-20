@@ -19,5 +19,7 @@
 
 install(FILES
     capture_tools_file_sink_text.xml
-    capture_tools_one_then_zero.xml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_one_then_zero.xml
+    capture_tools_file_sink_on_message.xml
+    capture_tools_level_alert.xml DESTINATION share/gnuradio/grc/blocks
 )
