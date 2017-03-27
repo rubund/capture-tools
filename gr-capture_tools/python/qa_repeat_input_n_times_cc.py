@@ -33,7 +33,13 @@ class qa_repeat_input_n_times_cc (gr_unittest.TestCase):
 
     def test_001_t (self):
         # set up fg
+        self.src = blocks.vector_source_c([1,2,3,4,5])
+        self.dst = blocks.vector_sink_c()
+        self.repeating = capture_tools.repeat_input_n_times_cc(3, 1000)
+        self.tb.connect(self.src, self.repeating, self.dst)
         self.tb.run ()
+        print(str(self.dst.data()))
+        self.assertEqual(self.dst.data() , ((1+0j), (2+0j), (3+0j), (4+0j), (5+0j), (1+0j), (2+0j), (3+0j), (4+0j), (5+0j), (1+0j), (2+0j), (3+0j), (4+0j), (5+0j)))
         # check data
 
 

@@ -30,6 +30,14 @@ namespace gr {
     {
      private:
       // Nothing to declare in this block.
+        gr_complex *d_memory;
+        int d_memory_cnt;
+        int d_max_samples;
+        int d_n_times;
+        int d_state;
+        int d_playback_cnt;
+        int d_playback_time;
+        char d_done_input;
 
      public:
       repeat_input_n_times_cc_impl(int n_times, int max_samples);
