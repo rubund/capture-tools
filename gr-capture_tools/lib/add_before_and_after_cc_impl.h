@@ -30,6 +30,12 @@ namespace gr {
     {
      private:
       // Nothing to declare in this block.
+        int d_n_before;
+        int d_n_after;
+        int d_val_before;
+        int d_val_after;
+        int d_cnt;
+        int d_state;
 
      public:
       add_before_and_after_cc_impl(int n_before, int n_after, int val_before, int val_after);

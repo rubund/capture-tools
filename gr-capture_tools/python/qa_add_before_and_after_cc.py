@@ -33,9 +33,23 @@ class qa_add_before_and_after_cc (gr_unittest.TestCase):
 
     def test_001_t (self):
         # set up fg
+        self.src = blocks.vector_source_c([1,2,3,4,5])
+        self.dst = blocks.vector_sink_c()
+        self.addbefafter = capture_tools.add_before_and_after_cc(10,15, 0, 1);
+        self.tb.connect(self.src, self.addbefafter, self.dst)
         self.tb.run ()
+        self.assertEqual(self.dst.data() , (0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, (1+0j), (2+0j), (3+0j), (4+0j), (5+0j), (1+0j), (1+0j), (1+0j), (1+0j), (1+0j), (1+0j), (1+0j), (1+0j), (1+0j), (1+0j), (1+0j), (1+0j), (1+0j), (1+0j), (1+0j)))
         # check data
 
+    def test_002_t (self):
+        # set up fg
+        self.src = blocks.vector_source_c([1,2,5,4,5])
+        self.dst = blocks.vector_sink_c()
+        self.addbefafter = capture_tools.add_before_and_after_cc(10,15, 0, 0);
+        self.tb.connect(self.src, self.addbefafter, self.dst)
+        self.tb.run ()
+        self.assertEqual(self.dst.data() , (0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, (1+0j), (2+0j), (5+0j), (4+0j), (5+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j)))
+        # check data
 
 if __name__ == '__main__':
     gr_unittest.run(qa_add_before_and_after_cc, "qa_add_before_and_after_cc.xml")
