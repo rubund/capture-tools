@@ -11,9 +11,29 @@
        * key (makes the value accessible as $keyname, e.g. in the make node)
        * type -->
   <param>
-    <name>...</name>
-    <key>...</key>
-    <type>...</type>
+    <name>N samples before</name>
+    <key>n_before</key>
+    <type>Int</type>
+  </param>
+
+  <param>
+    <name>Value before</name>
+    <key>val_before</key>
+    <type>Int</type>
+<!--    <value>0</value>-->
+  </param>
+
+  <param>
+    <name>N samples after</name>
+    <key>n_after</key>
+    <type>Int</type>
+  </param>
+
+  <param>
+    <name>Value after</name>
+    <key>val_after</key>
+    <type>Int</type>
+<!--    <value>0</value>-->
   </param>
 
   <!-- Make one 'sink' node per input. Sub-nodes:
@@ -23,7 +43,7 @@
        * optional (set to 1 for optional inputs) -->
   <sink>
     <name>in</name>
-    <type><!-- e.g. int, float, complex, byte, short, xxx_vector, ...--></type>
+    <type>complex</type>
   </sink>
 
   <!-- Make one 'source' node per output. Sub-nodes:
@@ -33,6 +53,6 @@
        * optional (set to 1 for optional inputs) -->
   <source>
     <name>out</name>
-    <type><!-- e.g. int, float, complex, byte, short, xxx_vector, ...--></type>
+    <type>complex</type>
   </source>
 </block>
