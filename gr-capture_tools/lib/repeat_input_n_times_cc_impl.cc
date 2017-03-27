@@ -113,11 +113,14 @@ namespace gr {
                 consumed = minelem;
             }
             else {
+                printf("HERE\n");
                 memcpy(d_memory+(d_memory_cnt), in, sizeof(gr_complex) * (d_max_samples - d_memory_cnt));
                 memcpy(out, in, sizeof(gr_complex) * (d_max_samples - d_memory_cnt));
-                d_memory_cnt = d_max_samples;
                 produced = d_max_samples - d_memory_cnt;
-                consumed = d_max_samples - d_memory_cnt;
+                d_memory_cnt = d_max_samples;
+                consumed = ninput_items[0];
+                d_done_input = 1;
+                d_state = 1;
             }
         }
         else if (d_state == 1){
