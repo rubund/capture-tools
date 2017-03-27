@@ -25,5 +25,6 @@ install(FILES
     file_sink_text.h
     one_then_zero.h
     file_sink_on_message.h
-    level_alert.h DESTINATION include/capture_tools
+    level_alert.h
+    add_before_and_after_cc.h DESTINATION include/capture_tools
 )
