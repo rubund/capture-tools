@@ -50,7 +50,6 @@ namespace gr {
         d_state = 0;
         d_playback_cnt = 0;
         d_playback_time = 0;
-        d_done_input = 0;
     }
 
     /*
@@ -65,16 +64,11 @@ namespace gr {
     repeat_input_n_times_cc_impl::forecast (int noutput_items, gr_vector_int &ninput_items_required)
     {
         if (d_state == 0) {
-            if (d_done_input)
-                ninput_items_required[0] = 0;
-            else
-                ninput_items_required[0] = noutput_items;
+            ninput_items_required[0] = noutput_items;
         }
         else if (d_state == 1) {
             ninput_items_required[0] = 0;
         }
-        printf("A: To produce: %d\n", noutput_items);
-        printf("A: Required items: %d\n", ninput_items_required[0]);
       /* <+forecast+> e.g. ninput_items_required[0] = noutput_items */
     }
 
@@ -89,14 +83,11 @@ namespace gr {
       const gr_complex *in = (const gr_complex *) input_items[0];
       gr_complex *out = (gr_complex *) output_items[0];
 
-        printf("B: Input items: %d\n", ninput_items[0]);
-        printf("B: Output items: %d\n", noutput_items);
         produced = 0;
         consumed = 0;
 
         if (d_state == 0){
             if(ninput_items[0] == 1){
-                d_done_input = 1;
                 d_state = 1;
             }
             int minelem = std::min(noutput_items, ninput_items[0]);
@@ -104,27 +95,19 @@ namespace gr {
                 memcpy(d_memory+(d_memory_cnt), in, sizeof(gr_complex) * (minelem));
                 memcpy(out, in, sizeof(gr_complex) * (minelem));
                 d_memory_cnt += minelem;
-                printf("d_memory_cnt: %d\n", d_memory_cnt);
-                for(int j=0;j<d_memory_cnt;j++) {
-                    std::cout << d_memory[j] << " ";
-                }
-                std::cout << std::endl;
                 produced = minelem;
                 consumed = minelem;
             }
             else {
-                printf("HERE\n");
                 memcpy(d_memory+(d_memory_cnt), in, sizeof(gr_complex) * (d_max_samples - d_memory_cnt));
                 memcpy(out, in, sizeof(gr_complex) * (d_max_samples - d_memory_cnt));
                 produced = d_max_samples - d_memory_cnt;
                 d_memory_cnt = d_max_samples;
                 consumed = ninput_items[0];
-                d_done_input = 1;
                 d_state = 1;
             }
         }
         else if (d_state == 1){
-            printf("in state 1\n");
             if((d_playback_cnt + noutput_items) < d_memory_cnt) {
                 memcpy(out, d_memory+(d_playback_cnt), sizeof(gr_complex) * noutput_items);
                 d_playback_cnt += noutput_items;
@@ -132,7 +115,6 @@ namespace gr {
                 consumed = 0;
             }
             else {
-                printf("difference: %d\n", (d_memory_cnt - d_playback_cnt));
                 memcpy(out, d_memory+(d_playback_cnt), sizeof(gr_complex) * (d_memory_cnt - d_playback_cnt));
                 produced = d_memory_cnt - d_playback_cnt;
                 consumed = 0;
@@ -141,12 +123,6 @@ namespace gr {
                 if(d_playback_time >= (d_n_times - 1)){
                     d_state = 2;
                 }
-                //else {
-                //    memcpy(out+((d_memory_cnt - d_playback_cnt)), d_memory+sizeof(gr_complex)*(d_playback_cnt), sizeof(gr_complex) * (noutput_items-(d_memory_cnt - d_playback_cnt)));
-                //    d_playback_cnt += noutput_items;
-                //    produced = noutput_items;
-                //    consumed = 0;
-                //}
             }
         }
         else if (d_state == 2) {
@@ -154,8 +130,6 @@ namespace gr {
             produced = -1;
         }
 
-        printf("Consumed: %d\n", consumed);
-        printf("Produced: %d\n", produced);
 
       consume_each (consumed);
 

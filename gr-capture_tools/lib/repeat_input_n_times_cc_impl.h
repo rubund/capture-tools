@@ -37,7 +37,6 @@ namespace gr {
         int d_state;
         int d_playback_cnt;
         int d_playback_time;
-        char d_done_input;
 
      public:
       repeat_input_n_times_cc_impl(int n_times, int max_samples);
