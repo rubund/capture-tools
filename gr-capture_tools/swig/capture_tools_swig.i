@@ -13,6 +13,7 @@
 #include "capture_tools/file_sink_on_message.h"
 #include "capture_tools/level_alert.h"
 #include "capture_tools/add_before_and_after_cc.h"
+#include "capture_tools/repeat_input_n_times_cc.h"
 %}
 
 
@@ -26,3 +27,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, file_sink_on_message);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, level_alert);
 %include "capture_tools/add_before_and_after_cc.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, add_before_and_after_cc);
+%include "capture_tools/repeat_input_n_times_cc.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, repeat_input_n_times_cc);

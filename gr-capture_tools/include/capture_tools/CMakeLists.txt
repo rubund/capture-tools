@@ -26,5 +26,6 @@ install(FILES
     one_then_zero.h
     file_sink_on_message.h
     level_alert.h
-    add_before_and_after_cc.h DESTINATION include/capture_tools
+    add_before_and_after_cc.h
+    repeat_input_n_times_cc.h DESTINATION include/capture_tools
 )

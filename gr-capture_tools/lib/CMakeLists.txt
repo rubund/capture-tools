@@ -31,6 +31,7 @@ list(APPEND capture_tools_sources
     file_sink_on_message_impl.cc
     level_alert_impl.cc
     add_before_and_after_cc_impl.cc
+    repeat_input_n_times_cc_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)
