@@ -50,6 +50,7 @@ namespace gr {
         d_state = 0;
         d_playback_cnt = 0;
         d_playback_time = 0;
+        set_tag_propagation_policy(TPP_DONT);
     }
 
     /*
@@ -80,6 +81,7 @@ namespace gr {
     {
         int produced;
         int consumed;
+        std::vector<tag_t> tags;
       const gr_complex *in = (const gr_complex *) input_items[0];
       gr_complex *out = (gr_complex *) output_items[0];
 
@@ -94,6 +96,10 @@ namespace gr {
             if((d_memory_cnt + minelem) < d_max_samples) {
                 memcpy(d_memory+(d_memory_cnt), in, sizeof(gr_complex) * (minelem));
                 memcpy(out, in, sizeof(gr_complex) * (minelem));
+                get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + minelem);
+                for(int i=0; i<tags.size(); i++) {
+                    add_item_tag(0, nitems_written(0) + (tags[i].offset-nitems_read(0)), tags[i].key, tags[i].value, tags[i].srcid);
+                }
                 d_memory_cnt += minelem;
                 produced = minelem;
                 consumed = minelem;
@@ -101,6 +107,10 @@ namespace gr {
             else {
                 memcpy(d_memory+(d_memory_cnt), in, sizeof(gr_complex) * (d_max_samples - d_memory_cnt));
                 memcpy(out, in, sizeof(gr_complex) * (d_max_samples - d_memory_cnt));
+                get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + (d_max_samples - d_memory_cnt));
+                for(int i=0; i<tags.size(); i++) {
+                    add_item_tag(0, nitems_written(0) + (tags[i].offset-nitems_read(0)), tags[i].key, tags[i].value, tags[i].srcid);
+                }
                 produced = d_max_samples - d_memory_cnt;
                 d_memory_cnt = d_max_samples;
                 consumed = ninput_items[0];

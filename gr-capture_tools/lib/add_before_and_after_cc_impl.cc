@@ -49,6 +49,7 @@ namespace gr {
         d_val_after = val_after;
         d_cnt = 0;
         d_state = 0;
+        set_tag_propagation_policy(TPP_DONT);
     }
 
     /*
@@ -76,6 +77,7 @@ namespace gr {
     {
         int consumed;
         int produced;
+        std::vector<tag_t> tags;
       const gr_complex *in = (const gr_complex *) input_items[0];
       gr_complex *out = (gr_complex *) output_items[0];
 
@@ -94,6 +96,10 @@ namespace gr {
         }
         else if (d_state == 1) {
             memcpy(out, in, sizeof(gr_complex) * noutput_items);
+            get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + noutput_items);
+            for(int i=0; i<tags.size(); i++) {
+                add_item_tag(0, nitems_written(0) + (tags[i].offset-nitems_read(0)), tags[i].key, tags[i].value, tags[i].srcid);
+            }
             consumed = noutput_items;
             produced = noutput_items;
             if (ninput_items[0] == 1) {
