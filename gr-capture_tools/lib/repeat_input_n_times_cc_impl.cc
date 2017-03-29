@@ -106,12 +106,13 @@ namespace gr {
             }
             else {
                 memcpy(d_memory+(d_memory_cnt), in, sizeof(gr_complex) * (d_max_samples - d_memory_cnt));
-                memcpy(out, in, sizeof(gr_complex) * (d_max_samples - d_memory_cnt));
-                get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + (d_max_samples - d_memory_cnt));
+                int minelem2 = std::min((d_max_samples - d_memory_cnt), minelem);
+                memcpy(out, in, sizeof(gr_complex) * minelem2);
+                get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + minelem2);
                 for(int i=0; i<tags.size(); i++) {
                     add_item_tag(0, nitems_written(0) + (tags[i].offset-nitems_read(0)), tags[i].key, tags[i].value, tags[i].srcid);
                 }
-                produced = d_max_samples - d_memory_cnt;
+                produced = minelem2;
                 d_memory_cnt = d_max_samples;
                 consumed = ninput_items[0];
                 d_state = 1;
