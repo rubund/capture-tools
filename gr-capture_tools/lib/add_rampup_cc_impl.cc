@@ -44,6 +44,7 @@ namespace gr {
               gr::io_signature::make(1, 1, sizeof(gr_complex)),
               gr::io_signature::make(1, 1, sizeof(gr_complex)))
     {
+        d_alpha = alpha;
         d_scale = 0;
         d_state = 0;
     }
@@ -98,16 +99,18 @@ namespace gr {
                 }
             }
             if(d_state == 1) {
-                d_scale = 0.1 * d_rampcounter;
+                d_scale = 1 - exp(-d_rampcounter*d_alpha);
                 d_rampcounter++;
-                if(d_rampcounter == 11){
+                if(d_scale > 0.995){
+                    d_scale = 1;
                     d_state = 0;
                 }
             }
             else if(d_state == 2) {
-                d_scale = 1.0 - 0.1 * d_rampcounter;
+                d_scale = exp(-d_rampcounter*d_alpha);
                 d_rampcounter++;
-                if(d_rampcounter == 11){
+                if(d_scale < 0.005){
+                    d_scale = 0;
                     d_state = 0;
                 }
             }

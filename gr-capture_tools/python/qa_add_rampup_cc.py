@@ -36,7 +36,7 @@ class qa_add_rampup_cc (gr_unittest.TestCase):
         # set up fg
         tag1 = gr.tag_utils.python_to_tag((0, pmt.to_pmt("ramp_up"), pmt.to_pmt("the_value"), pmt.PMT_NIL))
         tag2 = gr.tag_utils.python_to_tag((25, pmt.to_pmt("ramp_down"), pmt.to_pmt("the_value"), pmt.PMT_NIL))
-        self.src = blocks.vector_source_c([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], tags=[tag1, tag2])
+        self.src = blocks.vector_source_c([1+2j,1+2j,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], tags=[tag1, tag2])
         self.dut = capture_tools.add_rampup_cc(0.4)
         self.dst = blocks.vector_sink_c()
         self.tb.connect(self.src, self.dut, self.dst)
