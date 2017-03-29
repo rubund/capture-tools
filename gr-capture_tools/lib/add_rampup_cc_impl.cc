@@ -47,6 +47,9 @@ namespace gr {
         d_alpha = alpha;
         d_scale = 0;
         d_state = 0;
+        d_constant_start = constant_start;
+        d_constant_stop = constant_stop;
+        d_constant_length = constant_length;
     }
 
     /*
@@ -69,15 +72,35 @@ namespace gr {
       const gr_complex *in = (const gr_complex *) input_items[0];
       gr_complex *out = (gr_complex *) output_items[0];
 
-        get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + noutput_items);
-        for(int i=0; i<tags.size(); i++) {
-            if (pmt::equal(tags[i].key, pmt::intern("ramp_up"))) {
-                rampup_start_pos.push_back(tags[i].offset - nitems_read(0));
+        if (d_constant_start == -1) {
+            get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + noutput_items);
+            for(int i=0; i<tags.size(); i++) {
+                if (pmt::equal(tags[i].key, pmt::intern("ramp_up"))) {
+                    rampup_start_pos.push_back(tags[i].offset - nitems_read(0));
+                    startposindex_rampup = 0;
+                }
+                else if (pmt::equal(tags[i].key, pmt::intern("ramp_down"))) {
+                    rampdown_start_pos.push_back(tags[i].offset - nitems_read(0));
+                    startposindex_rampdown = 0;
+                }
+            }
+        }
+        else {
+            if((d_constant_start - nitems_read(0)) >= 0) {
+                rampup_start_pos.push_back(d_constant_start - nitems_read(0));
                 startposindex_rampup = 0;
             }
-            else if (pmt::equal(tags[i].key, pmt::intern("ramp_down"))) {
-                rampdown_start_pos.push_back(tags[i].offset - nitems_read(0));
-                startposindex_rampdown = 0;
+            if (d_constant_stop != -1) {
+                if((d_constant_stop - nitems_read(0)) >= 0) {
+                    rampdown_start_pos.push_back(d_constant_stop - nitems_read(0));
+                    startposindex_rampdown = 0;
+                }
+            }
+            else if (d_constant_length != -1) {
+                if(((d_constant_start+d_constant_length) - nitems_read(0)) >= 0) {
+                    rampdown_start_pos.push_back((d_constant_start+d_constant_length) - nitems_read(0));
+                    startposindex_rampdown = 0;
+                }
             }
         }
 

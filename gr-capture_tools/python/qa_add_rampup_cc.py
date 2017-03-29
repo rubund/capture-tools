@@ -44,6 +44,15 @@ class qa_add_rampup_cc (gr_unittest.TestCase):
         print(self.dst.data())
         # check data
 
+    def test_002_t (self):
+        # set up fg
+        self.src = blocks.vector_source_c([1+2j,1+2j,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+        self.dut = capture_tools.add_rampup_cc(0.4, 3,25)
+        self.dst = blocks.vector_sink_c()
+        self.tb.connect(self.src, self.dut, self.dst)
+        self.tb.run ()
+        print(self.dst.data())
+        # check data
 
 if __name__ == '__main__':
     gr_unittest.run(qa_add_rampup_cc, "qa_add_rampup_cc.xml")

@@ -34,6 +34,9 @@ namespace gr {
         float d_alpha;
         int d_rampcounter;
         int d_state;
+        int d_constant_start;
+        int d_constant_stop;
+        int d_constant_length;
 
      public:
       add_rampup_cc_impl(float alpha, int constant_start, int constant_stop, int constant_length);
