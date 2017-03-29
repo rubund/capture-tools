@@ -113,9 +113,10 @@ namespace gr {
                     startposindex_rampup = -1;
                 }
             }
-            if (startposindex_rampdown != -1 && i == rampdown_start_pos[startposindex_rampdown] && d_state == 0) {
+            if (startposindex_rampdown != -1 && i == rampdown_start_pos[startposindex_rampdown] && d_state != 2) {
                 d_state = 2;
                 d_rampcounter = 0;
+                d_startval_rampdown = d_scale;
                 startposindex_rampdown++;
                 if (startposindex_rampdown == rampdown_start_pos.size()) {
                     startposindex_rampdown = -1;
@@ -130,7 +131,7 @@ namespace gr {
                 }
             }
             else if(d_state == 2) {
-                d_scale = exp(-d_rampcounter*d_alpha);
+                d_scale = d_startval_rampdown * exp(-d_rampcounter*d_alpha);
                 d_rampcounter++;
                 if(d_scale < 0.005){
                     d_scale = 0;
