@@ -24,5 +24,6 @@ install(FILES
     capture_tools_level_alert.xml
     capture_tools_add_before_and_after_cc.xml
     capture_tools_repeat_input_n_times_cc.xml
-    capture_tools_keep_middle_in_vector.xml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_keep_middle_in_vector.xml
+    capture_tools_add_rampup_cc.xml DESTINATION share/gnuradio/grc/blocks
 )

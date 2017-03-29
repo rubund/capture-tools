@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<block>
+  <name>add_rampup_cc</name>
+  <key>capture_tools_add_rampup_cc</key>
+  <category>[capture_tools]</category>
+  <import>import capture_tools</import>
+  <make>capture_tools.add_rampup_cc($alpha, $constant_start, $constant_stop, $constant_length)</make>
+  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
+       Sub-nodes:
+       * name
+       * key (makes the value accessible as $keyname, e.g. in the make node)
+       * type -->
+  <param>
+    <name>alpha</name>
+    <key>alpha</key>
+    <type>float</type>
+  </param>
+
+  <param>
+    <name>Constant start</name>
+    <key>constant_start</key>
+    <value>-1</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Constant stop</name>
+    <key>constant_stop</key>
+    <value>-1</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Constant length</name>
+    <key>constant_length</key>
+    <value>-1</value>
+    <type>int</type>
+  </param>
+
+  <!-- Make one 'sink' node per input. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+  </sink>
+
+  <!-- Make one 'source' node per output. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <source>
+    <name>out</name>
+    <type>complex</type>
+  </source>
+</block>

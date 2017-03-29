@@ -28,5 +28,6 @@ install(FILES
     level_alert.h
     add_before_and_after_cc.h
     repeat_input_n_times_cc.h
-    keep_middle_in_vector.h DESTINATION include/capture_tools
+    keep_middle_in_vector.h
+    add_rampup_cc.h DESTINATION include/capture_tools
 )
