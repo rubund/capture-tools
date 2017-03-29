@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<block>
+  <name>keep_middle_in_vector</name>
+  <key>capture_tools_keep_middle_in_vector</key>
+  <category>[capture_tools]</category>
+  <import>import capture_tools</import>
+  <make>capture_tools.keep_middle_in_vector($vlen, $keep)</make>
+  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
+       Sub-nodes:
+       * name
+       * key (makes the value accessible as $keyname, e.g. in the make node)
+       * type -->
+  <param>
+      <name>Vec Length</name>
+      <key>vlen</key>
+      <value>1</value>
+      <type>int</type>
+  </param>
+
+  <param>
+      <name>Keep N</name>
+      <key>keep</key>
+      <value>1</value>
+      <type>int</type>
+  </param>
+
+
+  <!-- Make one 'sink' node per input. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+    <vlen>$vlen</vlen>
+  </sink>
+
+  <!-- Make one 'source' node per output. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <source>
+    <name>in</name>
+    <type>complex</type>
+    <vlen>$vlen</vlen>
+  </source>
+</block>

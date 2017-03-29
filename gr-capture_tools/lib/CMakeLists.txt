@@ -32,6 +32,7 @@ list(APPEND capture_tools_sources
     level_alert_impl.cc
     add_before_and_after_cc_impl.cc
     repeat_input_n_times_cc_impl.cc
+    keep_middle_in_vector_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)
