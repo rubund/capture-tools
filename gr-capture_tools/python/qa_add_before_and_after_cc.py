@@ -59,5 +59,35 @@ class qa_add_before_and_after_cc (gr_unittest.TestCase):
         self.assertEqual(self.dst.data() , (0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, (1+0j), (2+0j), (5+0j), (4+0j), (5+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j)))
         # check data
 
+    def test_003_t (self):
+        # set up fg
+        self.src = blocks.vector_source_c([1,2,5,4])
+        self.dst = blocks.vector_sink_c()
+        self.addbefafter = capture_tools.add_before_and_after_cc(10,15, 0, 0);
+        self.tb.connect(self.src, self.addbefafter, self.dst)
+        self.tb.run ()
+        self.assertEqual(self.dst.data() , (0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, (1+0j), (2+0j), (5+0j), (4+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j)))
+        # check data
+
+    def test_004_t (self):
+        # set up fg
+        self.src = blocks.vector_source_c([1,2])
+        self.dst = blocks.vector_sink_c()
+        self.addbefafter = capture_tools.add_before_and_after_cc(10,15, 0, 0);
+        self.tb.connect(self.src, self.addbefafter, self.dst)
+        self.tb.run ()
+        self.assertEqual(self.dst.data() , (0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, (1+0j), (2+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j)))
+        # check data
+
+    def test_005_t (self):
+        # set up fg
+        self.src = blocks.vector_source_c([1])
+        self.dst = blocks.vector_sink_c()
+        self.addbefafter = capture_tools.add_before_and_after_cc(10,15, 0, 0);
+        self.tb.connect(self.src, self.addbefafter, self.dst)
+        self.tb.run ()
+        self.assertEqual(self.dst.data() , (0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, 0j, (1+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j), (0+0j)))
+        # check data
+
 if __name__ == '__main__':
     gr_unittest.run(qa_add_before_and_after_cc, "qa_add_before_and_after_cc.xml")

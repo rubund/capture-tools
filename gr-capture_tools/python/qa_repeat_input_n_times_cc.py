@@ -93,5 +93,60 @@ class qa_repeat_input_n_times_cc (gr_unittest.TestCase):
         self.assertEqual(self.dst.data() , ((9+0j), (8+0j), (1+0j), (9+0j), (8+0j), (1+0j)))
         # check data
 
+    def test_006_t (self):
+        # set up fg
+        self.src = blocks.vector_source_c([1,2,3,4])
+        self.dst = blocks.vector_sink_c()
+        self.repeating = capture_tools.repeat_input_n_times_cc(2, 3)
+        self.tb.connect(self.src, self.repeating, self.dst)
+        self.tb.run ()
+        print(str(self.dst.data()))
+        self.assertEqual(self.dst.data() , ((1+0j), (2+0j), (3+0j), (1+0j), (2+0j), (3+0j)))
+        # check data
+
+    def test_007_t (self):
+        # set up fg
+        self.src = blocks.vector_source_c([1,2,3,4])
+        self.dst = blocks.vector_sink_c()
+        self.repeating = capture_tools.repeat_input_n_times_cc(2, 4)
+        self.tb.connect(self.src, self.repeating, self.dst)
+        self.tb.run ()
+        print(str(self.dst.data()))
+        self.assertEqual(self.dst.data() , ((1+0j), (2+0j), (3+0j), (4+0j), (1+0j), (2+0j), (3+0j), (4+0j)))
+        # check data
+
+    def test_008_t (self):
+        # set up fg
+        self.src = blocks.vector_source_c([1,2,3,4])
+        self.dst = blocks.vector_sink_c()
+        self.repeating = capture_tools.repeat_input_n_times_cc(2, 5)
+        self.tb.connect(self.src, self.repeating, self.dst)
+        self.tb.run ()
+        print(str(self.dst.data()))
+        self.assertEqual(self.dst.data() , ((1+0j), (2+0j), (3+0j), (4+0j), (1+0j), (2+0j), (3+0j), (4+0j)))
+        # check data
+
+    def test_009_t (self):
+        # set up fg
+        self.src = blocks.vector_source_c([1,2])
+        self.dst = blocks.vector_sink_c()
+        self.repeating = capture_tools.repeat_input_n_times_cc(3, 5)
+        self.tb.connect(self.src, self.repeating, self.dst)
+        self.tb.run ()
+        print(str(self.dst.data()))
+        self.assertEqual(self.dst.data() , ((1+0j), (2+0j), (1+0j), (2+0j), (1+0j), (2+0j)))
+        # check data
+
+    def test_010_t (self):
+        # set up fg
+        self.src = blocks.vector_source_c([1])
+        self.dst = blocks.vector_sink_c()
+        self.repeating = capture_tools.repeat_input_n_times_cc(3, 5)
+        self.tb.connect(self.src, self.repeating, self.dst)
+        self.tb.run ()
+        print(str(self.dst.data()))
+        self.assertEqual(self.dst.data() , ((1+0j), (1+0j), (1+0j)))
+        # check data
+
 if __name__ == '__main__':
     gr_unittest.run(qa_repeat_input_n_times_cc, "qa_repeat_input_n_times_cc.xml")

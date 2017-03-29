@@ -92,7 +92,8 @@ namespace gr {
             if(ninput_items[0] == 1){
                 d_state = 1;
             }
-            int minelem = std::min(noutput_items, ninput_items[0]);
+            int ninputItemsMinus1 = ninput_items[0] > 1 ? ninput_items[0] - 1 : ninput_items[0];
+            int minelem = std::min(noutput_items, ninputItemsMinus1);
             if((d_memory_cnt + minelem) < d_max_samples) {
                 memcpy(d_memory+(d_memory_cnt), in, sizeof(gr_complex) * (minelem));
                 memcpy(out, in, sizeof(gr_complex) * (minelem));

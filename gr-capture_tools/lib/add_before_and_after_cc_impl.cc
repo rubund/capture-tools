@@ -95,13 +95,15 @@ namespace gr {
             produced = minval;
         }
         else if (d_state == 1) {
-            memcpy(out, in, sizeof(gr_complex) * noutput_items);
-            get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + noutput_items);
+            int ninputItemsMinus1 = ninput_items[0] > 1 ? ninput_items[0] - 1 : ninput_items[0];
+            int minval = std::min(ninputItemsMinus1, noutput_items);
+            memcpy(out, in, sizeof(gr_complex) * minval);
+            get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + minval);
             for(int i=0; i<tags.size(); i++) {
                 add_item_tag(0, nitems_written(0) + (tags[i].offset-nitems_read(0)), tags[i].key, tags[i].value, tags[i].srcid);
             }
-            consumed = noutput_items;
-            produced = noutput_items;
+            consumed = minval;
+            produced = minval;
             if (ninput_items[0] == 1) {
                 d_state = 2;
             }
