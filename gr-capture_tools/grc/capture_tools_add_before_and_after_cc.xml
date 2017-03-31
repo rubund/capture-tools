@@ -13,26 +13,26 @@
   <param>
     <name>N samples before</name>
     <key>n_before</key>
-    <type>Int</type>
+    <type>int</type>
   </param>
 
   <param>
     <name>Value before</name>
     <key>val_before</key>
-    <type>Int</type>
+    <type>int</type>
 <!--    <value>0</value>-->
   </param>
 
   <param>
     <name>N samples after</name>
     <key>n_after</key>
-    <type>Int</type>
+    <type>int</type>
   </param>
 
   <param>
     <name>Value after</name>
     <key>val_after</key>
-    <type>Int</type>
+    <type>int</type>
 <!--    <value>0</value>-->
   </param>
 
