@@ -26,5 +26,6 @@ install(FILES
     capture_tools_repeat_input_n_times_cc.xml
     capture_tools_keep_middle_in_vector.xml
     capture_tools_add_rampup_cc.xml
-    capture_tools_replace_value_ff.xml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_replace_value_ff.xml
+    capture_tools_cut_samples_cc.xml DESTINATION share/gnuradio/grc/blocks
 )

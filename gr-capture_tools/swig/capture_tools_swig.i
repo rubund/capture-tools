@@ -17,6 +17,7 @@
 #include "capture_tools/keep_middle_in_vector.h"
 #include "capture_tools/add_rampup_cc.h"
 #include "capture_tools/replace_value_ff.h"
+#include "capture_tools/cut_samples_cc.h"
 %}
 
 
@@ -38,3 +39,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, keep_middle_in_vector);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, add_rampup_cc);
 %include "capture_tools/replace_value_ff.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, replace_value_ff);
+%include "capture_tools/cut_samples_cc.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, cut_samples_cc);

@@ -35,6 +35,7 @@ list(APPEND capture_tools_sources
     keep_middle_in_vector_impl.cc
     add_rampup_cc_impl.cc
     replace_value_ff_impl.cc
+    cut_samples_cc_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)
