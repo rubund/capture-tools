@@ -132,7 +132,7 @@ namespace gr {
                 consumed = 0;
                 d_playback_cnt = 0;
                 d_playback_time++;
-                if(d_playback_time >= (d_n_times - 1)){
+                if(d_n_times != 0 && (d_playback_time >= (d_n_times - 1))){
                     d_state = 2;
                 }
             }
