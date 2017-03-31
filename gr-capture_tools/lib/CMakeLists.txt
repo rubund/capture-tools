@@ -34,6 +34,7 @@ list(APPEND capture_tools_sources
     repeat_input_n_times_cc_impl.cc
     keep_middle_in_vector_impl.cc
     add_rampup_cc_impl.cc
+    replace_value_ff_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)

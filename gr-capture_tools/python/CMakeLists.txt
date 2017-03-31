@@ -47,3 +47,4 @@ GR_ADD_TEST(qa_add_before_and_after_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOUR
 GR_ADD_TEST(qa_repeat_input_n_times_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_repeat_input_n_times_cc.py)
 GR_ADD_TEST(qa_keep_middle_in_vector ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_keep_middle_in_vector.py)
 GR_ADD_TEST(qa_add_rampup_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_add_rampup_cc.py)
+GR_ADD_TEST(qa_replace_value_ff ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_replace_value_ff.py)
