@@ -30,9 +30,13 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Generate message when magnitude of input is above a threshold
      * \ingroup ble
      *
+     * \details
+     * 1000 samples are averaged. When the average is above "level" in dB,
+     * a message is being produced. This message can be used to trigger file
+     * logging for file_sink_on_message.
      */
     class CAPTURE_TOOLS_API level_alert : virtual public gr::block
     {

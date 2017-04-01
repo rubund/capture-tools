@@ -29,9 +29,14 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Add constant before and after stream coming in
      * \ingroup capture_tools
      *
+     * \details
+     * "n_before" samples of value "val_before" are added before the first incoming sample.
+     * "n_after" samples of value "val_after" are added after the last incoming sample.
+     *
+     * The method of detecting the last sample is not bullet proof.
      */
     class CAPTURE_TOOLS_API add_before_and_after_cc : virtual public gr::block
     {

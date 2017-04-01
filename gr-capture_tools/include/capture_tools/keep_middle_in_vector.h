@@ -29,9 +29,13 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Keep only the "keep" number of values in the middle of a vector
      * \ingroup capture_tools
      *
+     * \details
+     * This can be useful when mapping carrier to an OFDM signal.
+     * If only the 500 tones in the middle are used of a 1024 bin wide FFT for
+     * an OFDM signal, this block can be instantiated with width=1024 and keep=500.
      */
     class CAPTURE_TOOLS_API keep_middle_in_vector : virtual public gr::sync_block
     {

@@ -29,9 +29,15 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Multiply the input with a ramp-up/ramp-down function
      * \ingroup capture_tools
      *
+     * \details
+     * If constant_* parameters are -1, the stream tag "ramp_up" defines
+     * when to start ramping up, and the stream tag "ramp_down" defines
+     * when to start ramping down.
+     *
+     * "alpha" defines the speed of the ramp-up/ramp-down.
      */
     class CAPTURE_TOOLS_API add_rampup_cc : virtual public gr::sync_block
     {

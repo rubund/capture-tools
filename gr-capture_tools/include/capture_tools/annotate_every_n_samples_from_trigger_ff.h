@@ -29,9 +29,17 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Add strobe-tags to float stream
      * \ingroup capture_tools
      *
+     * \details
+     * One of the inputs is a float stream, the other an enable signal.
+     * When the enable signal goes to 1, tags with the key "strobe" is added
+     * every "n" samples. An adjustable offset from the beginning can be added.
+     *
+     * This can be useful for plotting with the QT time sink.
+     *
+     * It can also be used by the annotated_to_msg_f block to extract packet bits.
      */
     class CAPTURE_TOOLS_API annotate_every_n_samples_from_trigger_ff : virtual public gr::block
     {

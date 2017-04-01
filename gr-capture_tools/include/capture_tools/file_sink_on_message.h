@@ -31,9 +31,12 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Write samples when receiving a message
      * \ingroup ble
      *
+     * \details
+     * Write "number_buffered" to "number_to_write" samples when receiving a message in the queue.
+     * "number_to_write" 0s are appended afterwards.
      */
     class CAPTURE_TOOLS_API file_sink_on_message : virtual public gr::sync_block, virtual public gr::blocks::file_sink_base
     {

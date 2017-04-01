@@ -29,9 +29,14 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Repeat the input N times
      * \ingroup capture_tools
      *
+     * \details
+     * The end of the input is detected (not perfectly yet).
+     * Then the samples until then are repeat N times.
+     * "max_samples" chooses the buffer size, and not more than this number of samples
+     * can be repeated.
      */
     class CAPTURE_TOOLS_API repeat_input_n_times_cc : virtual public gr::block
     {

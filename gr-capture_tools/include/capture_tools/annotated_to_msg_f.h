@@ -30,9 +30,12 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Convert strobe-tagged stream to messages (and print to console)
      * \ingroup capture_tools
      *
+     * \details
+     * Take a stream from annotate_every_n_samples_from_trigger_ff and slice the bits where there are tags with the
+     * "strobe" key. Use the input "th" to define when a packet start and stops.
      */
     class CAPTURE_TOOLS_API annotated_to_msg_f : virtual public gr::sync_block
     {

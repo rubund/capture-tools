@@ -29,9 +29,11 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Generate a 1, and then only 0s
      * \ingroup capture_tools
      *
+     * \details
+     * Works with both char and float. The size is set as parameter.
      */
     class CAPTURE_TOOLS_API one_then_zero : virtual public gr::sync_block
     {
