@@ -37,6 +37,7 @@ list(APPEND capture_tools_sources
     replace_value_ff_impl.cc
     cut_samples_cc_impl.cc
     annotate_every_n_samples_from_trigger_ff_impl.cc
+    annotated_to_msg_f_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)

@@ -32,5 +32,6 @@ install(FILES
     add_rampup_cc.h
     replace_value_ff.h
     cut_samples_cc.h
-    annotate_every_n_samples_from_trigger_ff.h DESTINATION include/capture_tools
+    annotate_every_n_samples_from_trigger_ff.h
+    annotated_to_msg_f.h DESTINATION include/capture_tools
 )
