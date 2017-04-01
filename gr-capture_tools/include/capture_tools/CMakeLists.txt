@@ -31,5 +31,6 @@ install(FILES
     keep_middle_in_vector.h
     add_rampup_cc.h
     replace_value_ff.h
-    cut_samples_cc.h DESTINATION include/capture_tools
+    cut_samples_cc.h
+    annotate_every_n_samples_from_trigger_ff.h DESTINATION include/capture_tools
 )

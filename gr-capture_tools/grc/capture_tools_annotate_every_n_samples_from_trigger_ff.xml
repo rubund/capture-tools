@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<block>
+  <name>annotate_every_n_samples_from_trigger_ff</name>
+  <key>capture_tools_annotate_every_n_samples_from_trigger_ff</key>
+  <category>[capture_tools]</category>
+  <import>import capture_tools</import>
+  <make>capture_tools.annotate_every_n_samples_from_trigger_ff($n, $offset)</make>
+  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
+       Sub-nodes:
+       * name
+       * key (makes the value accessible as $keyname, e.g. in the make node)
+       * type -->
+  <param>
+    <name>N</name>
+    <key>n</key>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Offset</name>
+    <key>offset</key>
+    <type>int</type>
+  </param>
+
+  <!-- Make one 'sink' node per input. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <sink>
+    <name>in</name>
+    <type>float</type>
+  </sink>
+
+  <sink>
+    <name>threshold_in</name>
+    <type>float</type>
+  </sink>
+
+  <!-- Make one 'source' node per output. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <source>
+    <name>out</name>
+    <type>float</type>
+  </source>
+
+  <source>
+    <name>strobe</name>
+    <type>float</type>
+    <optional>1</optional>
+  </source>
+</block>

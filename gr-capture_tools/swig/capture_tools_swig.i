@@ -18,6 +18,7 @@
 #include "capture_tools/add_rampup_cc.h"
 #include "capture_tools/replace_value_ff.h"
 #include "capture_tools/cut_samples_cc.h"
+#include "capture_tools/annotate_every_n_samples_from_trigger_ff.h"
 %}
 
 
@@ -41,3 +42,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, add_rampup_cc);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, replace_value_ff);
 %include "capture_tools/cut_samples_cc.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, cut_samples_cc);
+%include "capture_tools/annotate_every_n_samples_from_trigger_ff.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, annotate_every_n_samples_from_trigger_ff);
