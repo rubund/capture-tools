@@ -29,9 +29,11 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Print samples in human readable form to console
      * \ingroup capture_tools
      *
+     * \details
+     * Prints the values to console. "size" is data type size. "nelem" is vector size
      */
     class CAPTURE_TOOLS_API file_sink_text : virtual public gr::sync_block
     {
