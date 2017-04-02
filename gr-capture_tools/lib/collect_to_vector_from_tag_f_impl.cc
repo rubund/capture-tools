@@ -78,12 +78,13 @@ namespace gr {
                 if(pmt::equal(tags[i].key, pmt::intern("burst")) && pmt::equal(tags[i].value, pmt::from_bool(1))) {
                     printf("Found burst tag True\n");
                     int index = tags[i].offset - nitems_read(0);
+                    d_state = 1;
+                    d_cnt = 0;
                     if (index > 0) {
-                        d_state = 1;
-                        d_cnt = 0;
                         consume_each(index);
                         return 0; // Align so that first input sample is at burst tag
                     }
+                    break;
                 }
             }
         }
