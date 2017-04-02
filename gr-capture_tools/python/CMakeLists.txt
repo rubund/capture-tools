@@ -51,3 +51,4 @@ GR_ADD_TEST(qa_replace_value_ff ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}
 GR_ADD_TEST(qa_cut_samples_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_cut_samples_cc.py)
 GR_ADD_TEST(qa_annotate_every_n_samples_from_trigger_ff ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_annotate_every_n_samples_from_trigger_ff.py)
 GR_ADD_TEST(qa_annotated_to_msg_f ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_annotated_to_msg_f.py)
+GR_ADD_TEST(qa_collect_to_vector_from_tag_f ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_collect_to_vector_from_tag_f.py)

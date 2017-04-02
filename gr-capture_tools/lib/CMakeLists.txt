@@ -38,6 +38,7 @@ list(APPEND capture_tools_sources
     cut_samples_cc_impl.cc
     annotate_every_n_samples_from_trigger_ff_impl.cc
     annotated_to_msg_f_impl.cc
+    collect_to_vector_from_tag_f_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)

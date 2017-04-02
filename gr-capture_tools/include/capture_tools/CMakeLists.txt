@@ -33,5 +33,6 @@ install(FILES
     replace_value_ff.h
     cut_samples_cc.h
     annotate_every_n_samples_from_trigger_ff.h
-    annotated_to_msg_f.h DESTINATION include/capture_tools
+    annotated_to_msg_f.h
+    collect_to_vector_from_tag_f.h DESTINATION include/capture_tools
 )
