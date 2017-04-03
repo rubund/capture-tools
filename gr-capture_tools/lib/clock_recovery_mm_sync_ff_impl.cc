@@ -56,6 +56,7 @@ namespace gr {
     throw std::out_of_range("Gains must be non-negative");
 
       set_omega(omega);         // also sets min and max omega
+        d_mid = floor(d_omega / 2.0);
       //set_relative_rate (1.0 / omega);
       //enable_update_rate(true);  // fixes tag propagation through variable rate block
     }
@@ -108,7 +109,7 @@ namespace gr {
     d_omega = d_omega_mid + gr::branchless_clip(d_omega-d_omega_mid, d_omega_lim);
     d_mu = d_mu + d_omega + d_gain_mu * mm_val;
 
-    add_item_tag(0, nitems_written(0) + ii, pmt::intern("strobe"), pmt::intern(""), pmt::intern(""));
+    add_item_tag(0, nitems_written(0) + ii + d_mid, pmt::intern("strobe"), pmt::intern(""), pmt::intern(""));
     for(int j=0;j<((int)floor(d_mu));j++) {
         out[ii+j] = tmpout;
     }

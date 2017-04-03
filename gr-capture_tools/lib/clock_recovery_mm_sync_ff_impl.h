@@ -43,6 +43,7 @@ namespace gr {
        filter::mmse_fir_interpolator_ff *d_interp;
 
        bool d_verbose;
+       int d_mid;
 
      public:
       clock_recovery_mm_sync_ff_impl(float omega, float gain_omega, float mu, float gain_mu, float omega_relative_limit);
