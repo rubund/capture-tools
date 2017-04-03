@@ -67,4 +67,19 @@
         <name>out</name>
         <type>float</type>
     </source>
+    <source>
+        <name>omega</name>
+        <type>float</type>
+        <optional>1</optional>
+    </source>
+    <source>
+        <name>mu</name>
+        <type>float</type>
+        <optional>1</optional>
+    </source>
+    <source>
+        <name>mu_end</name>
+        <type>float</type>
+        <optional>1</optional>
+    </source>
 </block>

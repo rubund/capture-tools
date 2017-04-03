@@ -45,7 +45,7 @@ namespace gr {
     clock_recovery_mm_sync_ff_impl::clock_recovery_mm_sync_ff_impl(float omega, float gain_omega, float mu, float gain_mu, float omega_relative_limit)
       : gr::sync_block("clock_recovery_mm_sync_ff",
               gr::io_signature::make(1, 1, sizeof(float)),
-              gr::io_signature::make(1, 1, sizeof(float))),
+              gr::io_signature::make(1, 4, sizeof(float))),
     d_mu(mu), d_gain_mu(gain_mu), d_gain_omega(gain_omega),
     d_omega_relative_limit(omega_relative_limit),
     d_last_sample(0), d_interp(new filter::mmse_fir_interpolator_ff())
@@ -92,6 +92,10 @@ namespace gr {
         float tmpout;
       const float *in = (const float *) input_items[0];
       float *out = (float *) output_items[0];
+      float *out_omega = (float *) output_items[1];
+      float *out_mu = (float *) output_items[2];
+      float *out_mu2 = (float *) output_items[3];
+      int noutputs = output_items.size();
 
       int ii = 0; // input index
       int oo = 0; // output index
@@ -110,11 +114,22 @@ namespace gr {
     d_mu = d_mu + d_omega + d_gain_mu * mm_val;
 
     add_item_tag(0, nitems_written(0) + ii + d_mid, pmt::intern("strobe"), pmt::intern(""), pmt::intern(""));
-    for(int j=0;j<((int)floor(d_mu));j++) {
+    int nsampout = ((int)floor(d_mu));
+    for(int j=0;j<nsampout;j++) {
         out[ii+j] = tmpout;
+        if (noutputs >= 2)
+            out_omega[ii+j] = d_omega;
+        if (noutputs >= 3)
+            out_mu[ii+j] = d_mu;
     }
+    int ii_before = ii;
     ii += (int)floor(d_mu);
     d_mu = d_mu - floor(d_mu);
+    if (noutputs >= 4) {
+        for(int j=0;j<nsampout;j++) {
+            out_mu2[ii_before+j] = d_mu;
+        }
+    }
     oo++;
       }
 
