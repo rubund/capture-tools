@@ -108,6 +108,7 @@ namespace gr {
     d_omega = d_omega_mid + gr::branchless_clip(d_omega-d_omega_mid, d_omega_lim);
     d_mu = d_mu + d_omega + d_gain_mu * mm_val;
 
+    add_item_tag(0, nitems_written(0) + ii, pmt::intern("strobe"), pmt::intern(""), pmt::intern(""));
     for(int j=0;j<((int)floor(d_mu));j++) {
         out[ii+j] = tmpout;
     }
