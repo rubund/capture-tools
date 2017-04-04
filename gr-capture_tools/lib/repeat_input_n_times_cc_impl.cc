@@ -138,6 +138,7 @@ namespace gr {
                 consumed = 0;
             }
             else {
+                int postag = nitems_written(0) + d_memory_cnt - d_playback_cnt - 1;
                 memcpy(out, d_memory+(d_playback_cnt), sizeof(gr_complex) * (d_memory_cnt - d_playback_cnt));
                 produced = d_memory_cnt - d_playback_cnt;
                 consumed = 0;
@@ -145,6 +146,10 @@ namespace gr {
                 d_playback_time++;
                 if(d_n_times != 0 && (d_playback_time >= (d_n_times - 1))){
                     d_state = 2;
+                    add_item_tag(0, postag, pmt::intern("end"), pmt::intern("repeat_input_n_times_cc"), pmt::intern(""));
+                }
+                else {
+                    add_item_tag(0, postag, pmt::intern("repeat"), pmt::intern("repeat_input_n_times_cc"), pmt::intern(""));
                 }
             }
         }
