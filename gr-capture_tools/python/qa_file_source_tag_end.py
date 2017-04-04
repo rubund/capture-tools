@@ -38,7 +38,10 @@ class qa_file_source_tag_end (gr_unittest.TestCase):
         dst = blocks.vector_sink_c()
         self.tb.connect(src,dst)
         self.tb.run ()
-        print(dst.tags())
+        print(len(dst.data()))
+        print("Tags:")
+        for t in dst.tags():
+            print(" %s: %s" % (t.offset, t.key))
         # check data
 
 

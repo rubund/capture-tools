@@ -62,7 +62,7 @@ namespace gr {
 		      gr::io_signature::make(0, 0, 0),
 		      gr::io_signature::make(1, 1, itemsize)),
 	d_itemsize(itemsize), d_fp(0), d_new_fp(0), d_repeat(repeat),
-	d_updated(false)
+	d_updated(false), d_first_iteration(true), d_complete(false)
     {
       open(filename, repeat);
       do_update();
@@ -168,6 +168,14 @@ namespace gr {
       if(d_fp == NULL)
 	throw std::runtime_error("work with file not open");
 
+      if(d_first_iteration)
+        d_first_iteration = false;
+      else if (!d_complete) {
+        memcpy(o, d_previous_val, d_itemsize);
+        o+= d_itemsize;
+        size = size - 1;
+      }
+
       gr::thread::scoped_lock lock(fp_mutex); // hold for the rest of this function
       while(size) {
 	i = fread(o, d_itemsize, size, (FILE*)d_fp);
@@ -196,12 +204,22 @@ namespace gr {
     //if (index_of_last != -1) {
     //    add_item_tag(0, nitems_written(0) + index_of_last, pmt::intern("end"), pmt::intern("file_source"), pmt::intern(""));
     //}
+    i = fread(d_previous_val, d_itemsize, 1, (FILE*)d_fp);
+
       if(size > 0) {	     		// EOF or error
 	if(size == noutput_items)       // we didn't read anything; say we're done
 	  return -1;
+            if (i < d_itemsize) {
+                add_item_tag(0, nitems_written(0) + noutput_items - size - 1, pmt::intern("end"), pmt::intern("file_source"), pmt::intern(""));
+                d_complete = true;
+            }
 	return noutput_items - size;	// else return partial result
       }
 
+      if (i < d_itemsize) {
+          add_item_tag(0, nitems_written(0) + noutput_items - 1, pmt::intern("end"), pmt::intern("file_source"), pmt::intern(""));
+          d_complete = true;
+      }
       return noutput_items;
     }
 

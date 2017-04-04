@@ -38,6 +38,10 @@ namespace gr {
       boost::mutex fp_mutex;
 
       void do_update();
+
+      char d_previous_val[8];
+      bool d_first_iteration;
+      bool d_complete;
       //long d_items_in_file;
 
     public:
