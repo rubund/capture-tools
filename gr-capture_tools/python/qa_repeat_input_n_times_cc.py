@@ -35,15 +35,17 @@ class qa_repeat_input_n_times_cc (gr_unittest.TestCase):
 
     def test_001_t (self):
         # set up fg
-        tag = gr.tag_utils.python_to_tag((2, pmt.to_pmt("the_key"), pmt.to_pmt("the_value"), pmt.PMT_NIL))
-        self.src = blocks.vector_source_c([1,2,3,4,5], tags=[tag])
+        tags = []
+        tags.append(gr.tag_utils.python_to_tag((2, pmt.to_pmt("the_key"), pmt.to_pmt("the_value"), pmt.PMT_NIL)))
+        tags.append(gr.tag_utils.python_to_tag((4, pmt.to_pmt("end"), pmt.to_pmt("vector_source_c"), pmt.PMT_NIL)))
+        self.src = blocks.vector_source_c([1,2,3,4,5], tags=tags)
         self.dst = blocks.vector_sink_c()
         self.repeating = capture_tools.repeat_input_n_times_cc(3, 1000)
         self.tb.connect(self.src, self.repeating, self.dst)
         self.tb.run ()
         tags = self.dst.tags()
         self.assertEqual(self.dst.data() , ((1+0j), (2+0j), (3+0j), (4+0j), (5+0j), (1+0j), (2+0j), (3+0j), (4+0j), (5+0j), (1+0j), (2+0j), (3+0j), (4+0j), (5+0j)))
-        self.assertEqual(len(tags), 1)
+        self.assertEqual(len(tags), 4)
         self.assertEqual(str(tags[0].key), "the_key")
         self.assertEqual(str(tags[0].value), "the_value")
         self.assertEqual(int(tags[0].offset), 2)
@@ -51,7 +53,9 @@ class qa_repeat_input_n_times_cc (gr_unittest.TestCase):
 
     def test_002_t (self):
         # set up fg
-        self.src = blocks.vector_source_c([1,2,3,4,5])
+        tags = []
+        tags.append(gr.tag_utils.python_to_tag((4, pmt.to_pmt("end"), pmt.to_pmt("vector_source_c"), pmt.PMT_NIL)))
+        self.src = blocks.vector_source_c([1,2,3,4,5], tags=tags)
         self.dst = blocks.vector_sink_c()
         self.repeating = capture_tools.repeat_input_n_times_cc(2, 1000)
         self.tb.connect(self.src, self.repeating, self.dst)
@@ -117,7 +121,9 @@ class qa_repeat_input_n_times_cc (gr_unittest.TestCase):
 
     def test_008_t (self):
         # set up fg
-        self.src = blocks.vector_source_c([1,2,3,4])
+        tags = []
+        tags.append(gr.tag_utils.python_to_tag((3, pmt.to_pmt("end"), pmt.to_pmt("vector_source_c"), pmt.PMT_NIL)))
+        self.src = blocks.vector_source_c([1,2,3,4], tags=tags)
         self.dst = blocks.vector_sink_c()
         self.repeating = capture_tools.repeat_input_n_times_cc(2, 5)
         self.tb.connect(self.src, self.repeating, self.dst)
@@ -128,7 +134,9 @@ class qa_repeat_input_n_times_cc (gr_unittest.TestCase):
 
     def test_009_t (self):
         # set up fg
-        self.src = blocks.vector_source_c([1,2])
+        tags = []
+        tags.append(gr.tag_utils.python_to_tag((1, pmt.to_pmt("end"), pmt.to_pmt("vector_source_c"), pmt.PMT_NIL)))
+        self.src = blocks.vector_source_c([1,2], tags=tags)
         self.dst = blocks.vector_sink_c()
         self.repeating = capture_tools.repeat_input_n_times_cc(3, 5)
         self.tb.connect(self.src, self.repeating, self.dst)
@@ -139,7 +147,9 @@ class qa_repeat_input_n_times_cc (gr_unittest.TestCase):
 
     def test_010_t (self):
         # set up fg
-        self.src = blocks.vector_source_c([1])
+        tags = []
+        tags.append(gr.tag_utils.python_to_tag((0, pmt.to_pmt("end"), pmt.to_pmt("vector_source_c"), pmt.PMT_NIL)))
+        self.src = blocks.vector_source_c([1], tags=tags)
         self.dst = blocks.vector_sink_c()
         self.repeating = capture_tools.repeat_input_n_times_cc(3, 5)
         self.tb.connect(self.src, self.repeating, self.dst)
