@@ -33,5 +33,6 @@ install(FILES
     capture_tools_collect_to_vector_from_tag_f.xml
     capture_tools_clock_recovery_mm_sync_ff.xml
     capture_tools_add_at_tag_cc.xml
-    capture_tools_file_source_tag_end.xml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_file_source_tag_end.xml
+    capture_tools_concatenate_cc.xml DESTINATION share/gnuradio/grc/blocks
 )
