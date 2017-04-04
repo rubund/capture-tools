@@ -54,3 +54,4 @@ GR_ADD_TEST(qa_annotated_to_msg_f ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DI
 GR_ADD_TEST(qa_collect_to_vector_from_tag_f ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_collect_to_vector_from_tag_f.py)
 GR_ADD_TEST(qa_clock_recovery_mm_sync_ff ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_clock_recovery_mm_sync_ff.py)
 GR_ADD_TEST(qa_add_at_tag_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_add_at_tag_cc.py)
+GR_ADD_TEST(qa_file_source_tag_end ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_file_source_tag_end.py)

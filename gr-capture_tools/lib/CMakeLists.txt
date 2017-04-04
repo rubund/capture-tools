@@ -41,6 +41,7 @@ list(APPEND capture_tools_sources
     collect_to_vector_from_tag_f_impl.cc
     clock_recovery_mm_sync_ff_impl.cc
     add_at_tag_cc_impl.cc
+    file_source_tag_end_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)

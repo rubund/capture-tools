@@ -36,5 +36,6 @@ install(FILES
     annotated_to_msg_f.h
     collect_to_vector_from_tag_f.h
     clock_recovery_mm_sync_ff.h
-    add_at_tag_cc.h DESTINATION include/capture_tools
+    add_at_tag_cc.h
+    file_source_tag_end.h DESTINATION include/capture_tools
 )
