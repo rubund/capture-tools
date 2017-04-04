@@ -81,6 +81,7 @@ namespace gr {
     {
         int produced;
         int consumed;
+        int end_pos = -1;
         std::vector<tag_t> tags;
       const gr_complex *in = (const gr_complex *) input_items[0];
       gr_complex *out = (gr_complex *) output_items[0];
@@ -89,25 +90,33 @@ namespace gr {
         consumed = 0;
 
         if (d_state == 0){
-            if(ninput_items[0] == 1){
-                d_state = 1;
+            int minelem = std::min(noutput_items, ninput_items[0]);
+            get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + minelem);
+            for(int i=0;i<tags.size();i++){
+                if (pmt::equal(tags[i].key, pmt::intern("end"))) {
+                    end_pos = tags[i].offset - nitems_read(0) + 1;
+                    break;
+                }
             }
-            int ninputItemsMinus1 = ninput_items[0] > 1 ? ninput_items[0] - 1 : ninput_items[0];
-            int minelem = std::min(noutput_items, ninputItemsMinus1);
-            if((d_memory_cnt + minelem) < d_max_samples) {
-                memcpy(d_memory+(d_memory_cnt), in, sizeof(gr_complex) * (minelem));
-                memcpy(out, in, sizeof(gr_complex) * (minelem));
-                get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + minelem);
+            int minelem3;
+            if (end_pos != -1)
+                minelem3 = std::min(minelem, end_pos);
+            else
+                minelem3 = minelem;
+            if((d_memory_cnt + minelem3) < d_max_samples) {
+                memcpy(d_memory+(d_memory_cnt), in, sizeof(gr_complex) * (minelem3));
+                memcpy(out, in, sizeof(gr_complex) * (minelem3));
+                get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + minelem3);
                 for(int i=0; i<tags.size(); i++) {
                     add_item_tag(0, nitems_written(0) + (tags[i].offset-nitems_read(0)), tags[i].key, tags[i].value, tags[i].srcid);
                 }
-                d_memory_cnt += minelem;
-                produced = minelem;
-                consumed = minelem;
+                d_memory_cnt += minelem3;
+                produced = minelem3;
+                consumed = minelem3;
             }
             else {
                 memcpy(d_memory+(d_memory_cnt), in, sizeof(gr_complex) * (d_max_samples - d_memory_cnt));
-                int minelem2 = std::min((d_max_samples - d_memory_cnt), minelem);
+                int minelem2 = std::min((d_max_samples - d_memory_cnt), minelem3);
                 memcpy(out, in, sizeof(gr_complex) * minelem2);
                 get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + minelem2);
                 for(int i=0; i<tags.size(); i++) {
@@ -118,6 +127,8 @@ namespace gr {
                 consumed = ninput_items[0];
                 d_state = 1;
             }
+            if (minelem3 == end_pos)
+                d_state = 1;
         }
         else if (d_state == 1){
             if((d_playback_cnt + noutput_items) < d_memory_cnt) {
