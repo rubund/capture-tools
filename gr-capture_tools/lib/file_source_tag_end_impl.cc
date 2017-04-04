@@ -195,10 +195,13 @@ namespace gr {
 	if(!d_repeat)
 	  break;
 
+    add_item_tag(0, nitems_written(0) + noutput_items - size - 1, pmt::intern("end"), pmt::intern("file_source"), pmt::intern(""));
+
 	if(fseek ((FILE *) d_fp, 0, SEEK_SET) == -1) {
 	  fprintf(stderr, "[%s] fseek failed\n", __FILE__);
 	  exit(-1);
 	}
+    d_complete = false;
       }
 
     //if (index_of_last != -1) {
@@ -209,14 +212,14 @@ namespace gr {
       if(size > 0) {	     		// EOF or error
 	if(size == noutput_items)       // we didn't read anything; say we're done
 	  return -1;
-            if (i < d_itemsize) {
+            if (i == 0) {
                 add_item_tag(0, nitems_written(0) + noutput_items - size - 1, pmt::intern("end"), pmt::intern("file_source"), pmt::intern(""));
                 d_complete = true;
             }
 	return noutput_items - size;	// else return partial result
       }
 
-      if (i < d_itemsize) {
+      if (i == 0) {
           add_item_tag(0, nitems_written(0) + noutput_items - 1, pmt::intern("end"), pmt::intern("file_source"), pmt::intern(""));
           d_complete = true;
       }
