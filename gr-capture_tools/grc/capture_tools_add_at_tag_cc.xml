@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<block>
+  <name>add_at_tag_cc</name>
+  <key>capture_tools_add_at_tag_cc</key>
+  <category>[capture_tools]</category>
+  <import>import capture_tools</import>
+  <make>capture_tools.add_at_tag_cc($n_min, $n_max, $val, $tag_key)</make>
+  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
+       Sub-nodes:
+       * name
+       * key (makes the value accessible as $keyname, e.g. in the make node)
+       * type -->
+  <param>
+    <name>N min</name>
+    <key>n_min</key>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>N max</name>
+    <key>n_max</key>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Value</name>
+    <key>val</key>
+    <type>complex</type>
+  </param>
+
+  <param>
+    <name>Tag key</name>
+    <key>tag_key</key>
+    <type>string</type>
+  </param>
+
+  <!-- Make one 'sink' node per input. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+  </sink>
+
+  <!-- Make one 'source' node per output. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <source>
+    <name>out</name>
+    <type>complex</type>
+  </source>
+</block>

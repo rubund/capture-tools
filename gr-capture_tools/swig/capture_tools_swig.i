@@ -22,6 +22,7 @@
 #include "capture_tools/annotated_to_msg_f.h"
 #include "capture_tools/collect_to_vector_from_tag_f.h"
 #include "capture_tools/clock_recovery_mm_sync_ff.h"
+#include "capture_tools/add_at_tag_cc.h"
 %}
 
 
@@ -53,3 +54,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, annotated_to_msg_f);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, collect_to_vector_from_tag_f);
 %include "capture_tools/clock_recovery_mm_sync_ff.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, clock_recovery_mm_sync_ff);
+%include "capture_tools/add_at_tag_cc.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, add_at_tag_cc);

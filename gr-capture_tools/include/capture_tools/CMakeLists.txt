@@ -35,5 +35,6 @@ install(FILES
     annotate_every_n_samples_from_trigger_ff.h
     annotated_to_msg_f.h
     collect_to_vector_from_tag_f.h
-    clock_recovery_mm_sync_ff.h DESTINATION include/capture_tools
+    clock_recovery_mm_sync_ff.h
+    add_at_tag_cc.h DESTINATION include/capture_tools
 )
