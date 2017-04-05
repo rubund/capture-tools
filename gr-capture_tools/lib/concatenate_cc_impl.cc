@@ -102,6 +102,7 @@ namespace gr {
       if(end_pos == minval){
         d_current++;
         if(d_current >= d_inputs) {
+            add_item_tag(0, nitems_written(0) + end_pos - 1, pmt::intern("end"), pmt::intern("concatenate_cc"), pmt::intern(""));
             d_current = -1;
         }
       }
