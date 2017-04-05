@@ -468,7 +468,7 @@ namespace gr {
       for(int j=0;j<nsampleshere;j++) {
         out[i+j] = tmpout;
       }
-      add_item_tag(0, nitems_written(0) + i + floor(d_sps/2.0) - 1, pmt::intern("strobe"), pmt::intern(""), pmt::intern(""));
+      add_item_tag(0, nitems_written(0) + i + floor(d_sps/2.0), pmt::intern("strobe"), pmt::intern(""), pmt::intern(""));
 	i = count;
       }
 
