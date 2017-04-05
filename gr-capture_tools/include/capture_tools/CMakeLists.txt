@@ -47,5 +47,6 @@ install(FILES
     clock_recovery_mm_sync_ff.h
     add_at_tag_cc.h
     file_source_tag_end.h
-    concatenate_cc.h DESTINATION include/capture_tools
+    concatenate_cc.h
+    head_tag_end.h DESTINATION include/capture_tools
 )

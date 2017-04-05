@@ -30,6 +30,7 @@
 #include "capture_tools/vector_source_i.h"
 #include "capture_tools/vector_source_f.h"
 #include "capture_tools/vector_source_c.h"
+#include "capture_tools/head_tag_end.h"
 
 %}
 
@@ -81,3 +82,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, vector_source_i);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, vector_source_f);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, vector_source_c);
 
+%include "capture_tools/head_tag_end.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, head_tag_end);

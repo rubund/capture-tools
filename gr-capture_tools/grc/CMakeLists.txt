@@ -35,5 +35,6 @@ install(FILES
     capture_tools_add_at_tag_cc.xml
     capture_tools_file_source_tag_end.xml
     capture_tools_concatenate_cc.xml
-    capture_tools_vector_source_x.xml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_vector_source_x.xml
+    capture_tools_head_tag_end.xml DESTINATION share/gnuradio/grc/blocks
 )
