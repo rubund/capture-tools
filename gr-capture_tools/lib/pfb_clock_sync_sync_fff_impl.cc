@@ -128,7 +128,7 @@ namespace gr {
     {
       unsigned ninputs = ninput_items_required.size ();
       for(unsigned i = 0; i < ninputs; i++)
-        ninput_items_required[i] = (noutput_items + history()) * (d_sps/d_osps);
+        ninput_items_required[i] = (noutput_items + history());// * (d_sps/d_osps);
     }
 
     void
@@ -380,6 +380,7 @@ namespace gr {
     {
       float *in = (float *) input_items[0];
       float *out = (float *) output_items[0];
+      float tmpout;
 
       if(d_updated) {
         std::vector<float> dtaps;
@@ -398,10 +399,13 @@ namespace gr {
       }
 
       int i = 0, count = 0;
+      int k = 0;
+      int floored = (int)floor(d_sps);
+      int nsampleshere = 0;
 
       // produce output as long as we can and there are enough input samples
-      while(i < noutput_items) {
-	while(d_out_idx < d_osps) {
+      while(i < (noutput_items - floored - 2)) {
+	while(d_out_idx < 1) {
 	  d_filtnum = (int)floor(d_k);
 
 	  // Keep the current filter number in [0, d_nfilters]
@@ -411,28 +415,32 @@ namespace gr {
 	    d_k -= d_nfilters;
 	    d_filtnum -= d_nfilters;
 	    count += 1;
+        nsampleshere += 1;
 	  }
 	  while(d_filtnum < 0) {
 	    d_k += d_nfilters;
 	    d_filtnum += d_nfilters;
 	    count -= 1;
+        nsampleshere -= 1;
 	  }
 
-	  out[i+d_out_idx] = d_filters[d_filtnum]->filter(&in[count+d_out_idx]);
+	  //out[i+d_out_idx] = d_filters[d_filtnum]->filter(&in[count+d_out_idx]);
+	  tmpout = d_filters[d_filtnum]->filter(&in[count+d_out_idx]);
+
 	  d_k = d_k + d_rate_i + d_rate_f; // update phase
 	  d_out_idx++;
 
-	  if(output_items.size() == 4) {
-	    err[i] = d_error;
-	    outrate[i] = d_rate_f;
-	    outk[i] = d_k;
-	  }
+	  //if(output_items.size() == 4) { // FIXME
+	  //  err[i] = d_error;
+	  //  outrate[i] = d_rate_f;
+	  //  outk[i] = d_k;
+	  //}
 
 	  // We've run out of output items we can create; return now.
-	  if(i+d_out_idx >= noutput_items) {
-	    consume_each(count);
-	    return i;
-	  }
+	  //if(i+d_out_idx >= noutput_items) {
+	  //  consume_each(count);
+	  //  return count;
+	  //}
 	}
 
 	// reset here; if we didn't complete a full osps samples last time,
@@ -441,7 +449,7 @@ namespace gr {
 
 	// Update the phase and rate estimates for this symbol
 	float diff = d_diff_filters[d_filtnum]->filter(&in[count]);
-	d_error = out[i] * diff;
+	d_error = tmpout * diff;
 
 	// Run the control loop to update the current phase (k) and
 	// tracking rate estimates based on the error value
@@ -454,12 +462,18 @@ namespace gr {
 	// Keep our rate within a good range
 	d_rate_f = gr::branchless_clip(d_rate_f, d_max_dev);
 
-	i+=d_osps;
+
 	count += (int)floor(d_sps);
+    nsampleshere += (int)floor(d_sps);
+      for(int j=0;j<nsampleshere;j++) {
+        out[i+j] = tmpout;
+      }
+      add_item_tag(0, nitems_written(0) + i + floor(d_sps/2.0) - 1, pmt::intern("strobe"), pmt::intern(""), pmt::intern(""));
+	i = count;
       }
 
       consume_each(count);
-      return i;
+      return count;
     }
 
   } /* namespace digital */
