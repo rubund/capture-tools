@@ -114,6 +114,7 @@ namespace gr {
           for(int i = 0; i < noutput_items*d_vlen; i++) {
             optr[i] = d_data[offset++];
             if(offset >= size) {
+              add_item_tag(0, nitems_written(0) + i, pmt::intern("end"), pmt::intern("@BASE_NAME@"), pmt::intern(""));
               offset = 0;
             }
           }
@@ -137,6 +138,9 @@ namespace gr {
                          d_tags[t].srcid);
         }
         d_offset += n;
+        if (d_offset == (unsigned)(d_data.size())) {
+          add_item_tag(0, nitems_written(0) + n - 1, pmt::intern("end"), pmt::intern("@BASE_NAME@"), pmt::intern(""));
+        }
         return n/d_vlen;
       }
     }
