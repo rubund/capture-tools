@@ -91,7 +91,11 @@ namespace gr {
                 break;
             }
         }
-        int minval = std::min(end_pos, ninput_items[d_current]);
+        int minval;
+        if (end_pos != -1)
+            minval = std::min(end_pos, ninput_items[d_current]);
+        else
+            minval = ninput_items[d_current];
         memcpy(out, d_in[d_current], sizeof(gr_complex) * minval);
         consumed += minval;
         produced += minval;
