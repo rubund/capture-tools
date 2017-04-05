@@ -48,5 +48,6 @@ install(FILES
     add_at_tag_cc.h
     file_source_tag_end.h
     concatenate_cc.h
-    head_tag_end.h DESTINATION include/capture_tools
+    head_tag_end.h
+    pfb_clock_sync_sync_fff.h DESTINATION include/capture_tools
 )

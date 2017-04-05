@@ -48,6 +48,7 @@ list(APPEND capture_tools_sources
     file_source_tag_end_impl.cc
     concatenate_cc_impl.cc
     head_tag_end_impl.cc
+    pfb_clock_sync_sync_fff_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)

@@ -58,3 +58,4 @@ GR_ADD_TEST(qa_file_source_tag_end ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_D
 GR_ADD_TEST(qa_concatenate_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_concatenate_cc.py)
 GR_ADD_TEST(qa_vector_source ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_vector_source.py)
 GR_ADD_TEST(qa_head_tag_end ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_head_tag_end.py)
+GR_ADD_TEST(qa_pfb_clock_sync_sync_fff ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_pfb_clock_sync_sync_fff.py)
