@@ -75,9 +75,9 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, concatenate_cc);
 %include "capture_tools/vector_source_f.h"
 %include "capture_tools/vector_source_c.h"
 
-GR_SWIG_BLOCK_MAGIC2(blocks, vector_source_b);
-GR_SWIG_BLOCK_MAGIC2(blocks, vector_source_s);
-GR_SWIG_BLOCK_MAGIC2(blocks, vector_source_i);
-GR_SWIG_BLOCK_MAGIC2(blocks, vector_source_f);
-GR_SWIG_BLOCK_MAGIC2(blocks, vector_source_c);
+GR_SWIG_BLOCK_MAGIC2(capture_tools, vector_source_b);
+GR_SWIG_BLOCK_MAGIC2(capture_tools, vector_source_s);
+GR_SWIG_BLOCK_MAGIC2(capture_tools, vector_source_i);
+GR_SWIG_BLOCK_MAGIC2(capture_tools, vector_source_f);
+GR_SWIG_BLOCK_MAGIC2(capture_tools, vector_source_c);
 

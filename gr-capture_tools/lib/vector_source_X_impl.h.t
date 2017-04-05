@@ -25,10 +25,10 @@
 #ifndef @GUARD_NAME_IMPL@
 #define @GUARD_NAME_IMPL@
 
-#include <gnuradio/blocks/@NAME@.h>
+#include <capture_tools/@NAME@.h>
 
 namespace gr {
-  namespace blocks {
+  namespace capture_tools {
 
     class @NAME_IMPL@ : public @NAME@
     {

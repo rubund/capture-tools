@@ -32,7 +32,7 @@
 #include <stdexcept>
 
 namespace gr {
-  namespace blocks {
+  namespace capture_tools {
 
     @NAME@::sptr
     @NAME@::make(const std::vector<@TYPE@> &data,

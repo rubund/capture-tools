@@ -25,11 +25,11 @@
 #ifndef @GUARD_NAME@
 #define @GUARD_NAME@
 
-#include <gnuradio/blocks/api.h>
+#include <capture_tools/api.h>
 #include <gnuradio/sync_block.h>
 
 namespace gr {
-  namespace blocks {
+  namespace capture_tools {
 
     /*!
      * \brief Source that streams @TYPE@ items based on the input \p data vector.
@@ -63,7 +63,7 @@ namespace gr {
      * offset of 0, that tag will be placed on item 0, 500, 1000,
      * 1500, etc.
      */
-    class BLOCKS_API @NAME@ : virtual public sync_block
+    class CAPTURE_TOOLS_API @NAME@ : virtual public gr::sync_block
     {
     public:
       // gr::blocks::@NAME@::sptr
