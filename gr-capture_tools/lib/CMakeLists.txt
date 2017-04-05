@@ -22,10 +22,14 @@
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 
+include(GrMiscUtils)
+GR_EXPAND_X_CC_H_IMPL(blocks vector_source_X    b s i f c)
+
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
 
 list(APPEND capture_tools_sources
+    ${generated_sources}
     file_sink_text_impl.cc
     one_then_zero_impl.cc
     file_sink_on_message_impl.cc
@@ -52,6 +56,7 @@ if(NOT capture_tools_sources)
 endif(NOT capture_tools_sources)
 
 add_library(gnuradio-capture_tools SHARED ${capture_tools_sources})
+add_dependencies(gnuradio-capture_tools blocks_generated_includes)
 target_link_libraries(gnuradio-capture_tools ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
 target_link_libraries(gnuradio-capture_tools gnuradio-blocks)
 set_target_properties(gnuradio-capture_tools PROPERTIES DEFINE_SYMBOL "gnuradio_capture_tools_EXPORTS")
