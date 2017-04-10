@@ -49,5 +49,6 @@ install(FILES
     file_source_tag_end.h
     concatenate_cc.h
     head_tag_end.h
-    pfb_clock_sync_sync_fff.h DESTINATION include/capture_tools
+    pfb_clock_sync_sync_fff.h
+    msk_timing_recovery_sync_cc.h DESTINATION include/capture_tools
 )

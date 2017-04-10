@@ -32,6 +32,7 @@
 #include "capture_tools/vector_source_c.h"
 #include "capture_tools/head_tag_end.h"
 #include "capture_tools/pfb_clock_sync_sync_fff.h"
+#include "capture_tools/msk_timing_recovery_sync_cc.h"
 
 %}
 
@@ -87,3 +88,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, vector_source_c);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, head_tag_end);
 %include "capture_tools/pfb_clock_sync_sync_fff.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, pfb_clock_sync_sync_fff);
+%include "capture_tools/msk_timing_recovery_sync_cc.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, msk_timing_recovery_sync_cc);
