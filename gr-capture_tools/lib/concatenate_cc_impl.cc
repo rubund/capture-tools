@@ -94,7 +94,7 @@ namespace gr {
         int minval2;
         int minval;
         if (end_pos != -1)
-            minval2 = std::min(end_pos, ninput_items[d_current]);
+            minval2 = std::min(end_pos + 1, ninput_items[d_current]);
         else
             minval2 = ninput_items[d_current];
         minval = std::min(minval2, noutput_items);
@@ -105,7 +105,7 @@ namespace gr {
 
       consume (d_current, consumed);
 
-      if(end_pos == minval){
+      if((end_pos+1) == minval){
         d_current++;
         if(d_current >= d_inputs) {
             add_item_tag(0, nitems_written(0) + end_pos - 1, pmt::intern("end"), pmt::intern("concatenate_cc"), pmt::intern(""));
