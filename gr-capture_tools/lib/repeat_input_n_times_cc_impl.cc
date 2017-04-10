@@ -67,7 +67,7 @@ namespace gr {
         if (d_state == 0) {
             ninput_items_required[0] = noutput_items;
         }
-        else if (d_state == 1) {
+        else if (d_state == 1 || d_state == 2) {
             ninput_items_required[0] = 0;
         }
       /* <+forecast+> e.g. ninput_items_required[0] = noutput_items */
