@@ -62,7 +62,10 @@ namespace gr {
     void
     add_at_tag_cc_impl::forecast (int noutput_items, gr_vector_int &ninput_items_required)
     {
-      ninput_items_required[0] = noutput_items;
+        if(d_state == 0)
+          ninput_items_required[0] = noutput_items;
+        else
+          ninput_items_required[0] = 0;
     }
 
     int
@@ -101,8 +104,8 @@ namespace gr {
                 }
             }
             for(int i=0; i<tags.size(); i++) {
-                if ((tags[i].offset - nitems_read(0)) < consumed)
-                    add_item_tag(0, nitems_written(0) + (tags[i].offset-nitems_read(0)), tags[i].key, tags[i].value, tags[i].srcid);
+                //if ((tags[i].offset - nitems_read(0)) < consumed)
+                //    add_item_tag(0, nitems_written(0) + (tags[i].offset-nitems_read(0)), tags[i].key, tags[i].value, tags[i].srcid);
             }
         }
         else if (d_state == 1){
@@ -111,6 +114,7 @@ namespace gr {
                 produced++;
                 d_cnt_added++;
                 if(d_cnt_added >= d_n){
+                    add_item_tag(0, nitems_written(0) + produced - 1, pmt::intern("end"), pmt::intern("add_at_tag_cc"), pmt::intern(""));
                     d_state = 0;
                     break;
                 }
