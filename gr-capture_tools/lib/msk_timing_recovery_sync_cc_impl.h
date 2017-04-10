@@ -44,6 +44,7 @@ namespace gr {
         int d_div;
         int d_osps;
         int d_loop_rate;
+        int d_mid;
 
      public:
       msk_timing_recovery_sync_cc_impl(float sps, float gain, float limit, int osps);

@@ -53,12 +53,13 @@ namespace gr {
       d_dly_diff_1(0),
       d_mu(0.5),
       d_div(0),
-      d_osps(osps)
+      d_osps(1)
     {
         set_sps(sps);
         enable_update_rate(true); //fixes tag propagation through variable rate blox
         set_gain(gain);
         if(d_osps != 1 && d_osps != 2) throw std::out_of_range("osps must be 1 or 2");
+        d_mid = floor(((float)sps) / 2.0);
     }
 
     msk_timing_recovery_sync_cc_impl::~msk_timing_recovery_sync_cc_impl()
@@ -100,7 +101,7 @@ namespace gr {
     {
         unsigned ninputs = ninput_items_required.size();
         for(unsigned i=0; i<ninputs; i++) {
-            ninput_items_required[i] = (int)ceil((noutput_items*d_sps*2) + 3.0*d_sps + d_interp->ntaps());
+            ninput_items_required[i] = noutput_items;
         }
     }
 
@@ -113,6 +114,7 @@ namespace gr {
         const gr_complex *in = (const gr_complex *) input_items[0];
         gr_complex *out = (gr_complex *) output_items[0];
         float *out2, *out3;
+        gr_complex tmp_out;
         if(output_items.size() >= 2) out2 = (float *) output_items[1];
         if(output_items.size() >= 3) out3 = (float *) output_items[2];
         int oidx=0, iidx=0;
@@ -136,6 +138,7 @@ namespace gr {
         float      err_out=0; //error output
 
         while(oidx < noutput_items && iidx < ninp) {
+            int ii_before = iidx;
             //check to see if there's a tag to reset the timing estimate
             if(tags.size() > 0) {
                 int offset = tags[0].offset - nitems_read(0);
@@ -192,9 +195,10 @@ out:
             }
             //output every other d_sps by default.
             if(!(d_div % 2) || d_osps==2) {
-                out[oidx] = in_interp;
-                if(output_items.size() >= 2) out2[oidx] = err_out;
-                if(output_items.size() >= 3) out3[oidx] = d_mu;
+                tmp_out  = in_interp;
+                //out[oidx] = in_interp;
+                //if(output_items.size() >= 2) out2[oidx] = err_out;
+                //if(output_items.size() >= 3) out3[oidx] = d_mu;
                 oidx++;
             }
             d_div++;
@@ -203,14 +207,22 @@ out:
             d_dly_conj_2 = d_dly_conj_1;
             d_dly_diff_1 = nlin_out;
 
+            add_item_tag(0, nitems_written(0) + iidx + d_mid, pmt::intern("strobe"), pmt::intern(""), pmt::intern(""));
+
             //update interpolator twice per symbol
             d_mu += d_omega;
             iidx    += (int)floor(d_mu);
+            oidx    = iidx;
+            int nsampout = iidx-ii_before;
             d_mu    -= floor(d_mu);
+
+            for(int j=0;j<nsampout;j++) {
+                out[ii_before+j] = in[ii_before+j];
+            }
         }
 
         consume_each (iidx);
-        return oidx;
+        return iidx;
     }
 
   } /* namespace digital */
