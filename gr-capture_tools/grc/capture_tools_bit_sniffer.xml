@@ -28,7 +28,7 @@
       <name>Hex printout</name>
       <key>hexadecimal</key>
       <value>False</value>
-      <type>enum</type>
+      <type>bool</type>
       <option>
           <name>Yes</name>
           <key>True</key>
@@ -58,7 +58,7 @@
       <name>LSB</name>
       <key>lsb</key>
       <value>False</value>
-      <type>enum</type>
+      <type>bool</type>
       <option>
           <name>Yes</name>
           <key>True</key>
@@ -73,7 +73,7 @@
       <name>Parity</name>
       <key>parity</key>
       <value>False</value>
-      <type>enum</type>
+      <type>bool</type>
       <option>
           <name>Yes</name>
           <key>True</key>

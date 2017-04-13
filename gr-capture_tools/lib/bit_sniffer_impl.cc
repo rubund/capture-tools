@@ -68,6 +68,9 @@ namespace gr {
         pmt::pmt_t bit_msg = pmt::cdr(msg);
         size_t packet_length = pmt::length(bit_msg);
         const uint8_t * bits = pmt::u8vector_elements(bit_msg, packet_length);
+
+        // TODO: Add optional manchester decoding here before (manipulate packet_length/bits before code below)
+
         if (d_last_size < packet_length) {
             if (d_last != NULL) {
                 uint8_t *temp_last = new uint8_t[packet_length];
