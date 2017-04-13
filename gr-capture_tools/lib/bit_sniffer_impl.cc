@@ -70,21 +70,34 @@ namespace gr {
         const uint8_t * bits = pmt::u8vector_elements(bit_msg, packet_length);
         if (d_last_size < packet_length) {
             if (d_last != NULL) {
-                delete d_last;
+                uint8_t *temp_last = new uint8_t[packet_length];
                 int * temp = new int[packet_length];
-                for(int i=0;i<d_last_size;i++)
+                memset(temp_last, 0, sizeof(uint8_t)*packet_length);
+                memset(temp, 0, sizeof(int)*packet_length);
+                int minval = std::min(d_last_size, (int)packet_length);
+                for(int i=0;i<minval;i++) {
                     temp[i] = d_since_change[i];
+                    temp_last[i] = d_last[i];
+                }
+                delete d_last;
                 delete d_since_change;
+                d_last = temp_last;
                 d_since_change = temp;
             }
             else {
+                d_last = new uint8_t[packet_length];
+                for(int i=0;i<packet_length;i++) {
+                    d_last[i] = 255;
+                }
                 d_since_change = new int[packet_length];
+                memset(d_since_change, 0, sizeof(int)*packet_length);
             }
-            d_last = new uint8_t[packet_length];
             d_last_size = packet_length;
         }
+        printf("\33[2K\r");
+        printf("%08d: ", d_cnt);
         for(int i=0;i<packet_length;i++) {
-            if (bits[i] != d_last[i]) {
+            if (bits[i] != d_last[i] && d_last[i] != 255) {
                 printf("\033[91;1m%1d\033[0m", bits[i]);
                 d_since_change[i] = 0;
             }
@@ -99,7 +112,6 @@ namespace gr {
             }
             d_last[i] = bits[i];
         }
-        printf("\r");
         fflush(stdout);
 
         d_cnt++;
