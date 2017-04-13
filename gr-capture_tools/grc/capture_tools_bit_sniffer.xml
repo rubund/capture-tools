@@ -4,17 +4,85 @@
   <key>capture_tools_bit_sniffer</key>
   <category>[capture_tools]</category>
   <import>import capture_tools</import>
-  <make>capture_tools.bit_sniffer()</make>
+  <make>capture_tools.bit_sniffer($fade_out, $hexadecimal, $offset, $bits_per_word, $lsb, $parity)</make>
+<callback>set_fade_out($fade_out)</callback>
+<callback>set_hexadecimal($hexadecimal)</callback>
+<callback>set_offset($offset)</callback>
+<callback>set_bits_per_word($bits_per_word)</callback>
+<callback>set_lsb($lsb)</callback>
+<callback>set_parity($parity)</callback>
+
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
        * key (makes the value accessible as $keyname, e.g. in the make node)
        * type -->
-  <!--<param>
-    <name>...</name>
-    <key>...</key>
-    <type>...</type>
-  </param>-->
+  <param>
+    <name>Fade out</name>
+    <key>fade_out</key>
+    <value>200</value>
+    <type>int</type>
+  </param>
+
+  <param>
+      <name>Hex printout</name>
+      <key>hexadecimal</key>
+      <value>False</value>
+      <type>enum</type>
+      <option>
+          <name>Yes</name>
+          <key>True</key>
+      </option>
+      <option>
+          <name>No</name>
+          <key>False</key>
+      </option>
+  </param>
+
+  <param>
+    <name>Offset</name>
+    <key>offset</key>
+    <value>0</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Bits per word</name>
+    <key>bits_per_word</key>
+    <value>8</value>
+    <type>int</type>
+  </param>
+
+
+  <param>
+      <name>LSB</name>
+      <key>lsb</key>
+      <value>False</value>
+      <type>enum</type>
+      <option>
+          <name>Yes</name>
+          <key>True</key>
+      </option>
+      <option>
+          <name>No</name>
+          <key>False</key>
+      </option>
+  </param>
+
+  <param>
+      <name>Parity</name>
+      <key>parity</key>
+      <value>False</value>
+      <type>enum</type>
+      <option>
+          <name>Yes</name>
+          <key>True</key>
+      </option>
+      <option>
+          <name>No</name>
+          <key>False</key>
+      </option>
+  </param>
 
   <!-- Make one 'sink' node per input. Sub-nodes:
        * name (an identifier for the GUI)

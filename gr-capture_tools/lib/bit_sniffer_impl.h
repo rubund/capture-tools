@@ -35,16 +35,30 @@ namespace gr {
         uint8_t *d_last;
         int *d_since_change;
         int d_last_size;
+
         int d_fade_out;
+        bool d_hexadecimal;
+        int d_offset;
+        int d_bits_per_word;
+        bool d_lsb;
+        bool d_parity;
 
      public:
-      bit_sniffer_impl();
+      bit_sniffer_impl(int fade_out=200, bool hexadecimal=0, int offset=0, int bits_per_word=8, bool lsb=0, bool parity=0);
       ~bit_sniffer_impl();
 
       // Where all the action really happens
       int work(int noutput_items,
          gr_vector_const_void_star &input_items,
          gr_vector_void_star &output_items);
+
+
+        void set_fade_out(int);
+        void set_hexadecimal(bool);
+        void set_offset(int);
+        void set_bits_per_word(int);
+        void set_lsb(bool);
+        void set_parity(bool);
     };
 
   } // namespace capture_tools

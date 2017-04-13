@@ -29,25 +29,25 @@ namespace gr {
   namespace capture_tools {
 
     bit_sniffer::sptr
-    bit_sniffer::make()
+    bit_sniffer::make(int fade_out, bool hexadecimal, int offset, int bits_per_word, bool lsb, bool parity)
     {
       return gnuradio::get_initial_sptr
-        (new bit_sniffer_impl());
+        (new bit_sniffer_impl(fade_out, hexadecimal, offset, bits_per_word, lsb, parity));
     }
 
     /*
      * The private constructor
      */
-    bit_sniffer_impl::bit_sniffer_impl()
+    bit_sniffer_impl::bit_sniffer_impl(int fade_out, bool hexadecimal, int offset, int bits_per_word, bool lsb, bool parity)
       : gr::sync_block("bit_sniffer",
               gr::io_signature::make(0, 0, 0),
-              gr::io_signature::make(0, 0, 0))
+              gr::io_signature::make(0, 0, 0)),
+        d_fade_out(fade_out), d_hexadecimal(hexadecimal), d_offset(offset), d_bits_per_word(bits_per_word), d_lsb(lsb), d_parity(parity)
     {
         d_cnt = 0;
         d_last_size = 0;
         d_last = NULL;
         d_since_change = NULL;
-        d_fade_out = 200;
         message_port_register_in(pmt::mp("packets"));
         set_msg_handler(pmt::mp("packets"), boost::bind(&bit_sniffer_impl::handler, this, _1));
     }
@@ -116,6 +116,36 @@ namespace gr {
 
         d_cnt++;
     }
+
+        void bit_sniffer_impl::set_fade_out(int val)
+        {
+            d_fade_out = val;
+        }
+
+        void bit_sniffer_impl::set_hexadecimal(bool val)
+        {
+            d_hexadecimal = val;
+        }
+
+        void bit_sniffer_impl::set_offset(int val)
+        {
+            d_offset = val;
+        }
+
+        void bit_sniffer_impl::set_bits_per_word(int val)
+        {
+            d_bits_per_word = val;
+        }
+
+        void bit_sniffer_impl::set_lsb(bool val)
+        {
+            d_lsb = val;
+        }
+
+        void bit_sniffer_impl::set_parity(bool val)
+        {
+            d_parity = val;
+        }
 
     int
     bit_sniffer_impl::work(int noutput_items,
