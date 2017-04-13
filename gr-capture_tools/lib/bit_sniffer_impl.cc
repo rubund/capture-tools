@@ -96,21 +96,79 @@ namespace gr {
         }
         printf("\33[2K\r");
         printf("%08d: ", d_cnt);
+        uint8_t current_byte;
+        int bitcounter = 0;
+        bool recent_changed = 0;
+        bool just_changed = 0;
+        int bits_per_word_practice = d_bits_per_word + (d_parity ? 1 : 0);
+        bool do_afterwards = 0;
         for(int i=0;i<packet_length;i++) {
+            if (i < d_offset){
+                bitcounter = 0;
+                continue;
+            }
+            if ((bitcounter % bits_per_word_practice) == 0) {
+                current_byte = 0;
+                recent_changed = 0;
+                just_changed = 0;
+            }
+            if(!d_parity || (bitcounter % bits_per_word_practice) <= (d_bits_per_word)) {
+                if(d_lsb) {
+                    current_byte |= bits[i] ? (1 << (bitcounter % bits_per_word_practice)) : 0;
+                }
+                else {
+                    current_byte |= bits[i] ? (1 << ((bits_per_word_practice - 1) - (bitcounter % bits_per_word_practice))) : 0;
+                }
+            }
             if (bits[i] != d_last[i] && d_last[i] != 255) {
-                printf("\033[91;1m%1d\033[0m", bits[i]);
+                if(!d_hexadecimal)
+                    printf("\033[91;1m%1d\033[0m", bits[i]);
                 d_since_change[i] = 0;
+                just_changed = 1;
             }
             else {
                 if(d_since_change[i] < d_fade_out) {
-                    printf("\033[91;2m%1d\033[0m", bits[i]);
+                    if(!d_hexadecimal)
+                        printf("\033[91;2m%1d\033[0m", bits[i]);
+                    recent_changed = 1;
                 }
                 else {
-                    printf("%1d", bits[i]);
+                    if(!d_hexadecimal)
+                        printf("%1d", bits[i]);
                 }
                 d_since_change[i]++;
             }
             d_last[i] = bits[i];
+            if ((bitcounter % bits_per_word_practice) == (bits_per_word_practice - 1)) {
+                if(d_hexadecimal) {
+                    if(just_changed)
+                        printf("\033[91;1m%02x\033[0m", current_byte);
+                    else if(recent_changed)
+                        printf("\033[91;2m%02x\033[0m", current_byte);
+                    else
+                        printf("%02x", current_byte);
+                }
+                else {
+                    if (i<(packet_length - 1)) {
+                        printf(" ");
+                    }
+                }
+                do_afterwards = 0;
+            }
+            else {
+                do_afterwards = 1;
+            }
+            bitcounter++;
+        }
+        if(d_hexadecimal) {
+            if (do_afterwards) {
+                if(just_changed)
+                    printf("\033[91;1m%02x..\033[0m", current_byte);
+                else if(recent_changed)
+                    printf("\033[91;2m%02x..\033[0m", current_byte);
+                else
+                    printf("%02x..", current_byte);
+            }
         }
         fflush(stdout);
 

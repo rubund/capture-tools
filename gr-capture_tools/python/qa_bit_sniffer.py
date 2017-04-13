@@ -37,11 +37,11 @@ class qa_bit_sniffer (gr_unittest.TestCase):
         # set up fg
         msg_meta = pmt.make_dict()
         msg_meta = pmt.dict_add(msg_meta, pmt.to_pmt("freq"), pmt.to_pmt("val"))
-        vec1 = [0x01, 0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00];
+        vec1 = [0x01, 0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00,0x01, 0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00,0x01, 0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00,0x01, 0x01, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00];
         msg_vector = pmt.init_u8vector(len(vec1), vec1)
         msg = pmt.cons(msg_meta, msg_vector)
-        src = blocks.message_strobe(msg, 1000)
-        dut = capture_tools.bit_sniffer()
+        src = blocks.message_strobe(msg, 10)
+        dut = capture_tools.bit_sniffer(fade_out=500, hexadecimal=True)
         self.tb.msg_connect((src, "strobe"), (dut, "packets"))
         self.tb.start ()
         time.sleep(5)
