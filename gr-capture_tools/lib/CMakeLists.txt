@@ -50,6 +50,7 @@ list(APPEND capture_tools_sources
     head_tag_end_impl.cc
     pfb_clock_sync_sync_fff_impl.cc
     msk_timing_recovery_sync_cc_impl.cc
+    bit_sniffer_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<block>
+  <name>bit_sniffer</name>
+  <key>capture_tools_bit_sniffer</key>
+  <category>[capture_tools]</category>
+  <import>import capture_tools</import>
+  <make>capture_tools.bit_sniffer()</make>
+  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
+       Sub-nodes:
+       * name
+       * key (makes the value accessible as $keyname, e.g. in the make node)
+       * type -->
+  <!--<param>
+    <name>...</name>
+    <key>...</key>
+    <type>...</type>
+  </param>-->
+
+  <!-- Make one 'sink' node per input. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <sink>
+    <name>packets</name>
+    <type>message</type>
+  </sink>
+
+</block>
