@@ -37,7 +37,8 @@ class qa_bit_sniffer (gr_unittest.TestCase):
         # set up fg
         msg_meta = pmt.make_dict()
         msg_meta = pmt.dict_add(msg_meta, pmt.to_pmt("freq"), pmt.to_pmt("val"))
-        msg_vector = pmt.init_u8vector(2, (0x09, 0x08))
+        vec1 = [0x01, 0x01, 0x01, 0x00, 0x01];
+        msg_vector = pmt.init_u8vector(len(vec1), vec1)
         msg = pmt.cons(msg_meta, msg_vector)
         src = blocks.message_strobe(msg, 1)
         dut = capture_tools.bit_sniffer()

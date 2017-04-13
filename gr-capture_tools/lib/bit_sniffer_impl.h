@@ -31,6 +31,11 @@ namespace gr {
      private:
       // Nothing to declare in this block.
     void handler(pmt::pmt_t msg);
+        int d_cnt;
+        uint8_t *d_last;
+        int *d_since_change;
+        int d_last_size;
+        int d_fade_out;
 
      public:
       bit_sniffer_impl();
