@@ -58,8 +58,9 @@ namespace gr {
     {
         pmt::pmt_t bit_msg = pmt::cdr(msg);
         size_t packet_length = pmt::length(bit_msg);
-        std::vector<uint8_t> * bits = (std::vector<uint8_t> *)pmt::u8vector_elements(bit_msg, packet_length);
-        //std::cout << bits << std::endl;
+        const uint8_t * bits = pmt::u8vector_elements(bit_msg, packet_length);
+        //std::cout << packet_length << std::endl;
+        //std::cout << ((int)bits[0]) << std::endl;
     }
 
     int
