@@ -147,7 +147,7 @@ namespace gr {
             }
             d_last[i] = bits[i];
             if ((bitcounter % bits_per_word_practice) == (bits_per_word_practice - 1)) {
-                if(d_hexadecimal) {
+                if(d_hexadecimal || d_ascii) {
                     if(just_changed){
                         hex_out << boost::format("\033[91;1m%02x\033[0m") % ((int)current_byte);
                         ascii_out << "\033[91;1m" << printable_char(current_byte) << "\033[0m";
@@ -173,7 +173,7 @@ namespace gr {
             }
             bitcounter++;
         }
-        if(d_hexadecimal) {
+        if(d_hexadecimal || d_ascii) {
             if (do_afterwards) {
                 if(just_changed){
                     hex_out << boost::format("\033[91;1m%02x..\033[0m") % ((int)current_byte);
