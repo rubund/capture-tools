@@ -29,22 +29,24 @@ namespace gr {
   namespace capture_tools {
 
     annotated_to_msg_f::sptr
-    annotated_to_msg_f::make(gr::msg_queue::sptr packet_queue)
+    annotated_to_msg_f::make()
     {
       return gnuradio::get_initial_sptr
-        (new annotated_to_msg_f_impl(packet_queue));
+        (new annotated_to_msg_f_impl());
     }
 
     /*
      * The private constructor
      */
-    annotated_to_msg_f_impl::annotated_to_msg_f_impl(gr::msg_queue::sptr packet_queue)
+    annotated_to_msg_f_impl::annotated_to_msg_f_impl()
       : gr::sync_block("annotated_to_msg_f",
               gr::io_signature::make(2, 2, sizeof(float)),
               gr::io_signature::make(0, 0, 0))
     {
         d_state = 0;
-        d_packet_queue = packet_queue;
+
+        message_port_register_out(pmt::mp("packets"));
+
     }
 
     /*
@@ -85,11 +87,17 @@ namespace gr {
             else if (d_state == 1) {
                 if (in_th[i] == 0) {
                     d_state = 0;
-                    printf("Received: ");
-                    for(int j=0;j<d_receive_buffer.size();j++){
-                        printf("%d", d_receive_buffer[j]);
-                    }
-                    printf("\n");
+                    pmt::pmt_t pdu_meta = pmt::make_dict();
+                    pmt::pmt_t pdu_vector = pmt::init_u8vector(d_receive_buffer.size(), d_receive_buffer);
+                    pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("freq"), pmt::mp("0"));
+                    pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
+                    message_port_pub(pmt::mp("packets"), out_msg);
+
+                    //printf("Received: ");
+                    //for(int j=0;j<d_receive_buffer.size();j++){
+                    //    printf("%d", d_receive_buffer[j]);
+                    //}
+                    //printf("\n");
                 }
             }
             if(d_state == 1) {

@@ -50,7 +50,7 @@ namespace gr {
        * class. capture_tools::annotated_to_msg_f::make is the public interface for
        * creating new instances.
        */
-      static sptr make(gr::msg_queue::sptr packet_queue);
+      static sptr make();
     };
 
   } // namespace capture_tools

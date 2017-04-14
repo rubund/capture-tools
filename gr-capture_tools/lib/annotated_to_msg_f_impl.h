@@ -32,11 +32,10 @@ namespace gr {
      private:
       // Nothing to declare in this block.
         int d_state;
-        gr::msg_queue::sptr d_packet_queue;
-        std::vector<char> d_receive_buffer;
+        std::vector<uint8_t> d_receive_buffer;
 
      public:
-      annotated_to_msg_f_impl(gr::msg_queue::sptr packet_queue);
+      annotated_to_msg_f_impl();
       ~annotated_to_msg_f_impl();
 
       // Where all the action really happens
