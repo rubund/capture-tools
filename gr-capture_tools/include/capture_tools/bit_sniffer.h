@@ -46,7 +46,7 @@ namespace gr {
        * class. capture_tools::bit_sniffer::make is the public interface for
        * creating new instances.
        */
-      static sptr make(int fade_out=200, bool hexadecimal=0, int offset=0, int bits_per_word=8, bool lsb=0, bool parity=0);
+      static sptr make(int fade_out=200, bool hexadecimal=0, int offset=0, int bits_per_word=8, bool lsb=0, bool parity=0, bool ascii=0, bool binary=1, int special=0, bool scroll=0);
 
         virtual void set_fade_out(int) = 0;
         virtual void set_hexadecimal(bool) = 0;
@@ -54,6 +54,10 @@ namespace gr {
         virtual void set_bits_per_word(int) = 0;
         virtual void set_lsb(bool) = 0;
         virtual void set_parity(bool) = 0;
+        virtual void set_ascii(bool) = 0;
+        virtual void set_binary(bool) = 0;
+        virtual void set_special(int) = 0;
+        virtual void set_scroll(bool) = 0;
     };
 
   } // namespace capture_tools

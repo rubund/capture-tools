@@ -4,13 +4,17 @@
   <key>capture_tools_bit_sniffer</key>
   <category>[capture_tools]</category>
   <import>import capture_tools</import>
-  <make>capture_tools.bit_sniffer($fade_out, $hexadecimal, $offset, $bits_per_word, $lsb, $parity)</make>
+  <make>capture_tools.bit_sniffer($fade_out, $hexadecimal, $offset, $bits_per_word, $lsb, $parity, $ascii, $binary, $special, $scroll)</make>
 <callback>set_fade_out($fade_out)</callback>
 <callback>set_hexadecimal($hexadecimal)</callback>
 <callback>set_offset($offset)</callback>
 <callback>set_bits_per_word($bits_per_word)</callback>
 <callback>set_lsb($lsb)</callback>
 <callback>set_parity($parity)</callback>
+<callback>set_ascii($ascii)</callback>
+<callback>set_binary($binary)</callback>
+<callback>set_special($special)</callback>
+<callback>set_scroll($scroll)</callback>
 
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
@@ -25,6 +29,36 @@
   </param>
 
   <param>
+      <name>Scroll</name>
+      <key>scroll</key>
+      <value>False</value>
+      <type>bool</type>
+      <option>
+          <name>Yes</name>
+          <key>True</key>
+      </option>
+      <option>
+          <name>No</name>
+          <key>False</key>
+      </option>
+  </param>
+
+  <param>
+      <name>Binary printout</name>
+      <key>binary</key>
+      <value>True</value>
+      <type>bool</type>
+      <option>
+          <name>Yes</name>
+          <key>True</key>
+      </option>
+      <option>
+          <name>No</name>
+          <key>False</key>
+      </option>
+  </param>
+
+  <param>
       <name>Hex printout</name>
       <key>hexadecimal</key>
       <value>False</value>
@@ -36,6 +70,44 @@
       <option>
           <name>No</name>
           <key>False</key>
+      </option>
+  </param>
+
+  <param>
+      <name>Ascii printout</name>
+      <key>ascii</key>
+      <value>False</value>
+      <type>bool</type>
+      <option>
+          <name>Yes</name>
+          <key>True</key>
+      </option>
+      <option>
+          <name>No</name>
+          <key>False</key>
+      </option>
+  </param>
+
+  <param>
+      <name>Special</name>
+      <key>special</key>
+      <value>0</value>
+      <type>int</type>
+      <option>
+          <name>None</name>
+          <key>0</key>
+      </option>
+      <option>
+          <name>Differential</name>
+          <key>1</key>
+      </option>
+      <option>
+          <name>Manchester 1</name>
+          <key>2</key>
+      </option>
+      <option>
+          <name>Manchester 2</name>
+          <key>3</key>
       </option>
   </param>
 

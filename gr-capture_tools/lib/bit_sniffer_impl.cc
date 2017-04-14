@@ -29,20 +29,21 @@ namespace gr {
   namespace capture_tools {
 
     bit_sniffer::sptr
-    bit_sniffer::make(int fade_out, bool hexadecimal, int offset, int bits_per_word, bool lsb, bool parity)
+    bit_sniffer::make(int fade_out, bool hexadecimal, int offset, int bits_per_word, bool lsb, bool parity, bool ascii, bool binary, int special, bool scroll)
     {
       return gnuradio::get_initial_sptr
-        (new bit_sniffer_impl(fade_out, hexadecimal, offset, bits_per_word, lsb, parity));
+        (new bit_sniffer_impl(fade_out, hexadecimal, offset, bits_per_word, lsb, parity, ascii, binary, special, scroll));
     }
 
     /*
      * The private constructor
      */
-    bit_sniffer_impl::bit_sniffer_impl(int fade_out, bool hexadecimal, int offset, int bits_per_word, bool lsb, bool parity)
+    bit_sniffer_impl::bit_sniffer_impl(int fade_out, bool hexadecimal, int offset, int bits_per_word, bool lsb, bool parity, bool ascii, bool binary, int special, bool scroll)
       : gr::sync_block("bit_sniffer",
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0)),
-        d_fade_out(fade_out), d_hexadecimal(hexadecimal), d_offset(offset), d_bits_per_word(bits_per_word), d_lsb(lsb), d_parity(parity)
+        d_fade_out(fade_out), d_hexadecimal(hexadecimal), d_offset(offset), d_bits_per_word(bits_per_word), d_lsb(lsb), d_parity(parity),
+        d_ascii(ascii), d_binary(binary), d_special(special), d_scroll(scroll)
     {
         d_cnt = 0;
         d_last_size = 0;
@@ -97,7 +98,8 @@ namespace gr {
             }
             d_last_size = packet_length;
         }
-        printf("\33[2K\r");
+        if(!d_scroll)
+            printf("\33[2K\r");
         printf("%08d: ", d_cnt);
         uint8_t current_byte;
         int bitcounter = 0;
@@ -105,6 +107,8 @@ namespace gr {
         bool just_changed = 0;
         int bits_per_word_practice = d_bits_per_word + (d_parity ? 1 : 0);
         bool do_afterwards = 0;
+        std::ostringstream hex_out;
+        std::ostringstream ascii_out;
         for(int i=0;i<packet_length;i++) {
             if (i < d_offset){
                 bitcounter = 0;
@@ -124,19 +128,19 @@ namespace gr {
                 }
             }
             if (bits[i] != d_last[i] && d_last[i] != 255) {
-                if(!d_hexadecimal)
+                if(d_binary)
                     printf("\033[91;1m%1d\033[0m", bits[i]);
                 d_since_change[i] = 0;
                 just_changed = 1;
             }
             else {
                 if(d_since_change[i] < d_fade_out) {
-                    if(!d_hexadecimal)
+                    if(d_binary)
                         printf("\033[91;2m%1d\033[0m", bits[i]);
                     recent_changed = 1;
                 }
                 else {
-                    if(!d_hexadecimal)
+                    if(d_binary)
                         printf("%1d", bits[i]);
                 }
                 d_since_change[i]++;
@@ -144,14 +148,20 @@ namespace gr {
             d_last[i] = bits[i];
             if ((bitcounter % bits_per_word_practice) == (bits_per_word_practice - 1)) {
                 if(d_hexadecimal) {
-                    if(just_changed)
-                        printf("\033[91;1m%02x\033[0m", current_byte);
-                    else if(recent_changed)
-                        printf("\033[91;2m%02x\033[0m", current_byte);
-                    else
-                        printf("%02x", current_byte);
+                    if(just_changed){
+                        hex_out << boost::format("\033[91;1m%02x\033[0m") % ((int)current_byte);
+                        ascii_out << "\033[91;1m" << printable_char(current_byte) << "\033[0m";
+                    }
+                    else if(recent_changed){
+                        hex_out << boost::format("\033[91;2m%02x\033[0m") % ((int)current_byte);
+                        ascii_out << "\033[91;2m" << printable_char(current_byte) << "\033[0m";
+                    }
+                    else {
+                        hex_out << boost::format("%02x") % ((int)current_byte);
+                        ascii_out << printable_char(current_byte);
+                    }
                 }
-                else {
+                if(d_binary) {
                     if (i<(packet_length - 1)) {
                         printf(" ");
                     }
@@ -165,18 +175,43 @@ namespace gr {
         }
         if(d_hexadecimal) {
             if (do_afterwards) {
-                if(just_changed)
-                    printf("\033[91;1m%02x..\033[0m", current_byte);
-                else if(recent_changed)
-                    printf("\033[91;2m%02x..\033[0m", current_byte);
-                else
-                    printf("%02x..", current_byte);
+                if(just_changed){
+                    hex_out << boost::format("\033[91;1m%02x..\033[0m") % ((int)current_byte);
+                    ascii_out << "\033[91;1m" << printable_char(current_byte) << "--\033[0m";
+                }
+                else if(recent_changed) {
+                    hex_out << boost::format("\033[91;2m%02x..\033[0m") % ((int)current_byte);
+                    ascii_out << "\033[91;2m" << printable_char(current_byte) << "--\033[0m";
+                }
+                else {
+                    hex_out << boost::format("%02x..") % ((int)current_byte);
+                    ascii_out << printable_char(current_byte) << "--";
+                }
             }
         }
+
+        if(d_binary && d_hexadecimal)
+            std::cout << "   ";
+        if(d_hexadecimal)
+            std::cout << "[" << hex_out.str() << "]";
+        if((d_binary || d_hexadecimal) && d_ascii)
+            std::cout << "   ";
+        if(d_ascii)
+            std::cout << "[" << ascii_out.str() << "]";
+
+        if(d_scroll)
+            printf("\n");
         fflush(stdout);
 
         d_cnt++;
     }
+        char bit_sniffer_impl::printable_char(char ch)
+        {
+            if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9'))
+                return ch;
+            else
+                return '.';
+        }
 
         void bit_sniffer_impl::set_fade_out(int val)
         {
@@ -206,6 +241,26 @@ namespace gr {
         void bit_sniffer_impl::set_parity(bool val)
         {
             d_parity = val;
+        }
+
+        void bit_sniffer_impl::set_ascii(bool val)
+        {
+            d_ascii = val;
+        }
+
+        void bit_sniffer_impl::set_binary(bool val)
+        {
+            d_binary = val;
+        }
+
+        void bit_sniffer_impl::set_special(int val)
+        {
+            d_special = val;
+        }
+
+        void bit_sniffer_impl::set_scroll(bool val)
+        {
+            d_scroll = val;
         }
 
     int

@@ -31,6 +31,7 @@ namespace gr {
      private:
       // Nothing to declare in this block.
     void handler(pmt::pmt_t msg);
+    char printable_char(char ch);
         int d_cnt;
         uint8_t *d_last;
         int *d_since_change;
@@ -42,9 +43,13 @@ namespace gr {
         int d_bits_per_word;
         bool d_lsb;
         bool d_parity;
+        bool d_ascii;
+        bool d_binary;
+        int d_special;
+        bool d_scroll;
 
      public:
-      bit_sniffer_impl(int fade_out=200, bool hexadecimal=0, int offset=0, int bits_per_word=8, bool lsb=0, bool parity=0);
+      bit_sniffer_impl(int fade_out=200, bool hexadecimal=0, int offset=0, int bits_per_word=8, bool lsb=0, bool parity=0, bool ascii=0, bool binary=1, int special=0, bool scroll=0);
       ~bit_sniffer_impl();
 
       // Where all the action really happens
@@ -59,6 +64,10 @@ namespace gr {
         void set_bits_per_word(int);
         void set_lsb(bool);
         void set_parity(bool);
+        void set_ascii(bool);
+        void set_binary(bool);
+        void set_special(int);
+        void set_scroll(bool);
     };
 
   } // namespace capture_tools
