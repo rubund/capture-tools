@@ -41,7 +41,7 @@ namespace gr {
     repeat_input_n_times_cc_impl::repeat_input_n_times_cc_impl(int n_times, int max_samples)
       : gr::block("repeat_input_n_times_cc",
               gr::io_signature::make(1, 1, sizeof(gr_complex)),
-              gr::io_signature::make(1, 1, sizeof(gr_complex)))
+              gr::io_signature::make(1, 1, sizeof(gr_complex))), d_fromtag(0)
     {
         d_memory = new gr_complex[max_samples];
         d_memory_cnt = 0;
@@ -109,6 +109,7 @@ namespace gr {
                 get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + minelem3);
                 for(int i=0; i<tags.size(); i++) {
                     add_item_tag(0, nitems_written(0) + (tags[i].offset-nitems_read(0)), tags[i].key, tags[i].value, tags[i].srcid);
+                    d_all_tags.push_back(tags[i]);
                 }
                 d_memory_cnt += minelem3;
                 produced = minelem3;
@@ -121,6 +122,7 @@ namespace gr {
                 get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + minelem2);
                 for(int i=0; i<tags.size(); i++) {
                     add_item_tag(0, nitems_written(0) + (tags[i].offset-nitems_read(0)), tags[i].key, tags[i].value, tags[i].srcid);
+                    d_all_tags.push_back(tags[i]);
                 }
                 produced = minelem2;
                 d_memory_cnt = d_max_samples;
@@ -132,18 +134,41 @@ namespace gr {
         }
         else if (d_state == 1){
             if((d_playback_cnt + noutput_items) < d_memory_cnt) {
+                for(int i=d_fromtag;i<d_all_tags.size(); i++){
+                    if(d_all_tags[i].offset < d_playback_cnt) {
+                        d_fromtag = i;
+                    }
+                    else if (d_all_tags[i].offset >= (d_playback_cnt + noutput_items)) {
+                        break;
+                    }
+                    else {
+                        add_item_tag(0, nitems_written(0) + (d_all_tags[i].offset-d_playback_cnt), d_all_tags[i].key, d_all_tags[i].value, d_all_tags[i].srcid);
+                    }
+                }
                 memcpy(out, d_memory+(d_playback_cnt), sizeof(gr_complex) * noutput_items);
                 d_playback_cnt += noutput_items;
                 produced = noutput_items;
                 consumed = 0;
             }
             else {
+                for(int i=d_fromtag;i<d_all_tags.size(); i++){
+                    if(d_all_tags[i].offset < d_playback_cnt) {
+                        d_fromtag = i;
+                    }
+                    else if (d_all_tags[i].offset >= d_memory_cnt) {
+                        break;
+                    }
+                    else {
+                        add_item_tag(0, nitems_written(0) + (d_all_tags[i].offset-d_playback_cnt), d_all_tags[i].key, d_all_tags[i].value, d_all_tags[i].srcid);
+                    }
+                }
                 int postag = nitems_written(0) + d_memory_cnt - d_playback_cnt - 1;
                 memcpy(out, d_memory+(d_playback_cnt), sizeof(gr_complex) * (d_memory_cnt - d_playback_cnt));
                 produced = d_memory_cnt - d_playback_cnt;
                 consumed = 0;
                 d_playback_cnt = 0;
                 d_playback_time++;
+                d_fromtag = 0;
                 if(d_n_times != 0 && (d_playback_time >= (d_n_times - 1))){
                     d_state = 2;
                     add_item_tag(0, postag, pmt::intern("end"), pmt::intern("repeat_input_n_times_cc"), pmt::intern(""));
