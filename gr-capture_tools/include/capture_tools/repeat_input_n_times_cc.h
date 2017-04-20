@@ -52,6 +52,9 @@ namespace gr {
        * creating new instances.
        */
       static sptr make(int n_times, int max_samples);
+
+        virtual void set_tag_propagate_end(bool)=0;
+        virtual void set_tag_add_repeat(bool)=0;
     };
 
   } // namespace capture_tools

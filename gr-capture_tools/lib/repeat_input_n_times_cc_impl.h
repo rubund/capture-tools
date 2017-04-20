@@ -39,6 +39,9 @@ namespace gr {
         int d_playback_time;
         int d_fromtag;
 
+        bool d_tag_propagate_end;
+        bool d_tag_add_repeat;
+
         std::vector<tag_t> d_all_tags;
 
      public:
@@ -52,6 +55,9 @@ namespace gr {
            gr_vector_int &ninput_items,
            gr_vector_const_void_star &input_items,
            gr_vector_void_star &output_items);
+
+      void set_tag_propagate_end(bool);
+      void set_tag_add_repeat(bool);
     };
 
   } // namespace capture_tools

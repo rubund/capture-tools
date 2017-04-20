@@ -4,7 +4,9 @@
   <key>capture_tools_repeat_input_n_times_cc</key>
   <category>[capture_tools]</category>
   <import>import capture_tools</import>
-  <make>capture_tools.repeat_input_n_times_cc($n_times, $max_samples)</make>
+  <make>capture_tools.repeat_input_n_times_cc($n_times, $max_samples)
+self.$(id).set_tag_propagate_end($propagate_end_tag)
+self.$(id).set_tag_add_repeat($add_repeat_tag)</make>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
@@ -21,6 +23,36 @@
     <key>max_samples</key>
     <type>int</type>
   </param>
+
+  <param>
+      <name>Propagate end tag through block</name>
+      <key>propagate_end_tag</key>
+      <value>False</value>
+      <type>bool</type>
+      <option>
+          <name>Yes</name>
+          <key>True</key>
+      </option>
+      <option>
+          <name>No</name>
+          <key>False</key>
+      </option>
+  </param>
+  <param>
+      <name>Add repeat tag</name>
+      <key>add_repeat_tag</key>
+      <value>True</value>
+      <type>bool</type>
+      <option>
+          <name>Yes</name>
+          <key>True</key>
+      </option>
+      <option>
+          <name>No</name>
+          <key>False</key>
+      </option>
+  </param>
+
 
   <!-- Make one 'sink' node per input. Sub-nodes:
        * name (an identifier for the GUI)
