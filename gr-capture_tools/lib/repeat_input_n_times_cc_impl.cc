@@ -181,10 +181,10 @@ namespace gr {
                 if(d_tag_add_repeat)
                     add_item_tag(0, nitems_written(0) + produced - 1, pmt::intern("repeat"), pmt::intern("repeat_input_n_times_cc"), pmt::intern(""));
             }
-            if (minelem3 == end_pos) {
+            if (d_anydone && consumed == d_remaining) {
                 //d_state = 1;
                 if(d_tag_add_repeat)
-                    add_item_tag(0, nitems_written(0) + produced - 1, pmt::intern("repeat"), pmt::intern("repeat_input_n_times_cc"), pmt::intern(""));
+                    add_item_tag(0, nitems_written(0) + consumed - 1, pmt::intern("repeat"), pmt::intern("repeat_input_n_times_cc"), pmt::intern(""));
             }
         }
         else if (d_state == 1){
