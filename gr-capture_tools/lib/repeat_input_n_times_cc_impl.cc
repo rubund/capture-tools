@@ -23,6 +23,9 @@
 #endif
 
 #include <gnuradio/io_signature.h>
+#include <gnuradio/block_detail.h>
+#include <gnuradio/buffer.h>
+#include <boost/thread.hpp>
 #include "repeat_input_n_times_cc_impl.h"
 
 namespace gr {
@@ -42,7 +45,7 @@ namespace gr {
       : gr::block("repeat_input_n_times_cc",
               gr::io_signature::make(1, 1, sizeof(gr_complex)),
               gr::io_signature::make(1, 1, sizeof(gr_complex))), d_fromtag(0),
-        d_tag_propagate_end(0), d_tag_add_repeat(1)
+        d_tag_propagate_end(0), d_tag_add_repeat(1), d_anydone(0)
     {
         d_memory = new gr_complex[max_samples];
         d_memory_cnt = 0;
@@ -75,6 +78,36 @@ namespace gr {
     void
     repeat_input_n_times_cc_impl::forecast (int noutput_items, gr_vector_int &ninput_items_required)
     {
+        gr::block_detail *d = this->detail().get();
+        gr_vector_int           d_ninput_items;
+        std::vector<bool>       d_input_done;
+
+        d_ninput_items.resize (d->ninputs ());
+        d_input_done.resize(d->ninputs());
+
+        if(d_state == 0) {
+            for(int i=0;i < d->ninputs() ;i++) {
+                gr::thread::scoped_lock guard(*d->input(i)->mutex());
+                d_ninput_items[i] = d->input(i)->items_available ();
+                d_input_done[i] = d->input(i)->done();
+                if(d_input_done[i]) {
+                    d_anydone = 1;
+                    d_remaining = d_ninput_items[i];
+                    //printf("setting anydone\n");
+                    ninput_items_required[0] = d_ninput_items[0];
+                    return;
+                    break;
+                }
+            }
+        }
+
+        //if (d_anydone) {
+        //      ninput_items_required[0] = 0;
+        //      //printf("Input is done!!!\n");
+        //}
+        //else {
+        //      ninput_items_required[0] = noutput_items;
+        //}
         if (d_state == 0) {
             ninput_items_required[0] = noutput_items;
         }
@@ -96,6 +129,10 @@ namespace gr {
         std::vector<tag_t> tags;
       const gr_complex *in = (const gr_complex *) input_items[0];
       gr_complex *out = (gr_complex *) output_items[0];
+
+        if(d_anydone){
+            //printf("general_work called after d_anydone is set. Called with ninput_items[0]==%d, and noutput_items==%d\n", ninput_items[0], noutput_items);
+        }
 
         produced = 0;
         consumed = 0;
@@ -140,12 +177,12 @@ namespace gr {
                 produced = minelem2;
                 d_memory_cnt = d_max_samples;
                 consumed = ninput_items[0];
-                d_state = 1;
+                //d_state = 1;
                 if(d_tag_add_repeat)
                     add_item_tag(0, nitems_written(0) + produced - 1, pmt::intern("repeat"), pmt::intern("repeat_input_n_times_cc"), pmt::intern(""));
             }
             if (minelem3 == end_pos) {
-                d_state = 1;
+                //d_state = 1;
                 if(d_tag_add_repeat)
                     add_item_tag(0, nitems_written(0) + produced - 1, pmt::intern("repeat"), pmt::intern("repeat_input_n_times_cc"), pmt::intern(""));
             }
@@ -204,6 +241,13 @@ namespace gr {
             produced = -1;
         }
 
+      if(d_state == 0 && d_anydone) {
+        //printf("done, consumed is %d and remaining %d\n",consumed, d_remaining);
+        if (consumed == d_remaining) {
+            //printf("Changing state\n");
+            d_state = 1;
+        }
+      }
 
       consume_each (consumed);
 

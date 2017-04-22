@@ -43,6 +43,8 @@ namespace gr {
         bool d_tag_add_repeat;
 
         std::vector<tag_t> d_all_tags;
+        bool d_anydone;
+        int d_remaining;
 
      public:
       repeat_input_n_times_cc_impl(int n_times, int max_samples);
