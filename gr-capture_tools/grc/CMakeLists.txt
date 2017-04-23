@@ -40,5 +40,6 @@ install(FILES
     capture_tools_pfb_clock_sync_sync_fff.xml
     capture_tools_msk_timing_recovery_sync_cc.xml
     capture_tools_bit_sniffer.xml
-    capture_tools_freqest.xml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_freqest.xml
+    capture_tools_repeat_input_n_times_cscs.xml DESTINATION share/gnuradio/grc/blocks
 )

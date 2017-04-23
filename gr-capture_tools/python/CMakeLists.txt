@@ -62,3 +62,4 @@ GR_ADD_TEST(qa_pfb_clock_sync_sync_fff ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOUR
 GR_ADD_TEST(qa_msk_timing_recovery_sync_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_msk_timing_recovery_sync_cc.py)
 GR_ADD_TEST(qa_bit_sniffer ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_bit_sniffer.py)
 GR_ADD_TEST(qa_freqest ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_freqest.py)
+GR_ADD_TEST(qa_repeat_input_n_times_cscs ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_repeat_input_n_times_cscs.py)

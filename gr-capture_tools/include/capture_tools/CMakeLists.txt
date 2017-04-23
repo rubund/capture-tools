@@ -52,5 +52,6 @@ install(FILES
     pfb_clock_sync_sync_fff.h
     msk_timing_recovery_sync_cc.h
     bit_sniffer.h
-    freqest.h DESTINATION include/capture_tools
+    freqest.h
+    repeat_input_n_times_cscs.h DESTINATION include/capture_tools
 )

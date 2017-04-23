@@ -35,6 +35,7 @@
 #include "capture_tools/msk_timing_recovery_sync_cc.h"
 #include "capture_tools/bit_sniffer.h"
 #include "capture_tools/freqest.h"
+#include "capture_tools/repeat_input_n_times_cscs.h"
 
 %}
 
@@ -96,3 +97,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, msk_timing_recovery_sync_cc);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, bit_sniffer);
 %include "capture_tools/freqest.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, freqest);
+%include "capture_tools/repeat_input_n_times_cscs.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, repeat_input_n_times_cscs);
