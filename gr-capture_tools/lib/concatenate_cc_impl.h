@@ -33,6 +33,8 @@ namespace gr {
         gr_complex **d_in;
         int d_inputs;
         int d_current;
+        bool d_current_done;
+        int d_current_samples_left;
 
      public:
       concatenate_cc_impl(int inputs);

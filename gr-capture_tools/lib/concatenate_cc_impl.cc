@@ -23,6 +23,9 @@
 #endif
 
 #include <gnuradio/io_signature.h>
+#include <gnuradio/block_detail.h>
+#include <gnuradio/buffer.h>
+#include <boost/thread.hpp>
 #include "concatenate_cc_impl.h"
 
 namespace gr {
@@ -41,7 +44,8 @@ namespace gr {
     concatenate_cc_impl::concatenate_cc_impl(int inputs)
       : gr::block("concatenate_cc",
               gr::io_signature::make(1, -1, sizeof(gr_complex)),
-              gr::io_signature::make(1,  1, sizeof(gr_complex)))
+              gr::io_signature::make(1,  1, sizeof(gr_complex))),
+            d_current_done(0)
     {
         d_in = new gr_complex*[inputs];
         d_inputs = inputs;
@@ -59,9 +63,26 @@ namespace gr {
     void
     concatenate_cc_impl::forecast (int noutput_items, gr_vector_int &ninput_items_required)
     {
+        gr::block_detail *d = this->detail().get();
+        int d_ninput_items;
+        bool d_input_done;
+
+        int forcurrent = noutput_items;
+
+        if(d_current >= 0 && d_current < d->ninputs()) {
+            gr::thread::scoped_lock guard(*d->input(d_current)->mutex());
+            d_ninput_items = d->input(d_current)->items_available ();
+            d_input_done = d->input(d_current)->done();
+            if(d_input_done) {
+                d_current_done = 1;
+                d_current_samples_left = d_ninput_items;
+                forcurrent = 0;
+            }
+        }
+
         for(int i=0;i<d_inputs;i++) {
           if(i == d_current)
-              ninput_items_required[i] = noutput_items;
+              ninput_items_required[i] = forcurrent;
           else
               ninput_items_required[i] = 0;
         }
@@ -93,10 +114,10 @@ namespace gr {
         }
         int minval2;
         int minval;
-        if (end_pos != -1)
-            minval2 = std::min(end_pos + 1, ninput_items[d_current]);
-        else
-            minval2 = ninput_items[d_current];
+        //if (end_pos != -1)
+        //    minval2 = std::min(end_pos + 1, ninput_items[d_current]);
+        //else
+        minval2 = ninput_items[d_current];
         minval = std::min(minval2, noutput_items);
         memcpy(out, d_in[d_current], sizeof(gr_complex) * minval);
         consumed += minval;
@@ -105,11 +126,14 @@ namespace gr {
 
       consume (d_current, consumed);
 
-      if((end_pos+1) == minval){
-        d_current++;
-        if(d_current >= d_inputs) {
-            add_item_tag(0, nitems_written(0) + end_pos, pmt::intern("end"), pmt::intern("concatenate_cc"), pmt::intern(""));
-            d_current = -1;
+      if(d_current_done){
+        if(d_current_samples_left == consumed) {
+            d_current++;
+            d_current_done = 0;
+            if(d_current >= d_inputs) {
+                add_item_tag(0, nitems_written(0) + produced - 1, pmt::intern("end"), pmt::intern("concatenate_cc"), pmt::intern(""));
+                d_current = -1;
+            }
         }
       }
 
