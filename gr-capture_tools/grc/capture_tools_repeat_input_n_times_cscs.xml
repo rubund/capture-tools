@@ -15,12 +15,14 @@ self.$(id).set_tag_add_repeat($add_repeat_tag)</make>
   <param>
     <name>Times to repeat</name>
     <key>n_times</key>
+    <value>0</value>
     <type>int</type>
   </param>
 
   <param>
     <name>Max samples to repeat</name>
     <key>max_samples</key>
+    <value>10000000</value>
     <type>int</type>
   </param>
 
