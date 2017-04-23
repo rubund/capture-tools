@@ -33,7 +33,15 @@ class qa_concatenate_cc (gr_unittest.TestCase):
 
     def test_001_t (self):
         # set up fg
+        src1 = blocks.vector_source_c([1,2,3,4])
+        src2 = blocks.vector_source_c([5,3,3,3])
+        dut = capture_tools.concatenate_cc(2)
+        dst = blocks.vector_sink_c()
+        self.tb.connect(src1,(dut,0))
+        self.tb.connect(src2,(dut,1))
+        self.tb.connect(dut, dst)
         self.tb.run ()
+        print(dst.data())
         # check data
 
 
