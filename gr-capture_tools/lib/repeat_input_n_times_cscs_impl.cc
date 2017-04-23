@@ -152,7 +152,7 @@ namespace gr {
             else
                 minelem3 = minelem;
             if((d_memory_cnt + minelem3) < d_max_samples) {
-                memcpy(d_memory+(d_memory_cnt), in, sizeof(short)*2 * (minelem3));
+                memcpy(d_memory+(d_memory_cnt*2), in, sizeof(short)*2 * (minelem3));
                 memcpy(out, in, sizeof(short)*2 * (minelem3));
                 get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + minelem3);
                 for(int i=0; i<tags.size(); i++) {
@@ -165,7 +165,7 @@ namespace gr {
                 consumed = minelem3;
             }
             else {
-                memcpy(d_memory+(d_memory_cnt), in, sizeof(short)*2 * (d_max_samples - d_memory_cnt));
+                memcpy(d_memory+(d_memory_cnt*2), in, sizeof(short)*2 * (d_max_samples - d_memory_cnt));
                 int minelem2 = std::min((d_max_samples - d_memory_cnt), minelem3);
                 memcpy(out, in, sizeof(short)*2 * minelem2);
                 get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + minelem2);
@@ -201,7 +201,7 @@ namespace gr {
                             add_item_tag(0, nitems_written(0) + (d_all_tags[i].offset-d_playback_cnt), d_all_tags[i].key, d_all_tags[i].value, d_all_tags[i].srcid);
                     }
                 }
-                memcpy(out, d_memory+(d_playback_cnt), sizeof(short)*2 * noutput_items);
+                memcpy(out, d_memory+(d_playback_cnt*2), sizeof(short)*2 * noutput_items);
                 d_playback_cnt += noutput_items;
                 produced = noutput_items;
                 consumed = 0;
@@ -220,7 +220,7 @@ namespace gr {
                     }
                 }
                 long long int postag = nitems_written(0) + d_memory_cnt - d_playback_cnt - 1;
-                memcpy(out, d_memory+(d_playback_cnt), sizeof(short)*2 * (d_memory_cnt - d_playback_cnt));
+                memcpy(out, d_memory+(d_playback_cnt*2), sizeof(short)*2 * (d_memory_cnt - d_playback_cnt));
                 produced = d_memory_cnt - d_playback_cnt;
                 consumed = 0;
                 d_playback_cnt = 0;
