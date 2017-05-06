@@ -139,6 +139,9 @@ namespace gr {
                     nstate = 1;
                     d_packet_counter = 0;
                     d_receive_buffer.clear();
+                    for(int i=0;i<d_sync_word_len;i++) {
+                        d_receive_buffer.push_back((d_sync_word >> (d_sync_word_len-i-1)) & 0x1);
+                    }
                   }
                   if(d_start_counter < 32)
                       d_start_counter++;
