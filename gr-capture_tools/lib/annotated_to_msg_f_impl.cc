@@ -41,7 +41,9 @@ namespace gr {
     annotated_to_msg_f_impl::annotated_to_msg_f_impl()
       : gr::sync_block("annotated_to_msg_f",
               gr::io_signature::make(2, 2, sizeof(float)),
-              gr::io_signature::make(0, 0, 0))
+              gr::io_signature::make(0, 0, 0)),
+            d_input_buffer(0), d_sync_word(0), d_sync_word_mask(0),
+            d_sync_word_len(0), d_start_counter(0)
     {
         d_state = 0;
 
@@ -56,6 +58,22 @@ namespace gr {
     {
     }
 
+    void
+    annotated_to_msg_f_impl::set_sync_word(const std::vector<uint8_t> s)
+    {
+        d_sync_word = 0;
+        d_sync_word_mask = 0;
+        int swsize = s.size();
+        if (swsize > 32) {
+            throw std::runtime_error("Sync word can be max 32 bits long");
+        }
+        for(int i=0; i<swsize ;i++) {
+            d_sync_word = ((d_sync_word << 1) & 0xfffffffe) | (uint32_t)(s[i] & 0x01);
+            d_sync_word_mask |= (((uint32_t)1) << i);
+        }
+        d_sync_word_len = swsize;
+    }
+
     int
     annotated_to_msg_f_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
@@ -66,6 +84,7 @@ namespace gr {
         int nextstrobe = -1;
       const float *in = (const float *) input_items[0];
       const float *in_th = (const float *) input_items[1];
+        uint8_t sliced;
 
         get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + noutput_items);
         for(int i=tagnum+1;i<tags.size();i++){
@@ -81,6 +100,7 @@ namespace gr {
             if (d_state == 0) {
                 if (in_th[i] == 1) {
                     d_state = 1;
+                    d_start_counter = 0;
                     d_receive_buffer.clear();
                 }
             }
@@ -102,7 +122,14 @@ namespace gr {
             }
             if(d_state == 1) {
                 if((nextstrobe != -1) && (i == nextstrobe)) {
-                    d_receive_buffer.push_back((in[i]) > 0.0 ? 1 : 0);
+                    sliced = (in[i]) > 0.0 ? 1 : 0;
+                    d_input_buffer = ((d_input_buffer << 1) & 0xfffffffe) | ((uint32_t)(sliced & 0x01));
+                    if (d_sync_word_len > 0 && d_start_counter >= d_sync_word_len && (d_input_buffer & d_sync_word_mask) == d_sync_word) {
+                        printf("Match\n");
+                    }
+                    if(d_start_counter < 32)
+                        d_start_counter++;
+                    d_receive_buffer.push_back(sliced);
                     nextstrobe = -1;
                     for(int i=tagnum+1;i<tags.size();i++){
                         if (pmt::equal(tags[i].key, pmt::intern("strobe"))) {

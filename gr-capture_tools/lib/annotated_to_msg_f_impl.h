@@ -33,6 +33,11 @@ namespace gr {
       // Nothing to declare in this block.
         int d_state;
         std::vector<uint8_t> d_receive_buffer;
+        uint32_t d_sync_word;
+        uint32_t d_sync_word_mask;
+        int d_sync_word_len;
+        uint32_t d_input_buffer;
+        int d_start_counter;
 
      public:
       annotated_to_msg_f_impl();
@@ -42,6 +47,8 @@ namespace gr {
       int work(int noutput_items,
          gr_vector_const_void_star &input_items,
          gr_vector_void_star &output_items);
+
+      void set_sync_word(const std::vector<uint8_t> s);
     };
 
   } // namespace capture_tools

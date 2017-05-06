@@ -51,6 +51,8 @@ namespace gr {
        * creating new instances.
        */
       static sptr make();
+
+      virtual void set_sync_word(const std::vector<uint8_t> s) = 0;
     };
 
   } // namespace capture_tools

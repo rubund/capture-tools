@@ -4,17 +4,20 @@
   <key>capture_tools_annotated_to_msg_f</key>
   <category>[capture_tools]</category>
   <import>import capture_tools</import>
-  <make>capture_tools.annotated_to_msg_f()</make>
+  <make>capture_tools.annotated_to_msg_f()
+self.$(id).set_sync_word($syncword)</make>
+  <callback>self.$(id).set_sync_word($syncword)</callback>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
        * key (makes the value accessible as $keyname, e.g. in the make node)
        * type -->
-  <!---<param>
-    <name>...</name>
-    <key>...</key>
-    <type>...</type>
-  </param>-->
+  <param>
+    <name>Sync word (list)</name>
+    <key>syncword</key>
+    <value></value>
+    <type>int_vector</type>
+  </param>
 
   <!-- Make one 'sink' node per input. Sub-nodes:
        * name (an identifier for the GUI)
