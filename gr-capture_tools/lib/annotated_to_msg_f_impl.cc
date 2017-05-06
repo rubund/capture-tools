@@ -93,6 +93,7 @@ namespace gr {
       const float *in = (const float *) input_items[0];
       const float *in_th = (const float *) input_items[1];
         uint8_t sliced;
+        int nstate;
 
         get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + noutput_items);
         for(int i=tagnum+1;i<tags.size();i++){
@@ -105,6 +106,7 @@ namespace gr {
 
       // Do <+signal processing+>
         for(int i=0;i<noutput_items;i++) {
+            nstate = d_state;
             //if (d_state == 0) {
             //    if (in_th[i] == 1) {
             //        d_state = 1;
@@ -131,16 +133,21 @@ namespace gr {
             if((nextstrobe != -1) && (i == nextstrobe)) {
                 sliced = (in[i]) > 0.0 ? 1 : 0;
                 d_input_buffer = ((d_input_buffer << 1) & 0xfffffffe) | ((uint32_t)(sliced & 0x01));
-                if (d_state == 0 && d_sync_word_len > 0 && d_start_counter >= d_sync_word_len && (d_input_buffer & d_sync_word_mask) == d_sync_word) {
-                    printf("Match. input_buffer: %08x\n", d_input_buffer);
-                    d_state = 1;
+                if (d_state == 0) {
+                  if(d_sync_word_len > 0 && d_start_counter >= d_sync_word_len && (d_input_buffer & d_sync_word_mask) == d_sync_word) {
+                    //printf("Match. input_buffer: %08x\n", d_input_buffer);
+                    nstate = 1;
                     d_packet_counter = 0;
                     d_receive_buffer.clear();
+                  }
+                  if(d_start_counter < 32)
+                      d_start_counter++;
                 }
                 else if (d_state == 1) {
                     d_packet_counter ++;
-                    if(d_packet_counter == d_n_to_catch) {
-                        d_state = 0;
+                    if(d_packet_counter >= d_n_to_catch) {
+                        //printf("Back to state 0\n");
+                        nstate = 0;
                         pmt::pmt_t pdu_meta = pmt::make_dict();
                         pmt::pmt_t pdu_vector = pmt::init_u8vector(d_receive_buffer.size(), d_receive_buffer);
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("freq"), pmt::mp("0"));
@@ -149,8 +156,6 @@ namespace gr {
                         d_start_counter = 0;
                     }
                 }
-                if(d_start_counter < 32)
-                    d_start_counter++;
                 if(d_state == 1) {
                     d_receive_buffer.push_back(sliced);
                 }
@@ -163,6 +168,7 @@ namespace gr {
                     }
                 }
             }
+            d_state = nstate;
         }
 
       // Tell runtime system how many output items we produced.
