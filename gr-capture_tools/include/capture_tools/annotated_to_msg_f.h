@@ -53,6 +53,8 @@ namespace gr {
       static sptr make();
 
       virtual void set_sync_word(const std::vector<uint8_t> s) = 0;
+
+      virtual void set_packet_length(int) = 0;
     };
 
   } // namespace capture_tools

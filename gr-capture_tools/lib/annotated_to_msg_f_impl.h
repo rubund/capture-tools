@@ -39,6 +39,9 @@ namespace gr {
         uint32_t d_input_buffer;
         int d_start_counter;
 
+        int d_n_to_catch;
+        int d_packet_counter;
+
      public:
       annotated_to_msg_f_impl();
       ~annotated_to_msg_f_impl();
@@ -49,6 +52,7 @@ namespace gr {
          gr_vector_void_star &output_items);
 
       void set_sync_word(const std::vector<uint8_t> s);
+      void set_packet_length(int val);
     };
 
   } // namespace capture_tools

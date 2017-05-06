@@ -43,7 +43,8 @@ namespace gr {
               gr::io_signature::make(2, 2, sizeof(float)),
               gr::io_signature::make(0, 0, 0)),
             d_input_buffer(0), d_sync_word(0), d_sync_word_mask(0),
-            d_sync_word_len(0), d_start_counter(0)
+            d_sync_word_len(0), d_start_counter(0),
+            d_n_to_catch(0)
     {
         d_state = 0;
 
@@ -72,6 +73,13 @@ namespace gr {
             d_sync_word_mask |= (((uint32_t)1) << i);
         }
         d_sync_word_len = swsize;
+        printf("d_sync_word: 0x%08x, d_sync_word_mask: 0x%08x, d_sync_word_len: %d\n",d_sync_word, d_sync_word_mask, d_sync_word_len);
+    }
+
+    void
+    annotated_to_msg_f_impl::set_packet_length(int val)
+    {
+        d_n_to_catch = val;
     }
 
     int
@@ -97,46 +105,61 @@ namespace gr {
 
       // Do <+signal processing+>
         for(int i=0;i<noutput_items;i++) {
-            if (d_state == 0) {
-                if (in_th[i] == 1) {
+            //if (d_state == 0) {
+            //    if (in_th[i] == 1) {
+            //        d_state = 1;
+            //        d_start_counter = 0;
+            //        d_receive_buffer.clear();
+            //    }
+            //}
+            //else if (d_state == 1) {
+            //    if (in_th[i] == 0) {
+            //        d_state = 0;
+            //        pmt::pmt_t pdu_meta = pmt::make_dict();
+            //        pmt::pmt_t pdu_vector = pmt::init_u8vector(d_receive_buffer.size(), d_receive_buffer);
+            //        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("freq"), pmt::mp("0"));
+            //        pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
+            //        message_port_pub(pmt::mp("packets"), out_msg);
+
+            //        //printf("Received: ");
+            //        //for(int j=0;j<d_receive_buffer.size();j++){
+            //        //    printf("%d", d_receive_buffer[j]);
+            //        //}
+            //        //printf("\n");
+            //    }
+            //}
+            if((nextstrobe != -1) && (i == nextstrobe)) {
+                sliced = (in[i]) > 0.0 ? 1 : 0;
+                d_input_buffer = ((d_input_buffer << 1) & 0xfffffffe) | ((uint32_t)(sliced & 0x01));
+                if (d_state == 0 && d_sync_word_len > 0 && d_start_counter >= d_sync_word_len && (d_input_buffer & d_sync_word_mask) == d_sync_word) {
+                    printf("Match. input_buffer: %08x\n", d_input_buffer);
                     d_state = 1;
-                    d_start_counter = 0;
+                    d_packet_counter = 0;
                     d_receive_buffer.clear();
                 }
-            }
-            else if (d_state == 1) {
-                if (in_th[i] == 0) {
-                    d_state = 0;
-                    pmt::pmt_t pdu_meta = pmt::make_dict();
-                    pmt::pmt_t pdu_vector = pmt::init_u8vector(d_receive_buffer.size(), d_receive_buffer);
-                    pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("freq"), pmt::mp("0"));
-                    pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
-                    message_port_pub(pmt::mp("packets"), out_msg);
-
-                    //printf("Received: ");
-                    //for(int j=0;j<d_receive_buffer.size();j++){
-                    //    printf("%d", d_receive_buffer[j]);
-                    //}
-                    //printf("\n");
-                }
-            }
-            if(d_state == 1) {
-                if((nextstrobe != -1) && (i == nextstrobe)) {
-                    sliced = (in[i]) > 0.0 ? 1 : 0;
-                    d_input_buffer = ((d_input_buffer << 1) & 0xfffffffe) | ((uint32_t)(sliced & 0x01));
-                    if (d_sync_word_len > 0 && d_start_counter >= d_sync_word_len && (d_input_buffer & d_sync_word_mask) == d_sync_word) {
-                        printf("Match\n");
+                else if (d_state == 1) {
+                    d_packet_counter ++;
+                    if(d_packet_counter == d_n_to_catch) {
+                        d_state = 0;
+                        pmt::pmt_t pdu_meta = pmt::make_dict();
+                        pmt::pmt_t pdu_vector = pmt::init_u8vector(d_receive_buffer.size(), d_receive_buffer);
+                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("freq"), pmt::mp("0"));
+                        pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
+                        message_port_pub(pmt::mp("packets"), out_msg);
+                        d_start_counter = 0;
                     }
-                    if(d_start_counter < 32)
-                        d_start_counter++;
+                }
+                if(d_start_counter < 32)
+                    d_start_counter++;
+                if(d_state == 1) {
                     d_receive_buffer.push_back(sliced);
-                    nextstrobe = -1;
-                    for(int i=tagnum+1;i<tags.size();i++){
-                        if (pmt::equal(tags[i].key, pmt::intern("strobe"))) {
-                            nextstrobe = tags[i].offset - nitems_read(0);
-                            tagnum = i;
-                            break;
-                        }
+                }
+                nextstrobe = -1;
+                for(int i=tagnum+1;i<tags.size();i++){
+                    if (pmt::equal(tags[i].key, pmt::intern("strobe"))) {
+                        nextstrobe = tags[i].offset - nitems_read(0);
+                        tagnum = i;
+                        break;
                     }
                 }
             }
