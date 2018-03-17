@@ -25,7 +25,6 @@ int main(int argc, char **argv)
 		if(i >= from){
 			fwrite(&tmp1,4,1,outfile);
 			fwrite(&tmp2,4,1,outfile);
-			fprintf(outfile,"%f\n",out);
 		}
 		i++;
 	}
