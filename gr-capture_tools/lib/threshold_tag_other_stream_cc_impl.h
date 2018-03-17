@@ -31,6 +31,8 @@ namespace gr {
      private:
       float d_low_thresh;
       float d_high_thresh;
+      bool d_is_above;
+      bool d_just_started;
 
      public:
       threshold_tag_other_stream_cc_impl(float low_thresh, float high_thresh);

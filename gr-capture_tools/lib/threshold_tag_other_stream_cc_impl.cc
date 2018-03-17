@@ -41,8 +41,9 @@ namespace gr {
     threshold_tag_other_stream_cc_impl::threshold_tag_other_stream_cc_impl(float low_thresh, float high_thresh)
       : gr::sync_block("threshold_tag_other_stream_cc",
               gr::io_signature::make2(2, 2, sizeof(gr_complex), sizeof(float)),
-              gr::io_signature::make(1, 1, sizeof(float))),
-            d_low_thresh(low_thresh), d_high_thresh(high_thresh)
+              gr::io_signature::make(1, 1, sizeof(gr_complex))),
+            d_low_thresh(low_thresh), d_high_thresh(high_thresh), d_is_above(false),
+            d_just_started(true)
     {}
 
     /*
@@ -73,7 +74,33 @@ namespace gr {
       const float *in_float = (const float *) input_items[1];
       gr_complex *out = (gr_complex *) output_items[0];
 
-      // Do <+signal processing+>
+      for(int i=0;i<noutput_items;i++) {
+        if(d_just_started) {
+          if (in_float[i] > d_high_thresh) {
+            d_is_above = true;
+            d_just_started = false;
+          }
+          if (in_float[i] < d_low_thresh) {
+            d_is_above = false;
+            d_just_started = false;
+          }
+        }
+        else {
+          if (d_is_above) {
+            if(in_float[i] < d_low_thresh) {
+              d_is_above = false;
+              add_item_tag(0, nitems_written(0) + i, pmt::intern("going low"), pmt::intern(""), pmt::intern(""));
+            }
+          }
+          else {
+            if(in_float[i] > d_high_thresh) {
+              d_is_above = true;
+              add_item_tag(0, nitems_written(0) + i, pmt::intern("going high"), pmt::intern(""), pmt::intern(""));
+            }
+          }
+        }
+      }
+      memcpy(out, in, sizeof(gr_complex)*noutput_items);
 
       // Tell runtime system how many output items we produced.
       return noutput_items;
