@@ -55,6 +55,8 @@ namespace gr {
        d_index_buffered = 0;
        d_is_writing = 0;
        d_numbers_written = 0;
+       d_null_to_write = new char[itemsize];
+       memset(d_null_to_write, 0, itemsize);
            printf("%d\n",number_to_write);
     }
 
@@ -73,7 +75,6 @@ namespace gr {
     {
         char *inbuf = (char *) input_items[0];
         int  nread = 0;
-        float null_to_write = 0;
         int status;
         std::vector<tag_t> tags;
         std::vector<int> tag_positions;
@@ -108,9 +109,8 @@ namespace gr {
               //inbuf += count;
               d_numbers_written += count;
               if(d_numbers_written >= d_number_to_write){
-                  null_to_write = 0;
                   for(int i=0;i<d_number_to_write;i++) {
-                      status = fwrite(&null_to_write,4,1,d_fp);
+                      status = fwrite(d_null_to_write,d_itemsize,1,d_fp);
                       if(status == 0) break;
                   }
                   d_is_writing = 0;
