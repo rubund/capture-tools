@@ -56,5 +56,6 @@ install(FILES
     repeat_input_n_times_cscs.h
     threshold_tag_other_stream_cc.h
     file_sink_on_tag.h
-    msg_to_gfsk_c.h DESTINATION include/capture_tools
+    msg_to_gfsk_c.h
+    file_source_on_tag.h DESTINATION include/capture_tools
 )

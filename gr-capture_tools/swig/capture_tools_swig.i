@@ -39,6 +39,7 @@
 #include "capture_tools/threshold_tag_other_stream_cc.h"
 #include "capture_tools/file_sink_on_tag.h"
 #include "capture_tools/msg_to_gfsk_c.h"
+#include "capture_tools/file_source_on_tag.h"
 
 %}
 
@@ -108,3 +109,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, threshold_tag_other_stream_cc);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, file_sink_on_tag);
 %include "capture_tools/msg_to_gfsk_c.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, msg_to_gfsk_c);
+%include "capture_tools/file_source_on_tag.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, file_source_on_tag);
