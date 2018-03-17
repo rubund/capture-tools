@@ -41,6 +41,7 @@
 #include "capture_tools/msg_to_gfsk_c.h"
 #include "capture_tools/file_source_on_tag.h"
 #include "capture_tools/tag_on_set_one_f.h"
+#include "capture_tools/tag_on_set_one_b.h"
 
 %}
 
@@ -114,3 +115,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, msg_to_gfsk_c);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, file_source_on_tag);
 %include "capture_tools/tag_on_set_one_f.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, tag_on_set_one_f);
+%include "capture_tools/tag_on_set_one_b.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, tag_on_set_one_b);

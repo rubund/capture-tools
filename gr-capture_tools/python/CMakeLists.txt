@@ -68,3 +68,4 @@ GR_ADD_TEST(qa_file_sink_on_tag ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}
 GR_ADD_TEST(qa_msg_to_gfsk_c ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_msg_to_gfsk_c.py)
 GR_ADD_TEST(qa_file_source_on_tag ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_file_source_on_tag.py)
 GR_ADD_TEST(qa_tag_on_set_one_f ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tag_on_set_one_f.py)
+GR_ADD_TEST(qa_tag_on_set_one_b ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tag_on_set_one_b.py)

@@ -58,5 +58,6 @@ install(FILES
     file_sink_on_tag.h
     msg_to_gfsk_c.h
     file_source_on_tag.h
-    tag_on_set_one_f.h DESTINATION include/capture_tools
+    tag_on_set_one_f.h
+    tag_on_set_one_b.h DESTINATION include/capture_tools
 )
