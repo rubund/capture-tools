@@ -33,6 +33,9 @@ namespace gr {
       size_t d_itemsize;
       pmt::pmt_t d_search_tag;
       bool d_filename_in_message;
+      pmt::pmt_t d_tag_start;
+      pmt::pmt_t d_tag_stop;
+      pmt::pmt_t d_tag_val;
 
       FILE *d_fp;
       FILE *d_new_fp;

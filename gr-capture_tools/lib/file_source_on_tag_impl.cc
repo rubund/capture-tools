@@ -72,6 +72,9 @@ namespace gr {
         d_updated(false)
     {
         d_search_tag = pmt::intern(tag_str);
+        d_tag_start = pmt::intern("file_begin");
+        d_tag_stop = pmt::intern("file_end");
+        d_tag_val = pmt::intern("");
 
         open(filename, true);
         do_update();
@@ -202,6 +205,7 @@ namespace gr {
                   next_tag_position = tag_positions[next_tag_position_index];
                 }
                 d_is_in_file = true;
+                add_item_tag(0, nitems_written(0)+pos, d_tag_start, d_tag_val);
             }
             else {
                 memset(o, 0, d_itemsize*noutput_items);
@@ -234,6 +238,11 @@ namespace gr {
             // of the file and try again, else break
             if(!d_repeat)
                 break;
+
+            if(pos > 0)
+                add_item_tag(0, nitems_written(0)+pos-1, d_tag_stop, d_tag_val);
+            else
+                add_item_tag(0, nitems_written(0)+pos, d_tag_stop, d_tag_val);
 
             if(fseek ((FILE *) d_fp, 0, SEEK_SET) == -1) {
                 fprintf(stderr, "[%s] fseek failed\n", __FILE__);
