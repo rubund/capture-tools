@@ -109,7 +109,8 @@ namespace gr {
               //inbuf += count;
               d_numbers_written += count;
               if(d_numbers_written >= d_number_to_write){
-                  for(int i=0;i<d_number_to_write;i++) {
+                  int n_zeros = (d_number_to_write / 4); // Fill a fourth of the length with zeros between groups
+                  for(int i=0;i<n_zeros;i++) {
                       status = fwrite(d_null_to_write,d_itemsize,1,d_fp);
                       if(status == 0) break;
                   }
@@ -118,6 +119,7 @@ namespace gr {
                   //d_queue->flush();
                   if (d_unbuffered)
                     fflush (d_fp);
+                  memset(d_buffered,0,d_number_buffered*d_itemsize);
               }
           }
           else {
