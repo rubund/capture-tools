@@ -29,16 +29,20 @@ namespace gr {
     class threshold_tag_other_stream_cc_impl : public threshold_tag_other_stream_cc
     {
      private:
-      // Nothing to declare in this block.
+      float d_low_thresh;
+      float d_high_thresh;
 
      public:
-      threshold_tag_other_stream_cc_impl();
+      threshold_tag_other_stream_cc_impl(float low_thresh, float high_thresh);
       ~threshold_tag_other_stream_cc_impl();
 
       // Where all the action really happens
       int work(int noutput_items,
          gr_vector_const_void_star &input_items,
          gr_vector_void_star &output_items);
+
+      void set_low_thresh(float);
+      void set_high_thresh(float);
     };
 
   } // namespace capture_tools

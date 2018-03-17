@@ -4,16 +4,22 @@
   <key>capture_tools_threshold_tag_other_stream_cc</key>
   <category>[capture_tools]</category>
   <import>import capture_tools</import>
-  <make>capture_tools.threshold_tag_other_stream_cc()</make>
+  <make>capture_tools.threshold_tag_other_stream_cc($low_thresh, $high_thresh)</make>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
        * key (makes the value accessible as $keyname, e.g. in the make node)
        * type -->
   <param>
-    <name>...</name>
-    <key>...</key>
-    <type>...</type>
+    <name>low_thresh</name>
+    <key>low_thresh</key>
+    <type>float</type>
+  </param>
+
+  <param>
+    <name>high_thresh</name>
+    <key>high_thresh</key>
+    <type>float</type>
   </param>
 
   <!-- Make one 'sink' node per input. Sub-nodes:
@@ -23,7 +29,12 @@
        * optional (set to 1 for optional inputs) -->
   <sink>
     <name>in</name>
-    <type><!-- e.g. int, float, complex, byte, short, xxx_vector, ...--></type>
+    <type>complex</type>
+  </sink>
+
+  <sink>
+    <name>in_float</name>
+    <type>float</type>
   </sink>
 
   <!-- Make one 'source' node per output. Sub-nodes:
@@ -33,6 +44,6 @@
        * optional (set to 1 for optional inputs) -->
   <source>
     <name>out</name>
-    <type><!-- e.g. int, float, complex, byte, short, xxx_vector, ...--></type>
+    <type>complex</type>
   </source>
 </block>

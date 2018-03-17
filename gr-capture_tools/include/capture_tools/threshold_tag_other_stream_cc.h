@@ -46,7 +46,10 @@ namespace gr {
        * class. capture_tools::threshold_tag_other_stream_cc::make is the public interface for
        * creating new instances.
        */
-      static sptr make();
+      static sptr make(float low_thres, float high_thres);
+
+      virtual void set_low_thresh(float)  = 0;
+      virtual void set_high_thresh(float) = 0;
     };
 
   } // namespace capture_tools

@@ -29,19 +29,20 @@ namespace gr {
   namespace capture_tools {
 
     threshold_tag_other_stream_cc::sptr
-    threshold_tag_other_stream_cc::make()
+    threshold_tag_other_stream_cc::make(float low_thresh, float high_thresh)
     {
       return gnuradio::get_initial_sptr
-        (new threshold_tag_other_stream_cc_impl());
+        (new threshold_tag_other_stream_cc_impl(low_thresh, high_thresh));
     }
 
     /*
      * The private constructor
      */
-    threshold_tag_other_stream_cc_impl::threshold_tag_other_stream_cc_impl()
+    threshold_tag_other_stream_cc_impl::threshold_tag_other_stream_cc_impl(float low_thresh, float high_thresh)
       : gr::sync_block("threshold_tag_other_stream_cc",
               gr::io_signature::make2(2, 2, sizeof(gr_complex), sizeof(float)),
-              gr::io_signature::make(1, 1, sizeof(float)))
+              gr::io_signature::make(1, 1, sizeof(float))),
+            d_low_thresh(low_thresh), d_high_thresh(high_thresh)
     {}
 
     /*
@@ -49,6 +50,18 @@ namespace gr {
      */
     threshold_tag_other_stream_cc_impl::~threshold_tag_other_stream_cc_impl()
     {
+    }
+
+    void
+    threshold_tag_other_stream_cc_impl::set_low_thresh(float val)
+    {
+      d_low_thresh = val;
+    }
+
+    void
+    threshold_tag_other_stream_cc_impl::set_high_thresh(float val)
+    {
+      d_high_thresh = val;
     }
 
     int
