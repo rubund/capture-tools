@@ -190,6 +190,12 @@ namespace gr {
     }
 
     void
+    msg_to_gfsk_c_impl::set_search_tag(const std::string &tag_str)
+    {
+      d_search_tag = pmt::intern(tag_str);
+    }
+
+    void
     msg_to_gfsk_c_impl::add_packet_to_queue(pmt::pmt_t msg)
     {
       gr::thread::scoped_lock lock(common_mutex);
@@ -261,6 +267,26 @@ namespace gr {
       float intofilt;
       float scale;
 
+      bool ok_to_start_from_sync = true;
+      std::vector<int> tag_positions;
+      int next_tag_position = -1;
+      int next_tag_position_index = -1;
+
+      if(in != NULL) {
+        ok_to_start_from_sync = false;
+        std::vector<tag_t> tags;
+        get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + noutput_items, d_search_tag);
+        for(int i=0;i<tags.size();i++) {
+            int current;
+            current = tags[i].offset - nitems_read(0);
+            tag_positions.push_back(current);
+            next_tag_position_index = 0;
+        }
+        if(next_tag_position_index >= 0) {
+            next_tag_position = tag_positions[next_tag_position_index];
+        }
+      }
+
       gr::thread::scoped_lock lock(common_mutex);
 
       int available_in_queue;
@@ -286,10 +312,23 @@ namespace gr {
 
       for(int i=0;i<noutput_items;i++) {
 
+        if (next_tag_position == i) {
+          ok_to_start_from_sync = true;
+          next_tag_position_index++;
+          if (next_tag_position_index == tag_positions.size()) {
+            next_tag_position_index = -1;
+            next_tag_position = -1;
+          }
+          else {
+            next_tag_position = tag_positions[next_tag_position_index];
+          }
+        }
+
         intofilt = 0;
         scale = d_level_off;
         // Check if any packets available in queue. In that case, set d_current_packet to current packet
-        if(d_current_packet == NULL && d_ready_to_transmit) {
+        if(d_current_packet == NULL && d_ready_to_transmit && ok_to_start_from_sync) {
+          if (in != NULL) ok_to_start_from_sync = false;
           if(d_packets.size() > 0) {
             d_current_packet = d_packets.front();
             if(!d_repeat_packet)

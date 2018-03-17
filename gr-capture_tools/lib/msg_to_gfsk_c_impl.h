@@ -77,6 +77,8 @@ namespace gr {
       void unset_current_packet();
       void init_filter();
 
+      pmt::pmt_t d_search_tag;
+
      public:
       msg_to_gfsk_c_impl(int samples_per_symbol, float sensitivity, float bt);
       ~msg_to_gfsk_c_impl();
@@ -105,6 +107,7 @@ namespace gr {
       void set_bt(float);
       void set_randomize_phase(bool);
       void set_sensitivity_range(float);
+      void set_search_tag(const std::string &);
     };
 
   } // namespace capture_tools

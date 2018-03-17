@@ -65,6 +65,7 @@ namespace gr {
       virtual void set_bt(float)=0;
       virtual void set_randomize_phase(bool)=0;
       virtual void set_sensitivity_range(float)=0;
+      virtual void set_search_tag(const std::string &)=0;
     };
 
   } // namespace capture_tools

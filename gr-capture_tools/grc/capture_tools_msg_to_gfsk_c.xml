@@ -17,6 +17,7 @@ self.$(id).set_value_between($value_between)
 self.$(id).set_level_off($level_off)
 self.$(id).set_fixed_delay_range($fixed_delay_range)
 self.$(id).set_sensitivity_range($sensitivity_range)
+self.$(id).set_search_tag($sync_tag)
 self.$(id).set_randomize_phase($randomize_phase)</make>
   <callback>self.$(id).set_fixed_delay($fixed_delay)</callback>
   <callback>self.$(id).set_fixed_delay_range($fixed_delay_range)</callback>
@@ -148,6 +149,13 @@ self.$(id).set_randomize_phase($randomize_phase)</make>
     <key>level_off</key>
     <value>0</value>
     <type>float</type>
+  </param>
+
+  <param>
+    <name>Sync tag</name>
+    <key>sync_tag</key>
+    <value>start</value>
+    <type>string</type>
   </param>
 
   <!-- Make one 'sink' node per input. Sub-nodes:
