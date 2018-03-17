@@ -64,3 +64,4 @@ GR_ADD_TEST(qa_bit_sniffer ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_b
 GR_ADD_TEST(qa_freqest ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_freqest.py)
 GR_ADD_TEST(qa_repeat_input_n_times_cscs ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_repeat_input_n_times_cscs.py)
 GR_ADD_TEST(qa_threshold_tag_other_stream_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_threshold_tag_other_stream_cc.py)
+GR_ADD_TEST(qa_file_sink_on_tag ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_file_sink_on_tag.py)

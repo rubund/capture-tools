@@ -54,5 +54,6 @@ install(FILES
     bit_sniffer.h
     freqest.h
     repeat_input_n_times_cscs.h
-    threshold_tag_other_stream_cc.h DESTINATION include/capture_tools
+    threshold_tag_other_stream_cc.h
+    file_sink_on_tag.h DESTINATION include/capture_tools
 )

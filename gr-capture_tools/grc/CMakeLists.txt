@@ -42,5 +42,6 @@ install(FILES
     capture_tools_bit_sniffer.xml
     capture_tools_freqest.xml
     capture_tools_repeat_input_n_times_cscs.xml
-    capture_tools_threshold_tag_other_stream_cc.xml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_threshold_tag_other_stream_cc.xml
+    capture_tools_file_sink_on_tag.xml DESTINATION share/gnuradio/grc/blocks
 )
