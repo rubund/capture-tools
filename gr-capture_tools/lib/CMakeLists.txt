@@ -57,6 +57,7 @@ list(APPEND capture_tools_sources
     file_sink_on_tag_impl.cc
     msg_to_gfsk_c_impl.cc
     file_source_on_tag_impl.cc
+    tag_on_set_one_f_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)

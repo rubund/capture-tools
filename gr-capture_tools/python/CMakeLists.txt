@@ -67,3 +67,4 @@ GR_ADD_TEST(qa_threshold_tag_other_stream_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURREN
 GR_ADD_TEST(qa_file_sink_on_tag ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_file_sink_on_tag.py)
 GR_ADD_TEST(qa_msg_to_gfsk_c ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_msg_to_gfsk_c.py)
 GR_ADD_TEST(qa_file_source_on_tag ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_file_source_on_tag.py)
+GR_ADD_TEST(qa_tag_on_set_one_f ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tag_on_set_one_f.py)

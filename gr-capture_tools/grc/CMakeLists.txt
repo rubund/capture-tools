@@ -45,5 +45,6 @@ install(FILES
     capture_tools_threshold_tag_other_stream_cc.xml
     capture_tools_file_sink_on_tag.xml
     capture_tools_msg_to_gfsk_c.xml
-    capture_tools_file_source_on_tag.xml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_file_source_on_tag.xml
+    capture_tools_tag_on_set_one_f.xml DESTINATION share/gnuradio/grc/blocks
 )
