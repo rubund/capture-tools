@@ -41,5 +41,6 @@ install(FILES
     capture_tools_msk_timing_recovery_sync_cc.xml
     capture_tools_bit_sniffer.xml
     capture_tools_freqest.xml
-    capture_tools_repeat_input_n_times_cscs.xml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_repeat_input_n_times_cscs.xml
+    capture_tools_threshold_tag_other_stream_cc.xml DESTINATION share/gnuradio/grc/blocks
 )

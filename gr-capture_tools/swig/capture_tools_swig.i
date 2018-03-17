@@ -36,6 +36,7 @@
 #include "capture_tools/bit_sniffer.h"
 #include "capture_tools/freqest.h"
 #include "capture_tools/repeat_input_n_times_cscs.h"
+#include "capture_tools/threshold_tag_other_stream_cc.h"
 
 %}
 
@@ -99,3 +100,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, bit_sniffer);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, freqest);
 %include "capture_tools/repeat_input_n_times_cscs.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, repeat_input_n_times_cscs);
+%include "capture_tools/threshold_tag_other_stream_cc.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, threshold_tag_other_stream_cc);
