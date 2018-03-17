@@ -47,7 +47,7 @@ namespace gr {
        * class. capture_tools::file_sink_on_tag::make is the public interface for
        * creating new instances.
        */
-      static sptr make(size_t itemsize, const char *filename, int number_buffered, int number_to_write, const char *tag_str);
+      static sptr make(size_t itemsize, const char *filename, int number_buffered, int number_to_write, const std::string &tag_str);
     };
 
   } // namespace capture_tools

@@ -30,16 +30,16 @@ namespace gr {
     {
      private:
       size_t	d_itemsize;
-      float *d_buffered;
+      char *d_buffered;
       int d_index_buffered;
       int d_number_buffered;
       int d_number_to_write;
       int d_numbers_written;
       bool d_is_writing;
-      std::string d_tag_str;
+      pmt::pmt_t d_search_tag;
 
      public:
-      file_sink_on_tag_impl(size_t itemsize, const char *filename, int number_buffered, int number_to_write, const char *tag_str);
+      file_sink_on_tag_impl(size_t itemsize, const char *filename, int number_buffered, int number_to_write, const std::string &tag_str);
       ~file_sink_on_tag_impl();
 
       // Where all the action really happens

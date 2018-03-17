@@ -23,13 +23,14 @@
 #endif
 
 #include <gnuradio/io_signature.h>
+#include <iostream>
 #include "file_sink_on_tag_impl.h"
 
 namespace gr {
   namespace capture_tools {
 
     file_sink_on_tag::sptr
-    file_sink_on_tag::make(size_t itemsize, const char *filename, int number_buffered, int number_to_write, const char *tag_str)
+    file_sink_on_tag::make(size_t itemsize, const char *filename, int number_buffered, int number_to_write, const std::string &tag_str)
     {
       return gnuradio::get_initial_sptr
         (new file_sink_on_tag_impl(itemsize, filename, number_buffered, number_to_write, tag_str));
@@ -38,21 +39,19 @@ namespace gr {
     /*
      * The private constructor
      */
-    file_sink_on_tag_impl::file_sink_on_tag_impl(size_t itemsize, const char *filename, int number_buffered, int number_to_write, const char *tag_str)
+    file_sink_on_tag_impl::file_sink_on_tag_impl(size_t itemsize, const char *filename, int number_buffered, int number_to_write, const std::string &tag_str)
       : gr::sync_block("file_sink_on_tag",
               gr::io_signature::make(1, 1, itemsize),
               gr::io_signature::make(0, 0, 0)),
         gr::blocks::file_sink_base(filename, true, 0),
     d_itemsize(itemsize), d_number_buffered(number_buffered), d_number_to_write(number_to_write)
     {
-       d_tag_str = std::string(tag_str);
+       d_search_tag = pmt::intern(tag_str);
 
        if (!open(filename))
           throw std::runtime_error ("can't open file");
-       d_buffered = new float[d_number_buffered];
-       for(int i=0;i<d_number_buffered;i++) {
-             d_buffered[i] = 0;
-       }
+       d_buffered = new char[d_number_buffered*itemsize];
+       memset(d_buffered,0,d_number_buffered*itemsize);
        d_index_buffered = 0;
        d_is_writing = 0;
        d_numbers_written = 0;
@@ -82,15 +81,16 @@ namespace gr {
         int next_tag_position_index = -1;
         bool start_now = false;
 
-        get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + noutput_items, pmt::intern(d_tag_str.c_str()));
+        get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + noutput_items, d_search_tag);
         for(int i=0;i<tags.size();i++) {
             int current;
             current = tags[i].offset - nitems_read(0);
             tag_positions.push_back(current);
             next_tag_position_index = 0;
         }
-        if(next_tag_position_index > 0)
+        if(next_tag_position_index >= 0) {
             next_tag_position = tag_positions[next_tag_position_index];
+        }
 
         do_update();				// update d_fp is reqd
 
@@ -121,13 +121,13 @@ namespace gr {
               }
           }
           else {
-              d_buffered[d_index_buffered] = *inbuf;
+              memcpy (d_buffered+(d_index_buffered*d_itemsize), inbuf, d_itemsize);
               d_index_buffered++;
               if(d_index_buffered >= d_number_buffered-1){
                   d_index_buffered = 0;
               }
               nread += 1;
-              inbuf += 1;
+              inbuf += d_itemsize;
               //msg_in = d_queue->delete_head_nowait();	
               while(nread > next_tag_position && next_tag_position != -1) {
                 next_tag_position_index++;
@@ -156,11 +156,11 @@ namespace gr {
                   printf("w");
                   fflush(stdout);
                   for(int i=d_index_buffered;i<d_number_buffered;i++){
-                      status = fwrite(d_buffered+i,4,1,d_fp);
+                      status = fwrite(d_buffered+i*d_itemsize,d_itemsize,1,d_fp);
                       if(status == 0) break;
                   }
                   for(int i=0;i<d_index_buffered;i++){
-                      status = fwrite(d_buffered+i,4,1,d_fp);
+                      status = fwrite(d_buffered+i*d_itemsize,d_itemsize,1,d_fp);
                       if(status == 0) break;
                   }
                   d_is_writing = 1;
