@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<block>
+  <name>msg_to_gfsk_c</name>
+  <key>capture_tools_msg_to_gfsk_c</key>
+  <category>[capture_tools]</category>
+  <import>import capture_tools</import>
+  <make>capture_tools.msg_to_gfsk_c($samples_per_symbol, $sensitivity, $bt)
+self.$(id).set_rampup_alpha($rampup_alpha)
+self.$(id).set_rampdown_alpha($rampdown_alpha)
+self.$(id).set_fixed_delay($fixed_delay)
+self.$(id).set_reset_phase($reset_phase)
+self.$(id).set_rampup_delay($rampup_delay)
+self.$(id).set_rampdown_delay($rampdown_delay)
+self.$(id).set_wait_settle($settle_delay)
+self.$(id).set_repeat_packet($repeat_packet)
+self.$(id).set_value_between($value_between)
+self.$(id).set_level_off($level_off)
+self.$(id).set_fixed_delay_range($fixed_delay_range)
+self.$(id).set_sensitivity_range($sensitivity_range)
+self.$(id).set_randomize_phase($randomize_phase)</make>
+  <callback>self.$(id).set_fixed_delay($fixed_delay)</callback>
+  <callback>self.$(id).set_fixed_delay_range($fixed_delay_range)</callback>
+  <callback>self.$(id).set_rampup_alpha($rampup_alpha)</callback>
+  <callback>self.$(id).set_rampdown_alpha($rampdown_alpha)</callback>
+  <callback>self.$(id).set_reset_phase($reset_phase)</callback>
+  <callback>self.$(id).set_rampup_delay($rampup_delay)</callback>
+  <callback>self.$(id).set_rampdown_delay($rampdown_delay)</callback>
+  <callback>self.$(id).set_wait_settle($settle_delay)</callback>
+  <callback>self.$(id).set_repeat_packet($repeat_packet)</callback>
+  <callback>self.$(id).set_value_between($value_between)</callback>
+  <callback>self.$(id).set_level_off($level_off)</callback>
+  <callback>self.$(id).set_sensitivity($sensitivity)</callback>
+  <callback>self.$(id).set_bt($bt)</callback>
+  <callback>self.$(id).set_randomize_phase($randomize_phase)</callback>
+  <callback>self.$(id).set_sensitivity_range($sensitivity_range)</callback>
+  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
+       Sub-nodes:
+       * name
+       * key (makes the value accessible as $keyname, e.g. in the make node)
+       * type -->
+  <param>
+    <name>Samples per symbol</name>
+    <key>samples_per_symbol</key>
+    <value>16</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Sensitivity</name>
+    <key>sensitivity</key>
+    <value>0.098175</value>
+    <type>float</type>
+  </param>
+
+  <param>
+    <name>Sensitivity range</name>
+    <key>sensitivity_range</key>
+    <value>0.00</value>
+    <type>float</type>
+  </param>
+
+  <param>
+    <name>BT</name>
+    <key>bt</key>
+    <value>0.5</value>
+    <type>float</type>
+  </param>
+
+  <param>
+    <name>Delay between packets</name>
+    <key>fixed_delay</key>
+    <value>1000</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Variation for the delay between packets</name>
+    <key>fixed_delay_range</key>
+    <value>0</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Ramp-up delay</name>
+    <key>rampup_delay</key>
+    <value>40</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Settle delay</name>
+    <key>settle_delay</key>
+    <value>80</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Ramp-down delay</name>
+    <key>rampdown_delay</key>
+    <value>7000</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Ramp-up alpha</name>
+    <key>rampup_alpha</key>
+    <value>0.2</value>
+    <type>float</type>
+  </param>
+
+  <param>
+    <name>Ramp-down alpha</name>
+    <key>rampdown_alpha</key>
+    <value>0.2</value>
+    <type>float</type>
+  </param>
+
+  <param>
+    <name>Repeat the same packet</name>
+    <key>repeat_packet</key>
+    <value>False</value>
+    <type>bool</type>
+  </param>
+
+  <param>
+    <name>Reset phase before every packet</name>
+    <key>reset_phase</key>
+    <value>True</value>
+    <type>bool</type>
+  </param>
+
+  <param>
+    <name>Randomize phase before every packet</name>
+    <key>randomize_phase</key>
+    <value>False</value>
+    <type>bool</type>
+  </param>
+
+  <param>
+    <name>Modulation value between packets</name>
+    <key>value_between</key>
+    <value>0</value>
+    <type>float</type>
+  </param>
+
+  <param>
+    <name>Scale when transmitter is off</name>
+    <key>level_off</key>
+    <value>0</value>
+    <type>float</type>
+  </param>
+
+  <!-- Make one 'sink' node per input. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <sink>
+    <name>packet</name>
+    <type>message</type>
+    <optional>1</optional>
+  </sink>
+
+  <sink>
+    <name>sync</name>
+    <type>byte</type>
+    <optional>1</optional>
+  </sink>
+
+  <!-- Make one 'source' node per output. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <source>
+    <name>out</name>
+    <type>complex</type>
+  </source>
+
+  <source>
+    <name>ready</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>
+
+  <source>
+    <name>modulation</name>
+    <type>float</type>
+    <optional>1</optional>
+  </source>
+
+
+</block>

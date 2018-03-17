@@ -55,6 +55,7 @@ list(APPEND capture_tools_sources
     repeat_input_n_times_cscs_impl.cc
     threshold_tag_other_stream_cc_impl.cc
     file_sink_on_tag_impl.cc
+    msg_to_gfsk_c_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)
