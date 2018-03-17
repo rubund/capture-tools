@@ -89,13 +89,13 @@ namespace gr {
           if (d_is_above) {
             if(in_float[i] < d_low_thresh) {
               d_is_above = false;
-              add_item_tag(0, nitems_written(0) + i, pmt::intern("going low"), pmt::intern(""), pmt::intern(""));
+              add_item_tag(0, nitems_written(0) + i, pmt::intern("going_low"), pmt::intern(""), pmt::intern(""));
             }
           }
           else {
             if(in_float[i] > d_high_thresh) {
               d_is_above = true;
-              add_item_tag(0, nitems_written(0) + i, pmt::intern("going high"), pmt::intern(""), pmt::intern(""));
+              add_item_tag(0, nitems_written(0) + i, pmt::intern("going_high"), pmt::intern(""), pmt::intern(""));
             }
           }
         }
