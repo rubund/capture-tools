@@ -206,6 +206,7 @@ namespace gr {
                 }
                 d_is_in_file = true;
                 add_item_tag(0, nitems_written(0)+pos, d_tag_start, d_tag_val);
+                do_update();       // update d_fp is reqd
             }
             else {
                 memset(o, 0, d_itemsize*noutput_items);
@@ -215,7 +216,6 @@ namespace gr {
             }
         }
 
-        do_update();       // update d_fp is reqd
         if(d_fp == NULL)
             throw std::runtime_error("work with file not open");
 
