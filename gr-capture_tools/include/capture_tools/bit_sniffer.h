@@ -58,6 +58,7 @@ namespace gr {
         virtual void set_binary(bool) = 0;
         virtual void set_special(int) = 0;
         virtual void set_scroll(bool) = 0;
+        virtual void set_invert(bool) = 0;
     };
 
   } // namespace capture_tools

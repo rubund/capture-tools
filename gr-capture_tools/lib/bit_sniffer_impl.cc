@@ -43,7 +43,7 @@ namespace gr {
               gr::io_signature::make(0, 0, 0),
               gr::io_signature::make(0, 0, 0)),
         d_fade_out(fade_out), d_hexadecimal(hexadecimal), d_offset(offset), d_bits_per_word(bits_per_word), d_lsb(lsb), d_parity(parity),
-        d_ascii(ascii), d_binary(binary), d_special(special), d_scroll(scroll)
+        d_ascii(ascii), d_binary(binary), d_special(special), d_scroll(scroll), d_invert(false)
     {
         d_cnt = 0;
         d_last_size = 0;
@@ -110,6 +110,8 @@ namespace gr {
         std::ostringstream hex_out;
         std::ostringstream ascii_out;
         for(int i=0;i<packet_length;i++) {
+            uint8_t current_bit;
+            current_bit = d_invert ? 1-bits[i] : bits[i];
             if (i < d_offset){
                 bitcounter = 0;
                 continue;
@@ -121,31 +123,31 @@ namespace gr {
             }
             if(!d_parity || (bitcounter % bits_per_word_practice) <= (d_bits_per_word)) {
                 if(d_lsb) {
-                    current_byte |= bits[i] ? (1 << (bitcounter % bits_per_word_practice)) : 0;
+                    current_byte |= current_bit ? (1 << (bitcounter % bits_per_word_practice)) : 0;
                 }
                 else {
-                    current_byte |= bits[i] ? (1 << ((bits_per_word_practice - 1) - (bitcounter % bits_per_word_practice))) : 0;
+                    current_byte |= current_bit ? (1 << ((bits_per_word_practice - 1) - (bitcounter % bits_per_word_practice))) : 0;
                 }
             }
-            if (bits[i] != d_last[i] && d_last[i] != 255) {
+            if (current_bit != d_last[i] && d_last[i] != 255) {
                 if(d_binary)
-                    printf("\033[91;1m%1d\033[0m", bits[i]);
+                    printf("\033[91;1m%1d\033[0m", current_bit);
                 d_since_change[i] = 0;
                 just_changed = 1;
             }
             else {
                 if(d_since_change[i] < d_fade_out) {
                     if(d_binary)
-                        printf("\033[91;2m%1d\033[0m", bits[i]);
+                        printf("\033[91;2m%1d\033[0m", current_bit);
                     recent_changed = 1;
                 }
                 else {
                     if(d_binary)
-                        printf("%1d", bits[i]);
+                        printf("%1d", current_bit);
                 }
                 d_since_change[i]++;
             }
-            d_last[i] = bits[i];
+            d_last[i] = current_bit;
             if ((bitcounter % bits_per_word_practice) == (bits_per_word_practice - 1)) {
                 if(d_hexadecimal || d_ascii) {
                     if(just_changed){
@@ -261,6 +263,11 @@ namespace gr {
         void bit_sniffer_impl::set_scroll(bool val)
         {
             d_scroll = val;
+        }
+
+        void bit_sniffer_impl::set_invert(bool val)
+        {
+            d_invert = val;
         }
 
     int
