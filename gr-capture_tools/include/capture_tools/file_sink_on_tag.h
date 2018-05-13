@@ -48,6 +48,8 @@ namespace gr {
        * creating new instances.
        */
       static sptr make(size_t itemsize, const char *filename, int number_buffered, int number_to_write, const std::string &tag_str);
+
+      virtual void set_metadata_output(bool enable, const char *filename) = 0;
     };
 
   } // namespace capture_tools

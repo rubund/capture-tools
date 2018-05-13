@@ -24,6 +24,7 @@
 
 #include <gnuradio/io_signature.h>
 #include <iostream>
+#include <ctime>
 #include "file_sink_on_tag_impl.h"
 
 namespace gr {
@@ -56,6 +57,9 @@ namespace gr {
        d_is_writing = 0;
        d_numbers_written = 0;
        d_null_to_write = new char[itemsize];
+       d_metadata_fp = NULL;
+       d_metadata_enabled = false;
+       d_capture_cnt = 1;
        memset(d_null_to_write, 0, itemsize);
            printf("%d\n",number_to_write);
     }
@@ -66,6 +70,24 @@ namespace gr {
     file_sink_on_tag_impl::~file_sink_on_tag_impl()
     {
         delete d_buffered;
+        if (d_metadata_fp != NULL) {
+            fclose(d_metadata_fp);
+            d_metadata_fp = NULL;
+        }
+    }
+
+    void
+    file_sink_on_tag_impl::set_metadata_output(bool enable, const char *filename) {
+        d_metadata_enabled = enable;
+        if (enable) {
+            d_metadata_fp = fopen(filename, "w");
+        }
+        else {
+            if (d_metadata_fp != NULL) {
+                fclose(d_metadata_fp);
+                d_metadata_fp = NULL;
+            }
+        }
     }
 
     int
@@ -143,6 +165,13 @@ namespace gr {
                 }
               }
               if(next_tag_position == nread) {
+                if(d_metadata_fp != NULL) {
+                    time_t t = time(NULL);
+                    struct tm tm = *localtime(&t);
+                    fprintf(d_metadata_fp, "Capture: %llu, Time: %04d-%02d-%02d %02d:%02d:%02d\n", d_capture_cnt, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+                    fflush(d_metadata_fp);
+                    d_capture_cnt++;
+                }
                 start_now = true;
                 next_tag_position_index++;
                 if (next_tag_position_index == tag_positions.size()) {

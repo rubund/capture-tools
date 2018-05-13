@@ -38,10 +38,15 @@ namespace gr {
       bool d_is_writing;
       pmt::pmt_t d_search_tag;
       char *d_null_to_write;
+      FILE *d_metadata_fp;
+      bool d_metadata_enabled;
+      uint64_t d_capture_cnt;
 
      public:
       file_sink_on_tag_impl(size_t itemsize, const char *filename, int number_buffered, int number_to_write, const std::string &tag_str);
       ~file_sink_on_tag_impl();
+
+      void set_metadata_output(bool enable, const char *filename);
 
       // Where all the action really happens
       int work(int noutput_items,
