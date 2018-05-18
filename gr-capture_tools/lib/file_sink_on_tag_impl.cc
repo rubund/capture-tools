@@ -128,7 +128,7 @@ namespace gr {
 				float burst_freq;
 				burst_freq = center_frequency + relative_frequency * ((float)sample_rate);
 				std::ostringstream make_string;
-				make_string << "Mag: " << magnitude << ", RelFreq: " << relative_frequency << ", BurstFreq: " << burst_freq;
+                make_string << "Mag: " << std::fixed << std::setprecision(2) << magnitude << ", BurstFreq: " << std::fixed << std::setprecision(3) << burst_freq << " MHz";
 				tag_data.push_back(make_string.str());
 			}
 			else tag_data.push_back("");
