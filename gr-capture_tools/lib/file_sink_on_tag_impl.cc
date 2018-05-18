@@ -25,6 +25,7 @@
 #include <gnuradio/io_signature.h>
 #include <iostream>
 #include <ctime>
+#include <string>
 #include "file_sink_on_tag_impl.h"
 
 namespace gr {
@@ -60,6 +61,7 @@ namespace gr {
        d_metadata_fp = NULL;
        d_metadata_enabled = false;
        d_capture_cnt = 1;
+       d_extra_burst_output = false;
        memset(d_null_to_write, 0, itemsize);
            printf("%d\n",number_to_write);
     }
@@ -90,6 +92,12 @@ namespace gr {
         }
     }
 
+    void
+    file_sink_on_tag_impl::set_burst_extra_data_output(bool enable) {
+        d_extra_burst_output = enable;
+    }
+
+
     int
     file_sink_on_tag_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
@@ -100,8 +108,10 @@ namespace gr {
         int status;
         std::vector<tag_t> tags;
         std::vector<int> tag_positions;
+        std::vector<std::string> tag_data;
         int next_tag_position = -1;
         int next_tag_position_index = -1;
+		std::string next_tag_data = "";
         bool start_now = false;
 
         get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + noutput_items, d_search_tag);
@@ -109,6 +119,20 @@ namespace gr {
             int current;
             current = tags[i].offset - nitems_read(0);
             tag_positions.push_back(current);
+			if (d_extra_burst_output) {
+				uint64_t id = pmt::to_uint64(pmt::dict_ref(tags[i].value, pmt::mp("id"), pmt::PMT_NIL));
+				float magnitude = pmt::to_float(pmt::dict_ref(tags[i].value, pmt::mp("magnitude"), pmt::PMT_NIL));
+				float center_frequency = pmt::to_float(pmt::dict_ref(tags[i].value, pmt::mp("center_frequency"), pmt::PMT_NIL));
+				float sample_rate = pmt::to_float(pmt::dict_ref(tags[i].value, pmt::mp("sample_rate"), pmt::PMT_NIL));
+				float relative_frequency = pmt::to_float(pmt::dict_ref(tags[i].value, pmt::mp("relative_frequency"), pmt::PMT_NIL));
+				float burst_freq;
+				burst_freq = center_frequency + relative_frequency * ((float)sample_rate);
+				std::ostringstream make_string;
+				make_string << "Mag: " << magnitude << ", RelFreq: " << relative_frequency << ", BurstFreq: " << burst_freq;
+				tag_data.push_back(make_string.str());
+			}
+			else tag_data.push_back("");
+
             next_tag_position_index = 0;
         }
         if(next_tag_position_index >= 0) {
@@ -168,7 +192,7 @@ namespace gr {
                 if(d_metadata_fp != NULL) {
                     time_t t = time(NULL);
                     struct tm tm = *localtime(&t);
-                    fprintf(d_metadata_fp, "Capture: %llu, Time: %04d-%02d-%02d %02d:%02d:%02d\n", d_capture_cnt, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+                    fprintf(d_metadata_fp, "Capture: %llu, Time: %04d-%02d-%02d %02d:%02d:%02d: Data: %s\n", d_capture_cnt, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec, tag_data[next_tag_position_index].c_str());
                     fflush(d_metadata_fp);
                     d_capture_cnt++;
                 }

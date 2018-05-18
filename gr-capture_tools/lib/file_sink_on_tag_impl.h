@@ -41,12 +41,14 @@ namespace gr {
       FILE *d_metadata_fp;
       bool d_metadata_enabled;
       uint64_t d_capture_cnt;
+      bool d_extra_burst_output;
 
      public:
       file_sink_on_tag_impl(size_t itemsize, const char *filename, int number_buffered, int number_to_write, const std::string &tag_str);
       ~file_sink_on_tag_impl();
 
       void set_metadata_output(bool enable, const char *filename);
+      void set_burst_extra_data_output(bool enable);
 
       // Where all the action really happens
       int work(int noutput_items,

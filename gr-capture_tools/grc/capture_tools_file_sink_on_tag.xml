@@ -5,10 +5,12 @@
   <category>[capture_tools]</category>
   <import>import capture_tools</import>
   <make>capture_tools.file_sink_on_tag($type.size*$vlen, $file, $number_buffered, $number_to_write, $tag_str)
-self.$(id).set_metadata_output($metadata_enabled, $metadata_file)</make>
+self.$(id).set_metadata_output($metadata_enabled, $metadata_file)
+self.$(id).set_burst_extra_data_output($burst_extra)</make>
 <!--self.$(id).set_unbuffered($unbuffered)</make>-->
 	<callback>set_unbuffered($unbuffered)</callback>
 	<callback>set_metadata_output($metadata_enabled, $metadata_file)</callback>
+    <callback>set_burst_extra_data_output($burst_extra)</callback>
 	<callback>open($file)</callback>
 	<param>
 		<name>File</name>
@@ -85,6 +87,20 @@ self.$(id).set_metadata_output($metadata_enabled, $metadata_file)</make>
 		<key>metadata_file</key>
 		<value></value>
 		<type>file_save</type>
+	</param>
+	<param>
+		<name>Add more data about bursts</name>
+		<key>burst_extra</key>
+		<value>False</value>
+		<type>bool</type>
+		<option>
+				<name>Off</name>
+				<key>False</key>
+		</option>
+		<option>
+				<name>On</name>
+				<key>True</key>
+		</option>
 	</param>
 	<param>
 		<name>Number to write</name>
