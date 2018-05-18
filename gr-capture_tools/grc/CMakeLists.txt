@@ -47,5 +47,6 @@ install(FILES
     capture_tools_msg_to_gfsk_c.xml
     capture_tools_file_source_on_tag.xml
     capture_tools_tag_on_set_one_f.xml
-    capture_tools_tag_on_set_one_b.xml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_tag_on_set_one_b.xml
+    capture_tools_tag_first_non_zero_cc.xml DESTINATION share/gnuradio/grc/blocks
 )

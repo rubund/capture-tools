@@ -42,6 +42,7 @@
 #include "capture_tools/file_source_on_tag.h"
 #include "capture_tools/tag_on_set_one_f.h"
 #include "capture_tools/tag_on_set_one_b.h"
+#include "capture_tools/tag_first_non_zero_cc.h"
 
 %}
 
@@ -117,3 +118,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, file_source_on_tag);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, tag_on_set_one_f);
 %include "capture_tools/tag_on_set_one_b.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, tag_on_set_one_b);
+%include "capture_tools/tag_first_non_zero_cc.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, tag_first_non_zero_cc);

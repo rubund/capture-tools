@@ -59,5 +59,6 @@ install(FILES
     msg_to_gfsk_c.h
     file_source_on_tag.h
     tag_on_set_one_f.h
-    tag_on_set_one_b.h DESTINATION include/capture_tools
+    tag_on_set_one_b.h
+    tag_first_non_zero_cc.h DESTINATION include/capture_tools
 )
