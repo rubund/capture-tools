@@ -11,9 +11,9 @@
        * key (makes the value accessible as $keyname, e.g. in the make node)
        * type -->
   <param>
-    <name>...</name>
-    <key>...</key>
-    <type>...</type>
+    <name>Num inputs</name>
+    <key>n</key>
+    <type>int</type>
   </param>
 
   <!-- Make one 'sink' node per input. Sub-nodes:
@@ -22,8 +22,9 @@
        * vlen
        * optional (set to 1 for optional inputs) -->
   <sink>
-    <name>in</name>
-    <type><!-- e.g. int, float, complex, byte, short, xxx_vector, ...--></type>
+    <name>burst</name>
+    <type>message</type>
+    <nports>$n</nports>
   </sink>
 
   <!-- Make one 'source' node per output. Sub-nodes:
@@ -33,6 +34,12 @@
        * optional (set to 1 for optional inputs) -->
   <source>
     <name>out</name>
-    <type><!-- e.g. int, float, complex, byte, short, xxx_vector, ...--></type>
+    <type>complex</type>
+  </source>
+
+  <source>
+    <name>handled</name>
+    <type>message</type>
+    <nports>$n</nports>
   </source>
 </block>

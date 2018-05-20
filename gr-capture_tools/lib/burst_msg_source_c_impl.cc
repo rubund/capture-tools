@@ -44,12 +44,20 @@ namespace gr {
               gr::io_signature::make(1, 1, sizeof(gr_complex)))
     {
 		char name[100];
-		for(int i=0;i<n;i++) {
-			snprintf(name, 99, "burst%d", i);
-			message_port_register_in(pmt::mp(name));
-			set_msg_handler(pmt::mp(name),boost::bind(&burst_msg_source_c_impl::new_burst, this, _1));
-		}
-		message_port_register_out(pmt::mp("handled"));
+        if (n == 1) {
+            message_port_register_in(pmt::mp("burst"));
+            set_msg_handler(pmt::mp("burst"),boost::bind(&burst_msg_source_c_impl::new_burst, this, _1));
+            message_port_register_out(pmt::mp("handled"));
+        }
+        else {
+            for(int i=0;i<n;i++) {
+                snprintf(name, 99, "burst%d", i);
+                message_port_register_in(pmt::mp(name));
+                set_msg_handler(pmt::mp(name),boost::bind(&burst_msg_source_c_impl::new_burst, this, _1));
+                snprintf(name, 99, "handled%d", i);
+		        message_port_register_out(pmt::mp(name));
+            }
+        }
 	}
 
     /*
