@@ -63,6 +63,7 @@ namespace gr {
         d_current_inc = 0;
         d_current_phase = 0;
         d_repeat = false;
+        d_round_factor = 1;
 	}
 
     /*
@@ -121,6 +122,14 @@ namespace gr {
                     float magnitude = pmt::to_float(pmt::dict_ref(meta, pmt::mp("magnitude"), pmt::PMT_NIL));
                     float burst_shift_freq;
                     burst_shift_freq = relative_frequency * ((float)sample_rate);
+
+                    // Round to every 50 kHz:
+                    float factor = d_round_factor;
+                    float divided = burst_shift_freq / factor;
+                    float rounded = round(divided);
+                    burst_shift_freq = rounded * factor;
+                    //
+
                     float burst_freq;
                     burst_freq = center_frequency + burst_shift_freq;
                     d_current_inc = 2*M_PI* burst_shift_freq / sample_rate;
