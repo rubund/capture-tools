@@ -73,6 +73,7 @@ namespace gr {
     {
 		gr::thread::scoped_lock lock(common_mutex);
 		d_bursts.push_back(msg);
+        std::cout << "Got message " << std::endl;
     }
 
 
@@ -90,14 +91,24 @@ namespace gr {
 			usleep(100);
 		}
 		else {
-			current_burst = d_bursts.front();
-			d_bursts.pop_front();
-			for(int i = 0;i<noutput_items;i++) {
-				out[i] = 1;
-				produced++;
-			}
-			pmt::pmt_t handled_msg = pmt::mp("handled");  // FIXME
-            message_port_pub(pmt::mp("handled"), handled_msg);
+            for(int i=0;i<d_bursts.size();i++) {
+		        current_burst = d_bursts.front();
+                pmt::pmt_t samples = pmt::cdr(current_burst);
+                size_t current_burst_length = pmt::length(samples);
+                if((noutput_items - produced) >= current_burst_length) {
+                    const gr_complex *burst = (const gr_complex*) pmt::c32vector_elements(samples, current_burst_length);
+                    d_bursts.pop_front();
+                    for(int i = 0; i<current_burst_length;i++) {
+                        out[i] = burst[i];
+                        produced++;
+                    }
+                    pmt::pmt_t handled_msg = pmt::mp("handled");  // FIXME
+                    message_port_pub(pmt::mp("handled"), handled_msg);
+                }
+                else {
+                    break;
+                }
+            }
 		}
 
       // Tell runtime system how many output items we produced.
