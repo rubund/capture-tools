@@ -128,6 +128,8 @@ namespace gr {
 
                     pmt::pmt_t value = pmt::make_dict();
                     value = pmt::dict_add(value, pmt::mp("id"), pmt::from_uint64(id));
+                    value = pmt::dict_add(value, pmt::mp("burst_frequency_mhz"), pmt::from_float(burst_freq/1e6));
+                    value = pmt::dict_add(value, pmt::mp("burst_frequency"), pmt::from_float(burst_freq));
                     value = pmt::dict_add(value, pmt::mp("relative_frequency"), pmt::from_float(relative_frequency));
                     value = pmt::dict_add(value, pmt::mp("center_frequency"), pmt::from_float(center_frequency));
                     value = pmt::dict_add(value, pmt::mp("magnitude"), pmt::from_float(magnitude));
@@ -153,6 +155,10 @@ namespace gr {
                     break;
                 }
                 else {
+                    if (toproduce > 0) {
+                        pmt::pmt_t key = pmt::string_to_symbol("end_burst");
+                        add_item_tag(0, nitems_written(0) + produced, key, pmt::PMT_NIL);
+                    }
                     d_in_burst = false;
                     d_current_burst_pos = 0;
                     if((!d_repeat) || (lnow - i) > 1) {
