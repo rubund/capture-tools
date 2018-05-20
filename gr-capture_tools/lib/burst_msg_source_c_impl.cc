@@ -146,7 +146,8 @@ namespace gr {
                     value = pmt::dict_add(value, pmt::mp("sample_rate"), pmt::from_float(sample_rate));
 
                     if(remaining_in_current > 0) {
-                        std::cout << "Received: Freq: " << (burst_freq/1e6) << " MHz, Magnitude: " << magnitude;
+                        fprintf(stdout, "Received: %5llu", id);
+                        std::cout << ", Freq: " << (burst_freq/1e6) << " MHz, Magnitude: " << magnitude;
                         time_t t = time(NULL);
                         struct tm tm = *localtime(&t);
                         fprintf(stdout, ", Time: %04d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
