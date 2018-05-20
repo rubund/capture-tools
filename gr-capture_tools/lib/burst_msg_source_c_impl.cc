@@ -95,7 +95,8 @@ namespace gr {
 			usleep(100);
 		}
 		else {
-            for(int i=0;i<d_bursts.size();i++) {
+            int lnow = d_bursts.size();
+            for(int i=0;i<lnow;i++) {
 		        current_burst = d_bursts.front();
                 pmt::pmt_t samples = pmt::cdr(current_burst);
                 size_t current_burst_length = pmt::length(samples);
