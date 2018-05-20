@@ -105,6 +105,25 @@ namespace gr {
                 }
                 else {
                     remaining_in_current = current_burst_length;
+
+                    pmt::pmt_t key = pmt::string_to_symbol("new_burst");
+
+                    pmt::pmt_t meta = pmt::car(current_burst);
+                    float relative_frequency = pmt::to_float(pmt::dict_ref(meta, pmt::mp("relative_frequency"), pmt::PMT_NIL));
+                    float center_frequency = pmt::to_float(pmt::dict_ref(meta, pmt::mp("center_frequency"), pmt::PMT_NIL));
+                    float sample_rate = pmt::to_float(pmt::dict_ref(meta, pmt::mp("sample_rate"), pmt::PMT_NIL));
+                    uint64_t id = pmt::to_uint64(pmt::dict_ref(meta, pmt::mp("id"), pmt::PMT_NIL));
+                    uint64_t offset = pmt::to_uint64(pmt::dict_ref(meta, pmt::mp("offset"), pmt::PMT_NIL));
+                    float magnitude = pmt::to_float(pmt::dict_ref(meta, pmt::mp("magnitude"), pmt::PMT_NIL));
+
+                    pmt::pmt_t value = pmt::make_dict();
+                    value = pmt::dict_add(value, pmt::mp("id"), pmt::from_uint64(id));
+                    value = pmt::dict_add(value, pmt::mp("relative_frequency"), pmt::from_float(relative_frequency));
+                    value = pmt::dict_add(value, pmt::mp("center_frequency"), pmt::from_float(center_frequency));
+                    value = pmt::dict_add(value, pmt::mp("magnitude"), pmt::from_float(magnitude));
+                    value = pmt::dict_add(value, pmt::mp("sample_rate"), pmt::from_float(sample_rate));
+
+                    add_item_tag(0, nitems_written(0) + produced, key, value);
                 }
 
                 
