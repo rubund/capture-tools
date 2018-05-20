@@ -60,6 +60,8 @@ namespace gr {
         }
         d_in_burst = false;
         d_current_burst_pos = 0;
+        d_current_inc = 0;
+        d_current_phase = 0;
 	}
 
     /*
@@ -115,6 +117,12 @@ namespace gr {
                     uint64_t id = pmt::to_uint64(pmt::dict_ref(meta, pmt::mp("id"), pmt::PMT_NIL));
                     uint64_t offset = pmt::to_uint64(pmt::dict_ref(meta, pmt::mp("offset"), pmt::PMT_NIL));
                     float magnitude = pmt::to_float(pmt::dict_ref(meta, pmt::mp("magnitude"), pmt::PMT_NIL));
+                    float burst_shift_freq;
+                    burst_shift_freq = relative_frequency * ((float)sample_rate);
+                    float burst_freq;
+                    burst_freq = center_frequency + burst_shift_freq;
+                    d_current_inc = 2*M_PI* burst_shift_freq / sample_rate;
+                    d_current_phase = 0;
 
                     pmt::pmt_t value = pmt::make_dict();
                     value = pmt::dict_add(value, pmt::mp("id"), pmt::from_uint64(id));
@@ -130,7 +138,10 @@ namespace gr {
                 int toproduce = std::min(remaining, remaining_in_current);
 
                 for(int j = 0; j<toproduce; j++) {
-                    out[produced] = burst[d_current_burst_pos+j];
+                    out[produced] = burst[d_current_burst_pos+j] * gr_complex(cos(d_current_phase), -sin(d_current_phase));
+                    d_current_phase = d_current_phase + d_current_inc;
+                    if      (d_current_phase > M_PI)  d_current_phase -= 2*M_PI;
+                    else if (d_current_phase < -M_PI) d_current_phase += 2*M_PI;
                     produced++;
                 }
                 if (toproduce < remaining_in_current) {

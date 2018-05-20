@@ -37,6 +37,8 @@ namespace gr {
 	  boost::mutex common_mutex;
       bool d_in_burst;
       int d_current_burst_pos;
+      float d_current_inc;
+      float d_current_phase;
 
      public:
       burst_msg_source_c_impl(int n);
