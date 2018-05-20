@@ -35,6 +35,8 @@ namespace gr {
 	  std::deque<pmt::pmt_t> d_bursts;
 	  void new_burst(pmt::pmt_t msg);
 	  boost::mutex common_mutex;
+      bool d_in_burst;
+      int d_current_burst_pos;
 
      public:
       burst_msg_source_c_impl(int n);

@@ -58,6 +58,8 @@ namespace gr {
 		        message_port_register_out(pmt::mp(name));
             }
         }
+        d_in_burst = false;
+        d_current_burst_pos = 0;
 	}
 
     /*
@@ -95,19 +97,36 @@ namespace gr {
 		        current_burst = d_bursts.front();
                 pmt::pmt_t samples = pmt::cdr(current_burst);
                 size_t current_burst_length = pmt::length(samples);
-                if((noutput_items - produced) >= current_burst_length) {
-                    const gr_complex *burst = (const gr_complex*) pmt::c32vector_elements(samples, current_burst_length);
+                int remaining = noutput_items - produced;
+                const gr_complex *burst = (const gr_complex*) pmt::c32vector_elements(samples, current_burst_length);
+                int remaining_in_current;
+                if (d_in_burst) {
+                    remaining_in_current = current_burst_length - d_current_burst_pos;
+                }
+                else {
+                    remaining_in_current = current_burst_length;
+                }
+
+                
+                int toproduce = std::min(remaining, remaining_in_current);
+
+                for(int j = 0; j<toproduce; j++) {
+                    out[j] = burst[d_current_burst_pos+j];
+                    produced++;
+                }
+                if (toproduce < remaining_in_current) {
+                    d_in_burst = true;
+                    d_current_burst_pos += toproduce;
+                    break;
+                }
+                else {
+                    d_in_burst = false;
+                    d_current_burst_pos = 0;
                     d_bursts.pop_front();
-                    for(int i = 0; i<current_burst_length;i++) {
-                        out[i] = burst[i];
-                        produced++;
-                    }
                     pmt::pmt_t handled_msg = pmt::mp("handled");  // FIXME
                     message_port_pub(pmt::mp("handled"), handled_msg);
                 }
-                else {
-                    break;
-                }
+
             }
 		}
 
