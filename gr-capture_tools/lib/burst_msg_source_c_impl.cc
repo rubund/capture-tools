@@ -111,7 +111,7 @@ namespace gr {
                 int toproduce = std::min(remaining, remaining_in_current);
 
                 for(int j = 0; j<toproduce; j++) {
-                    out[j] = burst[d_current_burst_pos+j];
+                    out[produced] = burst[d_current_burst_pos+j];
                     produced++;
                 }
                 if (toproduce < remaining_in_current) {
