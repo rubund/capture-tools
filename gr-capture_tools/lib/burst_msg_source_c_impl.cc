@@ -62,6 +62,7 @@ namespace gr {
         d_current_burst_pos = 0;
         d_current_inc = 0;
         d_current_phase = 0;
+        d_repeat = false;
 	}
 
     /*
@@ -154,9 +155,11 @@ namespace gr {
                 else {
                     d_in_burst = false;
                     d_current_burst_pos = 0;
-                    d_bursts.pop_front();
-                    pmt::pmt_t handled_msg = pmt::mp("handled");  // FIXME
-                    message_port_pub(pmt::mp("handled"), handled_msg);
+                    if((!d_repeat) || (lnow - i) > 1) {
+                        d_bursts.pop_front();
+                        pmt::pmt_t handled_msg = pmt::mp("handled");  // FIXME
+                        message_port_pub(pmt::mp("handled"), handled_msg);
+                    }
                 }
 
             }
