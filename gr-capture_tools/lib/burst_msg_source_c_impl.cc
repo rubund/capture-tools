@@ -94,7 +94,7 @@ namespace gr {
 
 		gr::thread::scoped_lock lock(common_mutex);
 		if(d_bursts.size() == 0) {
-			usleep(100);
+			usleep(100000);
 		}
 		else {
             int lnow = d_bursts.size();
@@ -144,8 +144,10 @@ namespace gr {
                     value = pmt::dict_add(value, pmt::mp("magnitude"), pmt::from_float(magnitude));
                     value = pmt::dict_add(value, pmt::mp("sample_rate"), pmt::from_float(sample_rate));
 
-                    if(remaining_in_current > 0)
+                    if(remaining_in_current > 0) {
+                        std::cout << "Received: Freq: " << (burst_freq/1e6) << " MHz, Magnitude: " << magnitude << std::endl;
                         add_item_tag(0, nitems_written(0) + produced, key, value);
+                    }
                 }
 
                 
