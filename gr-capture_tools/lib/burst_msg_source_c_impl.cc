@@ -131,7 +131,8 @@ namespace gr {
                     value = pmt::dict_add(value, pmt::mp("magnitude"), pmt::from_float(magnitude));
                     value = pmt::dict_add(value, pmt::mp("sample_rate"), pmt::from_float(sample_rate));
 
-                    add_item_tag(0, nitems_written(0) + produced, key, value);
+                    if(remaining_in_current > 0)
+                        add_item_tag(0, nitems_written(0) + produced, key, value);
                 }
 
                 
