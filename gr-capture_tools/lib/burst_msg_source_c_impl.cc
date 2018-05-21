@@ -210,10 +210,6 @@ namespace gr {
                     if (toproduce > 0) {
                         pmt::pmt_t key = pmt::string_to_symbol("end_burst");
                         add_item_tag(0, nitems_written(0) + produced, key, pmt::PMT_NIL);
-                        if (d_n_zeros > 0) {
-                            d_add_zeros_now = true;
-                            d_zeros_cnt = 0;
-                        }
                     }
                     d_in_burst = false;
                     d_current_burst_pos = 0;
@@ -221,6 +217,13 @@ namespace gr {
                         d_bursts.pop_front();
                         pmt::pmt_t handled_msg = pmt::from_uint64(d_current_id);
                         message_port_pub(pmt::mp("handled"), handled_msg);
+                    }
+                    if (toproduce > 0) {
+                        if (d_n_zeros > 0) {
+                            d_add_zeros_now = true;
+                            d_zeros_cnt = 0;
+                            break;
+                        }
                     }
                 }
 
