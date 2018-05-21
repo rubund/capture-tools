@@ -52,6 +52,8 @@ namespace gr {
                             int history_size=512, bool debug=false);
 
       virtual uint64_t get_n_tagged_bursts() = 0;
+
+      virtual void set_threshold(float threshold) = 0;
     };
 
   } // namespace capture_tools

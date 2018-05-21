@@ -96,11 +96,7 @@ namespace gr {
             d_burst_mask_f[i] = 1.0;
         }
 
-        d_threshold = pow(10, threshold/10) / d_history_size;
-        if(d_debug) {
-          fprintf(stderr, "threshold=%f, d_threshold=%f (%f/%d)\n",
-              threshold, d_threshold, d_threshold * d_history_size, d_history_size);
-        }
+        set_threshold(threshold);
 
         d_peaks.reserve(d_fft_size);
         
@@ -139,6 +135,15 @@ namespace gr {
       if(d_burst_debug_file) {
         fclose(d_burst_debug_file);
       }
+    }
+
+    void
+    fft_burst_tagger_impl::set_threshold(float threshold){
+        d_threshold = pow(10, threshold/10) / d_history_size;
+        if(d_debug) {
+          fprintf(stderr, "threshold=%f, d_threshold=%f (%f/%d)\n",
+              threshold, d_threshold, d_threshold * d_history_size, d_history_size);
+        }
     }
 
     bool

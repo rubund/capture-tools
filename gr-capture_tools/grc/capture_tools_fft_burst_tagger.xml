@@ -7,6 +7,7 @@
   <make>capture_tools.fft_burst_tagger($center_frequency, $fft_size, $sample_rate, $burst_pre_len, $burst_post_len,
                             $burst_width, $max_bursts, $threshold, $history_size, $debug)
   </make>
+  <callback>self.$(id).set_threshold($threshold)</callback>
 
   <param>
     <name>Center Frequency</name>
