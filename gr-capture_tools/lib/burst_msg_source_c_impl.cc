@@ -88,6 +88,12 @@ namespace gr {
         d_repeat = val;
     }
 
+	void
+    burst_msg_source_c_impl::set_round_factor(float val)
+    {
+        d_round_factor = val;
+    }
+
     int
     burst_msg_source_c_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,

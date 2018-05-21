@@ -5,7 +5,9 @@
   <category>[capture_tools]</category>
   <import>import capture_tools</import>
   <make>capture_tools.burst_msg_source_c($n)
-self.$(id).set_repeat($repeat)</make>
+self.$(id).set_repeat($repeat)
+self.$(id).set_round_factor($round_factor)</make>
+  <callback>self.$(id).set_round_factor($round_factor)</callback>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
@@ -22,6 +24,13 @@ self.$(id).set_repeat($repeat)</make>
     <key>repeat</key>
     <value>False</value>
     <type>bool</type>
+  </param>
+
+  <param>
+    <name>Round factor</name>
+    <key>round_factor</key>
+    <value>1.0</value>
+    <type>float</type>
   </param>
 
   <!-- Make one 'sink' node per input. Sub-nodes:

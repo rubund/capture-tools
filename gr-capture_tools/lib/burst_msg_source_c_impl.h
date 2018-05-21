@@ -54,6 +54,7 @@ namespace gr {
 
 
       void set_repeat(bool val);
+      void set_round_factor(float val);
     };
 
   } // namespace capture_tools
