@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /* 
- * Copyright 2018 <+YOU OR YOUR COMPANY+>.
+ * Copyright 2016 Free Software Foundation, Inc
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,38 +19,44 @@
  */
 
 
-#ifndef INCLUDED_CAPTURE_TOOLS_TAGGED_BURST_TO_PDU_H
-#define INCLUDED_CAPTURE_TOOLS_TAGGED_BURST_TO_PDU_H
+#ifndef INCLUDED_IRIDIUM_TOOLKIT_TAGGED_BURST_TO_PDU_H
+#define INCLUDED_IRIDIUM_TOOLKIT_TAGGED_BURST_TO_PDU_H
 
-#include <capture_tools/api.h>
+#include <iridium/api.h>
 #include <gnuradio/sync_block.h>
 
 namespace gr {
-  namespace capture_tools {
+  namespace iridium {
 
     /*!
      * \brief <+description of block+>
-     * \ingroup capture_tools
+     * \ingroup iridium
      *
      */
-    class CAPTURE_TOOLS_API tagged_burst_to_pdu : virtual public gr::sync_block
+    class IRIDIUM_TOOLKIT_API tagged_burst_to_pdu : virtual public gr::sync_block
     {
      public:
       typedef boost::shared_ptr<tagged_burst_to_pdu> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of capture_tools::tagged_burst_to_pdu.
+       * \brief Return a shared_ptr to a new instance of iridium::tagged_burst_to_pdu.
        *
-       * To avoid accidental use of raw pointers, capture_tools::tagged_burst_to_pdu's
+       * To avoid accidental use of raw pointers, iridium::tagged_burst_to_pdu's
        * constructor is in a private implementation
-       * class. capture_tools::tagged_burst_to_pdu::make is the public interface for
+       * class. iridium::tagged_burst_to_pdu::make is the public interface for
        * creating new instances.
        */
-      static sptr make(int max_burst_size, float relative_center_frequency, float relative_span, float d_relative_sample_rate, int outstanding_limit, bool drop_overflow);
+      static sptr make(int max_burst_size, float relative_center_frequency, float relative_span,
+                        float d_relative_sample_rate, int outstanding_limit, bool drop_overflow);
+
+      virtual uint64_t get_n_dropped_bursts() = 0;
+      virtual int get_output_queue_size() = 0;
+      virtual int get_output_max_queue_size() = 0;
+
     };
 
-  } // namespace capture_tools
+  } // namespace iridium
 } // namespace gr
 
-#endif /* INCLUDED_CAPTURE_TOOLS_TAGGED_BURST_TO_PDU_H */
+#endif /* INCLUDED_IRIDIUM_TOOLKIT_TAGGED_BURST_TO_PDU_H */
 

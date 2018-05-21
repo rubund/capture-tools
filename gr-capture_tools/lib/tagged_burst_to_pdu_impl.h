@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /* 
- * Copyright 2018 <+YOU OR YOUR COMPANY+>.
+ * Copyright 2016 Free Software Foundation, Inc
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,22 +18,62 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_CAPTURE_TOOLS_TAGGED_BURST_TO_PDU_IMPL_H
-#define INCLUDED_CAPTURE_TOOLS_TAGGED_BURST_TO_PDU_IMPL_H
+#ifndef INCLUDED_IRIDIUM_TOOLKIT_TAGGED_BURST_TO_PDU_IMPL_H
+#define INCLUDED_IRIDIUM_TOOLKIT_TAGGED_BURST_TO_PDU_IMPL_H
 
-#include <capture_tools/tagged_burst_to_pdu.h>
+#include <iridium/tagged_burst_to_pdu.h>
 
 namespace gr {
-  namespace capture_tools {
+  namespace iridium {
+
+    struct burst_data {
+        uint64_t id;
+        uint64_t offset;
+        float magnitude;
+        float relative_frequency;
+        float center_frequency;
+        float sample_rate;
+        size_t len;
+        gr_complex * data;
+    };
 
     class tagged_burst_to_pdu_impl : public tagged_burst_to_pdu
     {
      private:
-      // Nothing to declare in this block.
+       bool d_debug;
+       float d_relative_center_frequency;
+       float d_relative_span;
+       float d_relative_sample_rate;
+       int d_max_burst_size;
+       int d_outstanding;
+       int d_max_outstanding;
+       int d_outstanding_limit;
+       uint64_t d_n_dropped_bursts;
+       bool d_drop_overflow;
+       bool d_blocked;
 
+       float d_lower_border;
+       float d_upper_border;
+
+       std::map<uint64_t, burst_data> d_bursts;
+
+       void append_to_burst(burst_data &burst, const gr_complex * data, size_t n);
+       void publish_burst(burst_data &burst);
+
+       void create_new_bursts(int noutput_items,
+                const gr_complex * in);
+       void publish_and_remove_old_bursts(int noutput_items, const gr_complex * in);
+       void update_current_bursts(int noutput_items, const gr_complex * in);
+
+       int get_output_queue_size();
+       int get_output_max_queue_size();
+       void burst_handled(pmt::pmt_t msg);
      public:
-      tagged_burst_to_pdu_impl(int max_burst_size, float relative_center_frequency, float relative_span, float d_relative_sample_rate, int outstanding_limit, bool drop_overflow);
+      tagged_burst_to_pdu_impl(int max_burst_size, float relative_center_frequency, float relative_span,
+                                float d_relative_sample_rate, int outstanding_limit, bool drop_overflow);
       ~tagged_burst_to_pdu_impl();
+
+      uint64_t get_n_dropped_bursts();
 
       // Where all the action really happens
       int work(int noutput_items,
@@ -41,8 +81,8 @@ namespace gr {
          gr_vector_void_star &output_items);
     };
 
-  } // namespace capture_tools
+  } // namespace iridium
 } // namespace gr
 
-#endif /* INCLUDED_CAPTURE_TOOLS_TAGGED_BURST_TO_PDU_IMPL_H */
+#endif /* INCLUDED_IRIDIUM_TOOLKIT_TAGGED_BURST_TO_PDU_IMPL_H */
 
