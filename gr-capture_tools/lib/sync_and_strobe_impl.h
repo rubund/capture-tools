@@ -48,6 +48,9 @@ namespace gr {
         int d_state;
         int d_npreamb;
         int d_strobe_offset;
+        float d_min_swing;
+        float d_extreme_val_high;
+        float d_extreme_val_low;
 
         void sps_update();
 

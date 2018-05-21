@@ -61,6 +61,9 @@ namespace gr {
         d_timeout_cnt = 0;
         d_state = 0;
         d_strobe_offset = 7;
+        d_min_swing = 0.1;
+        d_extreme_val_high = 0;
+        d_extreme_val_low = 0;
         sps_update();
     }
 
@@ -116,19 +119,28 @@ namespace gr {
                 if (in[i] < (avg_val - d_hysteresis)) {
                     found_crossing = true;
                     d_direction = -1;
+                    d_extreme_val_low = 0;
+                }
+                else {
+                    d_extreme_val_high = in[i] > d_extreme_val_high ? in[i] : d_extreme_val_high;
                 }
             }
             else if (d_direction == -1) {
                 if (in[i] > (avg_val + d_hysteresis)) {
                     found_crossing = true;
                     d_direction = 1;
+                    d_extreme_val_high = 0;
+                }
+                else {
+                    d_extreme_val_low = in[i] < d_extreme_val_low ? in[i] : d_extreme_val_low;
                 }
             }
 
             if (d_last_crossing_cnt != -1) {
                 d_last_crossing_cnt ++;
             }
-            if (found_crossing) {
+            bool wide_enough = (d_extreme_val_high - d_extreme_val_low) > d_min_swing;
+            if (found_crossing && wide_enough) {
                 if(d_last_crossing_cnt > (d_sps - d_spsmargin) && d_last_crossing_cnt < (d_sps + d_spsmargin)) {
                     d_crossings++;
                 }
