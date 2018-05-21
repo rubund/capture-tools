@@ -50,6 +50,7 @@ namespace gr {
 
       virtual void set_repeat(bool val)=0;
       virtual void set_round_factor(float val)=0;
+      virtual void set_n_zeros(int val)=0;
     };
 
   } // namespace capture_tools

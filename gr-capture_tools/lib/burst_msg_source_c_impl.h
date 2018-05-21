@@ -42,6 +42,9 @@ namespace gr {
       bool d_repeat;
       float d_round_factor;
       uint64_t d_current_id;
+      int d_n_zeros;
+      bool d_add_zeros_now;
+      int d_zeros_cnt;
 
      public:
       burst_msg_source_c_impl(int n);
@@ -55,6 +58,7 @@ namespace gr {
 
       void set_repeat(bool val);
       void set_round_factor(float val);
+      void set_n_zeros(int val);
     };
 
   } // namespace capture_tools

@@ -65,6 +65,8 @@ namespace gr {
         d_current_phase = 0;
         d_repeat = false;
         d_round_factor = 1;
+        d_n_zeros = 0;
+        d_add_zeros_now = false;
 	}
 
     /*
@@ -94,6 +96,12 @@ namespace gr {
         d_round_factor = val;
     }
 
+	void
+    burst_msg_source_c_impl::set_n_zeros(int val)
+    {
+        d_n_zeros = val;
+    }
+
     int
     burst_msg_source_c_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
@@ -104,7 +112,18 @@ namespace gr {
 		pmt::pmt_t current_burst;
 
 		gr::thread::scoped_lock lock(common_mutex);
-		if(d_bursts.size() == 0) {
+        if(d_add_zeros_now) {
+            int remaining = d_n_zeros - d_zeros_cnt;
+            int tomake = std::min(remaining, noutput_items);
+
+            d_zeros_cnt += tomake;
+            produced += tomake;
+            memset(out, 0, tomake*sizeof(gr_complex));
+            if(tomake == remaining) {
+                d_add_zeros_now = false;
+            }
+        }
+		else if(d_bursts.size() == 0) {
             if(d_repeat) {
                 memset(out, 0, noutput_items*sizeof(gr_complex));
                 produced = noutput_items; // If repeat, we output continuously zeros before the first message. If not repeat, we just wait a little bit
@@ -191,6 +210,10 @@ namespace gr {
                     if (toproduce > 0) {
                         pmt::pmt_t key = pmt::string_to_symbol("end_burst");
                         add_item_tag(0, nitems_written(0) + produced, key, pmt::PMT_NIL);
+                        if (d_n_zeros > 0) {
+                            d_add_zeros_now = true;
+                            d_zeros_cnt = 0;
+                        }
                     }
                     d_in_burst = false;
                     d_current_burst_pos = 0;
