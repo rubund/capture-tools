@@ -118,6 +118,7 @@ namespace gr {
                     float center_frequency = pmt::to_float(pmt::dict_ref(meta, pmt::mp("center_frequency"), pmt::PMT_NIL));
                     float sample_rate = pmt::to_float(pmt::dict_ref(meta, pmt::mp("sample_rate"), pmt::PMT_NIL));
                     uint64_t id = pmt::to_uint64(pmt::dict_ref(meta, pmt::mp("id"), pmt::PMT_NIL));
+                    d_current_id = id;
                     uint64_t offset = pmt::to_uint64(pmt::dict_ref(meta, pmt::mp("offset"), pmt::PMT_NIL));
                     float magnitude = pmt::to_float(pmt::dict_ref(meta, pmt::mp("magnitude"), pmt::PMT_NIL));
                     float burst_shift_freq;
@@ -178,7 +179,7 @@ namespace gr {
                     d_current_burst_pos = 0;
                     if((!d_repeat) || (lnow - i) > 1) {
                         d_bursts.pop_front();
-                        pmt::pmt_t handled_msg = pmt::mp("handled");  // FIXME
+                        pmt::pmt_t handled_msg = pmt::from_uint64(d_current_id);
                         message_port_pub(pmt::mp("handled"), handled_msg);
                     }
                 }

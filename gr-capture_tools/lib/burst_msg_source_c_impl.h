@@ -41,6 +41,7 @@ namespace gr {
       float d_current_phase;
       bool d_repeat;
       float d_round_factor;
+      uint64_t d_current_id;
 
      public:
       burst_msg_source_c_impl(int n);

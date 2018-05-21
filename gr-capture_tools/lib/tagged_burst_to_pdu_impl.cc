@@ -78,6 +78,8 @@ namespace gr {
     void
     tagged_burst_to_pdu_impl::burst_handled(pmt::pmt_t msg)
     {
+      pmt::pmt_t value = msg;
+      uint64_t id = pmt::to_uint64(value);
       d_outstanding--;
     }
 
