@@ -80,7 +80,6 @@ namespace gr {
     {
 		gr::thread::scoped_lock lock(common_mutex);
 		d_bursts.push_back(msg);
-        std::cout << "Got message " << std::endl;
     }
 
 
