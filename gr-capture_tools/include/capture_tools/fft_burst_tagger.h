@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /* 
- * Copyright 2018 <+YOU OR YOUR COMPANY+>.
+ * Copyright 2016 Free Software Foundation, Inc
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,38 +19,43 @@
  */
 
 
-#ifndef INCLUDED_CAPTURE_TOOLS_FFT_BURST_TAGGER_H
-#define INCLUDED_CAPTURE_TOOLS_FFT_BURST_TAGGER_H
+#ifndef INCLUDED_IRIDIUM_TOOLKIT_FFT_BURST_TAGGER_H
+#define INCLUDED_IRIDIUM_TOOLKIT_FFT_BURST_TAGGER_H
 
-#include <capture_tools/api.h>
+#include <iridium/api.h>
 #include <gnuradio/sync_block.h>
 
 namespace gr {
-  namespace capture_tools {
+  namespace iridium {
 
     /*!
      * \brief <+description of block+>
-     * \ingroup capture_tools
+     * \ingroup iridium
      *
      */
-    class CAPTURE_TOOLS_API fft_burst_tagger : virtual public gr::sync_block
+    class IRIDIUM_TOOLKIT_API fft_burst_tagger : virtual public gr::sync_block
     {
      public:
       typedef boost::shared_ptr<fft_burst_tagger> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of capture_tools::fft_burst_tagger.
+       * \brief Return a shared_ptr to a new instance of iridium::fft_burst_tagger.
        *
-       * To avoid accidental use of raw pointers, capture_tools::fft_burst_tagger's
+       * To avoid accidental use of raw pointers, iridium::fft_burst_tagger's
        * constructor is in a private implementation
-       * class. capture_tools::fft_burst_tagger::make is the public interface for
+       * class. iridium::fft_burst_tagger::make is the public interface for
        * creating new instances.
        */
-      static sptr make(float center_frequency, int fft_size, int sample_rate, int burst_pre_len, int burst_post_len, int burst_width, int max_bursts=0, float threshold=7, int history_size=512, bool debug=false);
+      static sptr make(float center_frequency, int fft_size, int sample_rate,
+                            int burst_pre_len, int burst_post_len,
+                            int burst_width, int max_bursts=0, float threshold=7,
+                            int history_size=512, bool debug=false);
+
+      virtual uint64_t get_n_tagged_bursts() = 0;
     };
 
-  } // namespace capture_tools
+  } // namespace iridium
 } // namespace gr
 
-#endif /* INCLUDED_CAPTURE_TOOLS_FFT_BURST_TAGGER_H */
+#endif /* INCLUDED_IRIDIUM_TOOLKIT_FFT_BURST_TAGGER_H */
 

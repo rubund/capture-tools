@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /* 
- * Copyright 2018 <+YOU OR YOUR COMPANY+>.
+ * Copyright 2016 Free Software Foundation, Inc
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,31 +18,94 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_CAPTURE_TOOLS_FFT_BURST_TAGGER_IMPL_H
-#define INCLUDED_CAPTURE_TOOLS_FFT_BURST_TAGGER_IMPL_H
+#ifndef INCLUDED_IRIDIUM_TOOLKIT_FFT_BURST_TAGGER_IMPL_H
+#define INCLUDED_IRIDIUM_TOOLKIT_FFT_BURST_TAGGER_IMPL_H
 
-#include <capture_tools/fft_burst_tagger.h>
+#include <iridium/fft_burst_tagger.h>
+#include <gnuradio/fft/fft.h>
 
 namespace gr {
-  namespace capture_tools {
+  namespace iridium {
+
+    struct burst {
+        uint64_t start;
+        uint64_t stop;
+        uint64_t last_active;
+        int center_bin;
+        float magnitude;
+        uint64_t id;
+    };
+
+    struct peak {
+        int bin;
+        float relative_magnitude;
+    };
 
     class fft_burst_tagger_impl : public fft_burst_tagger
     {
      private:
-      // Nothing to declare in this block.
+      bool d_history_primed;
+      bool d_debug;
+
+      int d_fft_size;
+      int d_burst_pre_len;
+      int d_history_size;
+      int d_burst_width;
+      int d_history_index;
+      int d_burst_post_len;
+      int d_max_bursts;
+      int d_sample_rate;
+      uint64_t d_index;
+      uint64_t d_burst_id;
+      uint64_t d_n_tagged_bursts;
+
+      float * d_window_f;
+      float * d_magnitude_f;
+      float * d_magnitude_shifted_f;
+      float * d_baseline_sum_f;
+      float * d_baseline_history_f;
+      float * d_relative_magnitude_f;
+      float * d_burst_mask_f;
+      float * d_ones_f;
+      float d_threshold;
+      float d_center_frequency;
+
+      FILE * d_burst_debug_file;
+
+      gr::fft::fft_complex          *d_fft;
+      std::vector<peak> d_peaks;
+      std::vector<burst> d_bursts;
+      std::vector<burst> d_new_bursts;
+      std::vector<burst> d_gone_bursts;
+
+      bool update_filters_pre(void);
+      void update_filters_post(void);
+      void extract_peaks(void);
+      void save_peaks_to_debug_file(char * filename);
+      void remove_peaks_around_bursts(void);
+      void update_burst_mask(void);
+      void update_bursts(void);
+      void delete_gone_bursts(void);
+      void create_new_bursts(void);
+      void mask_burst(burst &b);
+      void tag_new_bursts(void);
+      void tag_gone_bursts(int noutput_items);
 
      public:
-      fft_burst_tagger_impl(float center_frequency, int fft_size, int sample_rate, int burst_pre_len, int burst_post_len, int burst_width, int max_bursts, float threshold, int history_size, bool debug);
+      fft_burst_tagger_impl(float center_frequency, int fft_size, int sample_rate,
+                            int burst_pre_len, int burst_post_len, int burst_width,
+                            int max_bursts, float threshold, int history_size, bool debug);
       ~fft_burst_tagger_impl();
 
-      // Where all the action really happens
+      uint64_t get_n_tagged_bursts();
+
       int work(int noutput_items,
          gr_vector_const_void_star &input_items,
          gr_vector_void_star &output_items);
     };
 
-  } // namespace capture_tools
+  } // namespace iridium
 } // namespace gr
 
-#endif /* INCLUDED_CAPTURE_TOOLS_FFT_BURST_TAGGER_IMPL_H */
+#endif /* INCLUDED_IRIDIUM_TOOLKIT_FFT_BURST_TAGGER_IMPL_H */
 
