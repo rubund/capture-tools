@@ -19,31 +19,31 @@
  */
 
 
-#ifndef INCLUDED_IRIDIUM_TOOLKIT_TAGGED_BURST_TO_PDU_H
-#define INCLUDED_IRIDIUM_TOOLKIT_TAGGED_BURST_TO_PDU_H
+#ifndef INCLUDED_CAPTURE_TOOLS_TAGGED_BURST_TO_PDU_H
+#define INCLUDED_CAPTURE_TOOLS_TAGGED_BURST_TO_PDU_H
 
-#include <iridium/api.h>
+#include <capture_tools/api.h>
 #include <gnuradio/sync_block.h>
 
 namespace gr {
-  namespace iridium {
+  namespace capture_tools {
 
     /*!
      * \brief <+description of block+>
-     * \ingroup iridium
+     * \ingroup capture_tools
      *
      */
-    class IRIDIUM_TOOLKIT_API tagged_burst_to_pdu : virtual public gr::sync_block
+    class CAPTURE_TOOLS_API tagged_burst_to_pdu : virtual public gr::sync_block
     {
      public:
       typedef boost::shared_ptr<tagged_burst_to_pdu> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of iridium::tagged_burst_to_pdu.
+       * \brief Return a shared_ptr to a new instance of capture_tools::tagged_burst_to_pdu.
        *
-       * To avoid accidental use of raw pointers, iridium::tagged_burst_to_pdu's
+       * To avoid accidental use of raw pointers, capture_tools::tagged_burst_to_pdu's
        * constructor is in a private implementation
-       * class. iridium::tagged_burst_to_pdu::make is the public interface for
+       * class. capture_tools::tagged_burst_to_pdu::make is the public interface for
        * creating new instances.
        */
       static sptr make(int max_burst_size, float relative_center_frequency, float relative_span,
@@ -55,8 +55,8 @@ namespace gr {
 
     };
 
-  } // namespace iridium
+  } // namespace capture_tools
 } // namespace gr
 
-#endif /* INCLUDED_IRIDIUM_TOOLKIT_TAGGED_BURST_TO_PDU_H */
+#endif /* INCLUDED_CAPTURE_TOOLS_TAGGED_BURST_TO_PDU_H */
 

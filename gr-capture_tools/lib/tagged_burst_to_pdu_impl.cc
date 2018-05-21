@@ -29,7 +29,7 @@
 #include <inttypes.h>
 
 namespace gr {
-  namespace iridium {
+  namespace capture_tools {
 
     tagged_burst_to_pdu::sptr
     tagged_burst_to_pdu::make(int max_burst_size, float relative_center_frequency, float relative_span,
@@ -260,6 +260,6 @@ namespace gr {
       return noutput_items;
     }
 
-  } /* namespace iridium */
+  } /* namespace capture_tools */
 } /* namespace gr */
 

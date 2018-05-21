@@ -18,13 +18,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_IRIDIUM_TOOLKIT_TAGGED_BURST_TO_PDU_IMPL_H
-#define INCLUDED_IRIDIUM_TOOLKIT_TAGGED_BURST_TO_PDU_IMPL_H
+#ifndef INCLUDED_CAPTURE_TOOLS_TAGGED_BURST_TO_PDU_IMPL_H
+#define INCLUDED_CAPTURE_TOOLS_TAGGED_BURST_TO_PDU_IMPL_H
 
-#include <iridium/tagged_burst_to_pdu.h>
+#include <capture_tools/tagged_burst_to_pdu.h>
 
 namespace gr {
-  namespace iridium {
+  namespace capture_tools {
 
     struct burst_data {
         uint64_t id;
@@ -81,8 +81,8 @@ namespace gr {
          gr_vector_void_star &output_items);
     };
 
-  } // namespace iridium
+  } // namespace capture_tools
 } // namespace gr
 
-#endif /* INCLUDED_IRIDIUM_TOOLKIT_TAGGED_BURST_TO_PDU_IMPL_H */
+#endif /* INCLUDED_CAPTURE_TOOLS_TAGGED_BURST_TO_PDU_IMPL_H */
 
