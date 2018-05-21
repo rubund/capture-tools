@@ -110,7 +110,7 @@ namespace gr {
 
         avg_val = d_avg_sum / ((float)d_navg);
 
-        if(d_state == 0) {
+        if(d_state == 0 || d_state == 1) {
             bool found_crossing = false;
             if(d_direction == 0) {
                 d_direction = in[i] >= avg_val ? 1 : -1;
@@ -148,20 +148,18 @@ namespace gr {
                     d_crossings = 0;
                 }
                 d_last_crossing_cnt = 0;
-            }
 
-            if(d_crossings == d_npreamb) {
-                d_state = 1;
-                d_crossings = 0 ;
-                d_last_crossing_cnt = 0 ;
-                d_symbol_cnt = 0;
-                d_residue = 0;
-                d_timeout_cnt = 0;
-                sps_update();
-                add_item_tag(0, nitems_written(0) + i, pmt::intern("preamble"), pmt::intern(""), pmt::intern(""));
+                if(d_crossings >= d_npreamb) {
+                    d_state = 1;
+                    d_symbol_cnt = 0;
+                    d_residue = 0;
+                    d_timeout_cnt = 0;
+                    sps_update();
+                    add_item_tag(0, nitems_written(0) + i, pmt::intern("preamble"), pmt::intern(""), pmt::intern(""));
+                }
             }
         }
-        else if (d_state == 1) {
+        if (d_state == 1) {
             if(d_symbol_cnt == d_strobe_offset) {
                 add_item_tag(0, nitems_written(0) + i, pmt::intern("strobe"), pmt::intern(""), pmt::intern(""));
             }
@@ -175,6 +173,7 @@ namespace gr {
                 if(d_timeout_cnt == d_preamble_timeout) {
                     d_direction = 0;
                     d_last_crossing_cnt = -1;
+                    d_crossings = 0 ;
                     d_state = 0;
                 }
             }
