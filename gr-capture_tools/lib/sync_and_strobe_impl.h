@@ -47,6 +47,7 @@ namespace gr {
         int d_timeout_cnt;
         int d_state;
         int d_npreamb;
+        int d_strobe_offset;
 
         void sps_update();
 

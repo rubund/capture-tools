@@ -52,14 +52,15 @@ namespace gr {
         d_avg_sum = 0;
         d_symbol_cnt = 0;
         d_residue = 0;
-        d_hysteresis = 0.02;
+        d_hysteresis = 0;
         d_last_crossing_cnt = -1;
         d_direction = 0;
-        d_spsmargin = 3;
+        d_spsmargin = 7;
         d_crossings = 0;
-        d_preamble_timeout = 20;
+        d_preamble_timeout = 50;
         d_timeout_cnt = 0;
         d_state = 0;
+        d_strobe_offset = 7;
         sps_update();
     }
 
@@ -143,14 +144,15 @@ namespace gr {
                 d_last_crossing_cnt = 0 ;
                 d_symbol_cnt = 0;
                 d_residue = 0;
+                d_timeout_cnt = 0;
                 sps_update();
                 add_item_tag(0, nitems_written(0) + i, pmt::intern("preamble"), pmt::intern(""), pmt::intern(""));
             }
         }
         else if (d_state == 1) {
-            //if(d_symbol_cnt == 0) {
-            //    add_item_tag(0, nitems_written(0) + i, pmt::intern("strobe"), pmt::intern(""), pmt::intern(""));
-            //}
+            if(d_symbol_cnt == d_strobe_offset) {
+                add_item_tag(0, nitems_written(0) + i, pmt::intern("strobe"), pmt::intern(""), pmt::intern(""));
+            }
 
             d_symbol_cnt++;
             if(d_symbol_cnt == d_spsint) {
@@ -160,6 +162,7 @@ namespace gr {
                 d_timeout_cnt++;
                 if(d_timeout_cnt == d_preamble_timeout) {
                     d_direction = 0;
+                    d_last_crossing_cnt = -1;
                     d_state = 0;
                 }
             }
