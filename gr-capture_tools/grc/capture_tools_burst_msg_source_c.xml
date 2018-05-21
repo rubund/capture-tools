@@ -4,7 +4,8 @@
   <key>capture_tools_burst_msg_source_c</key>
   <category>[capture_tools]</category>
   <import>import capture_tools</import>
-  <make>capture_tools.burst_msg_source_c($n)</make>
+  <make>capture_tools.burst_msg_source_c($n)
+self.$(id).set_repeat($repeat)</make>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
@@ -14,6 +15,13 @@
     <name>Num inputs</name>
     <key>n</key>
     <type>int</type>
+  </param>
+
+  <param>
+    <name>Repeat last</name>
+    <key>repeat</key>
+    <value>False</value>
+    <type>bool</type>
   </param>
 
   <!-- Make one 'sink' node per input. Sub-nodes:

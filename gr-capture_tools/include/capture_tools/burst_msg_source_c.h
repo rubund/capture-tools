@@ -47,6 +47,8 @@ namespace gr {
        * creating new instances.
        */
       static sptr make(int n=1);
+
+      virtual void set_repeat(bool val)=0;
     };
 
   } // namespace capture_tools

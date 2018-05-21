@@ -82,6 +82,11 @@ namespace gr {
 		d_bursts.push_back(msg);
     }
 
+	void
+    burst_msg_source_c_impl::set_repeat(bool val)
+    {
+        d_repeat = val;
+    }
 
     int
     burst_msg_source_c_impl::work(int noutput_items,
