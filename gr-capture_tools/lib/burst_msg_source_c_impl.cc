@@ -94,7 +94,13 @@ namespace gr {
 
 		gr::thread::scoped_lock lock(common_mutex);
 		if(d_bursts.size() == 0) {
-			usleep(100000);
+            if(d_repeat) {
+                memset(out, 0, noutput_items*sizeof(gr_complex));
+                produced = noutput_items; // If repeat, we output continuously zeros before the first message. If not repeat, we just wait a little bit
+            }
+            else {
+                usleep(100000);
+            }
 		}
 		else {
             int lnow = d_bursts.size();
