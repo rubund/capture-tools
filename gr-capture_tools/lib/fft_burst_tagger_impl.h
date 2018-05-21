@@ -18,14 +18,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef INCLUDED_IRIDIUM_TOOLKIT_FFT_BURST_TAGGER_IMPL_H
-#define INCLUDED_IRIDIUM_TOOLKIT_FFT_BURST_TAGGER_IMPL_H
+#ifndef INCLUDED_CAPTURE_TOOLS_FFT_BURST_TAGGER_IMPL_H
+#define INCLUDED_CAPTURE_TOOLS_FFT_BURST_TAGGER_IMPL_H
 
-#include <iridium/fft_burst_tagger.h>
+#include <capture_tools/fft_burst_tagger.h>
 #include <gnuradio/fft/fft.h>
 
 namespace gr {
-  namespace iridium {
+  namespace capture_tools {
 
     struct burst {
         uint64_t start;
@@ -104,8 +104,8 @@ namespace gr {
          gr_vector_void_star &output_items);
     };
 
-  } // namespace iridium
+  } // namespace capture_tools
 } // namespace gr
 
-#endif /* INCLUDED_IRIDIUM_TOOLKIT_FFT_BURST_TAGGER_IMPL_H */
+#endif /* INCLUDED_CAPTURE_TOOLS_FFT_BURST_TAGGER_IMPL_H */
 

@@ -19,31 +19,31 @@
  */
 
 
-#ifndef INCLUDED_IRIDIUM_TOOLKIT_FFT_BURST_TAGGER_H
-#define INCLUDED_IRIDIUM_TOOLKIT_FFT_BURST_TAGGER_H
+#ifndef INCLUDED_CAPTURE_TOOLS_FFT_BURST_TAGGER_H
+#define INCLUDED_CAPTURE_TOOLS_FFT_BURST_TAGGER_H
 
-#include <iridium/api.h>
+#include <capture_tools/api.h>
 #include <gnuradio/sync_block.h>
 
 namespace gr {
-  namespace iridium {
+  namespace capture_tools {
 
     /*!
      * \brief <+description of block+>
-     * \ingroup iridium
+     * \ingroup capture_tools
      *
      */
-    class IRIDIUM_TOOLKIT_API fft_burst_tagger : virtual public gr::sync_block
+    class CAPTURE_TOOLS_API fft_burst_tagger : virtual public gr::sync_block
     {
      public:
       typedef boost::shared_ptr<fft_burst_tagger> sptr;
 
       /*!
-       * \brief Return a shared_ptr to a new instance of iridium::fft_burst_tagger.
+       * \brief Return a shared_ptr to a new instance of capture_tools::fft_burst_tagger.
        *
-       * To avoid accidental use of raw pointers, iridium::fft_burst_tagger's
+       * To avoid accidental use of raw pointers, capture_tools::fft_burst_tagger's
        * constructor is in a private implementation
-       * class. iridium::fft_burst_tagger::make is the public interface for
+       * class. capture_tools::fft_burst_tagger::make is the public interface for
        * creating new instances.
        */
       static sptr make(float center_frequency, int fft_size, int sample_rate,
@@ -54,8 +54,8 @@ namespace gr {
       virtual uint64_t get_n_tagged_bursts() = 0;
     };
 
-  } // namespace iridium
+  } // namespace capture_tools
 } // namespace gr
 
-#endif /* INCLUDED_IRIDIUM_TOOLKIT_FFT_BURST_TAGGER_H */
+#endif /* INCLUDED_CAPTURE_TOOLS_FFT_BURST_TAGGER_H */
 

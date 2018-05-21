@@ -34,7 +34,7 @@
 #include <inttypes.h>
 
 namespace gr {
-  namespace iridium {
+  namespace capture_tools {
 
     
     fft_burst_tagger::sptr
@@ -401,6 +401,6 @@ namespace gr {
       return noutput_items;
     }
 
-  } /* namespace iridium */
+  } /* namespace capture_tools */
 } /* namespace gr */
 
