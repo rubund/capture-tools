@@ -63,5 +63,6 @@ install(FILES
     tag_first_non_zero_cc.h
     burst_msg_source_c.h
     fft_burst_tagger.h
-    tagged_burst_to_pdu.h DESTINATION include/capture_tools
+    tagged_burst_to_pdu.h
+    sync_and_strobe.h DESTINATION include/capture_tools
 )

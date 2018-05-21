@@ -51,5 +51,6 @@ install(FILES
     capture_tools_tag_first_non_zero_cc.xml
     capture_tools_burst_msg_source_c.xml
     capture_tools_fft_burst_tagger.xml
-    capture_tools_tagged_burst_to_pdu.xml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_tagged_burst_to_pdu.xml
+    capture_tools_sync_and_strobe.xml DESTINATION share/gnuradio/grc/blocks
 )

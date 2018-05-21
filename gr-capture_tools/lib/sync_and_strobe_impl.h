@@ -1,0 +1,67 @@
+/* -*- c++ -*- */
+/* 
+ * Copyright 2018 <+YOU OR YOUR COMPANY+>.
+ * 
+ * This is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this software; see the file COPYING.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street,
+ * Boston, MA 02110-1301, USA.
+ */
+
+#ifndef INCLUDED_CAPTURE_TOOLS_SYNC_AND_STROBE_IMPL_H
+#define INCLUDED_CAPTURE_TOOLS_SYNC_AND_STROBE_IMPL_H
+
+#include <capture_tools/sync_and_strobe.h>
+
+namespace gr {
+  namespace capture_tools {
+
+    class sync_and_strobe_impl : public sync_and_strobe
+    {
+     private:
+      // Nothing to declare in this block.
+        float * d_avg_buffer;
+        int d_navg;
+        int d_avg_index;
+        float d_avg_sum;
+        int d_symbol_cnt;
+        float d_residue;
+        float d_sps;
+        int d_spsint;
+        float d_hysteresis;
+        int d_last_crossing_cnt;
+        int d_direction;
+        float d_spsmargin;
+        int d_crossings;
+        int d_preamble_timeout;
+        int d_timeout_cnt;
+        int d_state;
+        int d_npreamb;
+
+        void sps_update();
+
+     public:
+      sync_and_strobe_impl(float sps, int npreamb);
+      ~sync_and_strobe_impl();
+
+      // Where all the action really happens
+      int work(int noutput_items,
+         gr_vector_const_void_star &input_items,
+         gr_vector_void_star &output_items);
+    };
+
+  } // namespace capture_tools
+} // namespace gr
+
+#endif /* INCLUDED_CAPTURE_TOOLS_SYNC_AND_STROBE_IMPL_H */
+
