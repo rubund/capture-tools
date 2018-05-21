@@ -62,6 +62,7 @@ list(APPEND capture_tools_sources
     tag_first_non_zero_cc_impl.cc
     burst_msg_source_c_impl.cc
     fft_burst_tagger_impl.cc
+    tagged_burst_to_pdu_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)
