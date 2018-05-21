@@ -221,7 +221,6 @@ namespace gr {
           b.start = d_index - d_burst_pre_len;
           b.last_active = b.start;
 
-          d_bursts.push_back(b);
           d_new_bursts.push_back(b);
           mask_burst(b);
 
@@ -235,13 +234,11 @@ namespace gr {
       if(d_max_bursts > 0 && d_bursts.size() > d_max_bursts) {
         fprintf(stderr, "Detector in burst squelch at %f\n", d_index / float(d_sample_rate));
         d_new_bursts.clear();
-        for(burst b : d_bursts) {
-          if(b.start != d_index - d_burst_pre_len) {
-            b.stop = d_index;
-            d_gone_bursts.push_back(b);
-          }
+      }
+      else {
+        for(burst b : d_new_bursts) {
+          d_bursts.push_back(b);
         }
-        d_bursts.clear();
       }
     }
 
