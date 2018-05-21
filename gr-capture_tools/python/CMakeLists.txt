@@ -71,3 +71,4 @@ GR_ADD_TEST(qa_tag_on_set_one_f ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}
 GR_ADD_TEST(qa_tag_on_set_one_b ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tag_on_set_one_b.py)
 GR_ADD_TEST(qa_tag_first_non_zero_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_tag_first_non_zero_cc.py)
 GR_ADD_TEST(qa_burst_msg_source_c ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_burst_msg_source_c.py)
+GR_ADD_TEST(qa_fft_burst_tagger ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_fft_burst_tagger.py)
