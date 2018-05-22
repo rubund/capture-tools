@@ -68,7 +68,7 @@ namespace gr {
         d_start_counter = 0;
         d_sync_word_len = 0;
         d_packet_counter = 0;
-        d_n_to_catch = 200;
+        d_n_to_catch = 400;
         sps_update();
     }
 
@@ -206,7 +206,6 @@ namespace gr {
                     }
                     else sliced = 0; 
                 }
-                add_item_tag(0, nitems_written(0) + i, pmt::intern("strobe"), pmt::from_long(d_packet_counter), pmt::intern(""));
                 d_input_buffer = ((d_input_buffer << 1) & 0xfffffffe) | ((uint32_t)(sliced & 0x01));
                 if (d_state == 1) {
                     if(d_sync_word_len > 0 && d_start_counter >= d_sync_word_len && (d_input_buffer & d_sync_word_mask) == d_sync_word) {
@@ -221,6 +220,7 @@ namespace gr {
                     }
                 }
                 else if (d_state == 2){
+                    add_item_tag(0, nitems_written(0) + i, pmt::intern("strobe"), pmt::from_long(d_packet_counter), pmt::intern(""));
                     d_receive_buffer.push_back(sliced);
                     d_packet_counter ++;
                     if(d_packet_counter >= d_n_to_catch) {
