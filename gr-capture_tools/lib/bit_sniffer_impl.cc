@@ -73,6 +73,7 @@ namespace gr {
         size_t packet_length = pmt::length(bit_msg);
         const uint8_t * bits = pmt::u8vector_elements(bit_msg, packet_length);
         float burst_frequency_mhz = pmt::to_float(pmt::dict_ref(bit_meta, pmt::mp("freq"), pmt::PMT_NIL));
+        float burst_magnitude = pmt::to_float(pmt::dict_ref(bit_meta, pmt::mp("magnitude"), pmt::PMT_NIL));
 
         // TODO: Add optional manchester decoding here before (manipulate packet_length/bits before code below)
 
@@ -206,6 +207,7 @@ namespace gr {
             std::cout << "[" << ascii_out.str() << "]";
         if(d_info) {
             printf(" Freq: %4.3f", burst_frequency_mhz);
+            printf(", Mag: %4.2f", burst_magnitude);
             time_t t = time(NULL);
             struct tm tm = *localtime(&t);
             printf(", Time: %04d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);

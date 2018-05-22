@@ -63,6 +63,7 @@ namespace gr {
         int d_n_to_catch;
 
         float d_current_burst_frequency_mhz;
+        float d_current_burst_magnitude;
 
         void sps_update();
 
