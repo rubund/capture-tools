@@ -49,6 +49,7 @@ namespace gr {
         d_last_size = 0;
         d_last = NULL;
         d_since_change = NULL;
+        d_info = false;
         message_port_register_in(pmt::mp("packets"));
         set_msg_handler(pmt::mp("packets"), boost::bind(&bit_sniffer_impl::handler, this, _1));
     }
@@ -67,8 +68,10 @@ namespace gr {
     void bit_sniffer_impl::handler(pmt::pmt_t msg)
     {
         pmt::pmt_t bit_msg = pmt::cdr(msg);
+        pmt::pmt_t bit_meta = pmt::car(msg);
         size_t packet_length = pmt::length(bit_msg);
         const uint8_t * bits = pmt::u8vector_elements(bit_msg, packet_length);
+        float burst_frequency_mhz = pmt::to_float(pmt::dict_ref(bit_meta, pmt::mp("freq"), pmt::PMT_NIL));
 
         // TODO: Add optional manchester decoding here before (manipulate packet_length/bits before code below)
 
@@ -200,6 +203,8 @@ namespace gr {
             std::cout << "   ";
         if(d_ascii)
             std::cout << "[" << ascii_out.str() << "]";
+        if(d_info)
+            printf(" Freq: %4.3f", burst_frequency_mhz);
 
         if(d_scroll)
             printf("\n");
@@ -268,6 +273,11 @@ namespace gr {
         void bit_sniffer_impl::set_invert(bool val)
         {
             d_invert = val;
+        }
+
+        void bit_sniffer_impl::set_info(bool val)
+        {
+            d_info = val;
         }
 
     int

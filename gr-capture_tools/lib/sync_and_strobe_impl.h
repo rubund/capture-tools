@@ -62,6 +62,8 @@ namespace gr {
         std::vector<uint8_t> d_receive_buffer;
         int d_n_to_catch;
 
+        float d_current_burst_frequency_mhz;
+
         void sps_update();
 
      public:

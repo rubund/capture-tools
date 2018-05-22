@@ -69,6 +69,7 @@ namespace gr {
         d_sync_word_len = 0;
         d_packet_counter = 0;
         d_n_to_catch = 400;
+        d_current_burst_frequency_mhz = 0;
         sps_update();
 
         message_port_register_out(pmt::mp("packets"));
@@ -158,8 +159,38 @@ namespace gr {
       float avg_val;
       int nstate;
 
+      std::vector<int> tag_positions;
+      int next_tag_position = -1;
+      int next_tag_position_index = -1;
+
+      std::vector<tag_t> new_bursts;
+      get_tags_in_window(new_bursts, 0, 0, noutput_items, pmt::mp("new_burst"));
+      for(int i=0;i<new_bursts.size();i++) {
+          int current;
+          current = new_bursts[i].offset - nitems_read(0);
+          tag_positions.push_back(current);
+          next_tag_position_index = 0;
+      }
+      if(next_tag_position_index >= 0) {
+          next_tag_position = tag_positions[next_tag_position_index];
+      }
 
       for(int i=0;i<noutput_items;i++) {
+        if (next_tag_position == i) {
+          tag_t current = new_bursts[i];
+          float burst_frequency_mhz = pmt::to_float(pmt::dict_ref(current.value, pmt::mp("burst_frequency_mhz"), pmt::PMT_NIL));
+          d_current_burst_frequency_mhz = burst_frequency_mhz;
+
+          next_tag_position_index++;
+          if (next_tag_position_index == tag_positions.size()) {
+            next_tag_position_index = -1;
+            next_tag_position = -1;
+          }
+          else {
+            next_tag_position = tag_positions[next_tag_position_index];
+          }
+        }
+
         nstate = d_state;
         //int subtractindex = d_avg_index < (d_navg-1) ? d_avg_index + 1 
         d_avg_sum -= d_avg_buffer[d_avg_index];
@@ -282,7 +313,7 @@ namespace gr {
 
                         pmt::pmt_t pdu_meta = pmt::make_dict();
                         pmt::pmt_t pdu_vector = pmt::init_u8vector(d_receive_buffer.size(), d_receive_buffer);
-                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("freq"), pmt::mp("0"));
+                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("freq"), pmt::from_float(d_current_burst_frequency_mhz));
                         pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
                         message_port_pub(pmt::mp("packets"), out_msg);
 

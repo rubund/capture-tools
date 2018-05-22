@@ -5,6 +5,7 @@
   <category>[capture_tools]</category>
   <import>import capture_tools</import>
   <make>capture_tools.bit_sniffer($fade_out, $hexadecimal, $offset, $bits_per_word, $lsb, $parity, $ascii, $binary, $special, $scroll)
+self.$(id).set_info($info)
 self.$(id).set_invert($invert)</make>
 <callback>set_fade_out($fade_out)</callback>
 <callback>set_hexadecimal($hexadecimal)</callback>
@@ -17,6 +18,7 @@ self.$(id).set_invert($invert)</make>
 <callback>set_special($special)</callback>
 <callback>set_scroll($scroll)</callback>
 <callback>set_invert($invert)</callback>
+<callback>set_info($info)</callback>
 
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
@@ -161,6 +163,21 @@ self.$(id).set_invert($invert)</make>
   <param>
       <name>Invert</name>
       <key>invert</key>
+      <value>False</value>
+      <type>bool</type>
+      <option>
+          <name>Yes</name>
+          <key>True</key>
+      </option>
+      <option>
+          <name>No</name>
+          <key>False</key>
+      </option>
+  </param>
+
+  <param>
+      <name>Info such as frequency</name>
+      <key>info</key>
       <value>False</value>
       <type>bool</type>
       <option>

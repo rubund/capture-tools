@@ -48,6 +48,7 @@ namespace gr {
         int d_special;
         bool d_scroll;
         bool d_invert;
+        bool d_info;
 
      public:
       bit_sniffer_impl(int fade_out=200, bool hexadecimal=0, int offset=0, int bits_per_word=8, bool lsb=0, bool parity=0, bool ascii=0, bool binary=1, int special=0, bool scroll=0);
@@ -70,6 +71,7 @@ namespace gr {
         void set_special(int);
         void set_scroll(bool);
         void set_invert(bool);
+        void set_info(bool);
     };
 
   } // namespace capture_tools
