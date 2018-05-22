@@ -117,6 +117,21 @@ namespace gr {
         bool do_afterwards = 0;
         std::ostringstream hex_out;
         std::ostringstream ascii_out;
+
+        if(d_info) {
+            printf(" Freq: %7.3f", burst_frequency_mhz);
+            printf(", Mag: %7.2f", burst_magnitude);
+            printf(", ID: %4llu", burst_id);
+
+			double seconds = ((double)offset_addressmatch)/((double)burst_sample_rate);
+            printf(", offset (s): %10.5lf", seconds);
+            //printf(", offset: %4llu", offset_addressmatch);
+            //printf(", Fs: %6.1f", burst_sample_rate);
+            time_t t = time(NULL);
+            struct tm tm = *localtime(&t);
+            printf(", Time: %04d-%02d-%02d %02d:%02d:%02d ", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        }
+
         for(int i=0;i<packet_length;i++) {
             uint8_t current_bit;
             current_bit = d_invert ? 1-bits[i] : bits[i];
@@ -208,19 +223,6 @@ namespace gr {
             std::cout << "   ";
         if(d_ascii)
             std::cout << "[" << ascii_out.str() << "]";
-        if(d_info) {
-            printf(" Freq: %7.3f", burst_frequency_mhz);
-            printf(", Mag: %7.2f", burst_magnitude);
-            printf(", ID: %4llu", burst_id);
-
-			double seconds = ((double)offset_addressmatch)/((double)burst_sample_rate);
-            printf(", offset (s): %10.5lf", seconds);
-            //printf(", offset: %4llu", offset_addressmatch);
-            //printf(", Fs: %6.1f", burst_sample_rate);
-            time_t t = time(NULL);
-            struct tm tm = *localtime(&t);
-            printf(", Time: %04d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-        }
 
         if(d_scroll)
             printf("\n");
