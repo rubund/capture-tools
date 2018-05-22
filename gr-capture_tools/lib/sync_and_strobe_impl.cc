@@ -70,6 +70,8 @@ namespace gr {
         d_packet_counter = 0;
         d_n_to_catch = 400;
         sps_update();
+
+        message_port_register_out(pmt::mp("packets"));
     }
 
     /*
@@ -277,6 +279,13 @@ namespace gr {
                         d_last_crossing_cnt = -1;
                         d_crossings = 0 ;
                         nstate = 0;
+
+                        pmt::pmt_t pdu_meta = pmt::make_dict();
+                        pmt::pmt_t pdu_vector = pmt::init_u8vector(d_receive_buffer.size(), d_receive_buffer);
+                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("freq"), pmt::mp("0"));
+                        pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
+                        message_port_pub(pmt::mp("packets"), out_msg);
+
                         d_start_counter = 0;
                     }
                 }

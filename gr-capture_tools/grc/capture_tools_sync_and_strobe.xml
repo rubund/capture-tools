@@ -103,4 +103,11 @@ self.$(id).set_sync_word($syncword)</make>
     <type>float</type>
     <optional>1</optional>
   </source>
+
+  <source>
+    <name>packets</name>
+    <type>message</type>
+    <optional>1</optional>
+  </source>
+
 </block>
