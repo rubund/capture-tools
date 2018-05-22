@@ -69,6 +69,7 @@ namespace gr {
         d_sync_word_len = 0;
         d_packet_counter = 0;
         d_n_to_catch = 400;
+		d_decim_in_front = 0;
         d_current_burst_frequency_mhz = 0;
         d_current_burst_magnitude     = 0;
         d_current_burst_id            = 0;
@@ -146,6 +147,12 @@ namespace gr {
     sync_and_strobe_impl::set_hysteresis(float val)
     {
         d_hysteresis = val;
+    }
+
+    void
+    sync_and_strobe_impl::set_decim_in_front(int val)
+    {
+        d_decim_in_front = val;
     }
 
     int
@@ -332,7 +339,7 @@ namespace gr {
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("freq"), pmt::from_float(d_current_burst_frequency_mhz));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("magnitude"), pmt::from_float(d_current_burst_magnitude));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("id"), pmt::from_uint64(d_current_burst_id));
-                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("offset_addressmatch"), pmt::from_uint64(d_current_burst_offset + d_cnt_since_burst_start));
+                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("offset_addressmatch"), pmt::from_uint64(d_current_burst_offset + d_cnt_since_burst_start*d_decim_in_front));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("sample_rate"), pmt::from_float(d_current_burst_sample_rate));
                         pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
                         message_port_pub(pmt::mp("packets"), out_msg);

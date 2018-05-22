@@ -10,6 +10,7 @@ self.$(id).set_preamble_timeout($preamble_timeout)
 self.$(id).set_n_to_catch($n_to_catch)
 self.$(id).set_spsmargin($spsmargin)
 self.$(id).set_hysteresis($hysteresis)
+self.$(id).set_decim_in_front($decim_in_front)
 self.$(id).set_sync_word($syncword)</make>
 <!--self.$(id).set_packet_length($packet_length)</make>-->
   <callback>self.$(id).set_sync_word($syncword)</callback>
@@ -18,6 +19,7 @@ self.$(id).set_sync_word($syncword)</make>
   <callback>self.$(id).set_n_to_catch($n_to_catch)</callback>
   <callback>self.$(id).set_spsmargin($spsmargin)</callback>
   <callback>self.$(id).set_hysteresis($hysteresis)</callback>
+  <callback>self.$(id).set_decim_in_front($decim_in_front)</callback>
   <!--<callback>self.$(id).set_packet_length($packet_length)</callback>-->
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
@@ -76,6 +78,13 @@ self.$(id).set_sync_word($syncword)</make>
     <key>hysteresis</key>
     <value>0.0</value>
     <type>float</type>
+  </param>
+
+  <param>
+    <name>Decimation in front (used to calculate offset only)</name>
+    <key>decim_in_front</key>
+    <value>1</value>
+    <type>int</type>
   </param>
 
   <!-- Make one 'sink' node per input. Sub-nodes:

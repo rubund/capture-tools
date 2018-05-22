@@ -53,6 +53,7 @@ namespace gr {
         float d_extreme_val_low;
         float d_frozen_avg_val;
         uint64_t d_input_buffer;
+		int d_decim_in_front;
 
         uint64_t d_sync_word;
         uint64_t d_sync_word_mask;
@@ -86,6 +87,7 @@ namespace gr {
       void set_n_to_catch(int val);
       void set_spsmargin(float val);
       void set_hysteresis(float val);
+      void set_decim_in_front(int val);
     };
 
   } // namespace capture_tools
