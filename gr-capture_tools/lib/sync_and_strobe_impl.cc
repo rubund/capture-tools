@@ -188,6 +188,21 @@ namespace gr {
                     d_frozen_avg_val = avg_val;
                     sps_update();
                     add_item_tag(0, nitems_written(0) + i, pmt::intern("preamble"), pmt::intern(""), pmt::intern(""));
+
+                    if (nstate != d_state) {
+                        uint8_t sliced;
+                        d_start_counter = d_npreamb;
+                        bool odd = (d_npreamb % 2) != 0;
+                        if((d_direction == 1 && odd) || (d_direction == -1 && !odd))
+                            sliced = 0;
+                        else
+                            sliced = 1;
+                        add_item_tag(0, nitems_written(0) + i, pmt::intern("sliced"), pmt::from_bool(sliced), pmt::intern(""));
+                        for (int j=0;j<d_npreamb;j++) {
+                            d_input_buffer = ((d_input_buffer << 1) & 0xfffffffffffffffeull) | ((uint64_t)(sliced & 0x01));
+                            sliced = (sliced == 1) ? 0 : 1;
+                        }
+                    }
                     //printf("\n");
                 }
             }
