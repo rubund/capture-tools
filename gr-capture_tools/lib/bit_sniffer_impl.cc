@@ -212,8 +212,11 @@ namespace gr {
             printf(" Freq: %7.3f", burst_frequency_mhz);
             printf(", Mag: %5.2f", burst_magnitude);
             printf(", ID: %4llu", burst_id);
-            printf(", offset: %4llu", offset_addressmatch);
-            printf(", Fs: %6.1f", burst_sample_rate);
+
+			double seconds = ((double)offset_addressmatch)/((double)burst_sample_rate);
+            printf(", offset (s): %10.5lf", seconds);
+            //printf(", offset: %4llu", offset_addressmatch);
+            //printf(", Fs: %6.1f", burst_sample_rate);
             time_t t = time(NULL);
             struct tm tm = *localtime(&t);
             printf(", Time: %04d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
