@@ -178,7 +178,7 @@ namespace gr {
 
       for(int i=0;i<noutput_items;i++) {
         if (next_tag_position == i) {
-          tag_t current = new_bursts[i];
+          tag_t current = new_bursts[next_tag_position_index];
           float burst_frequency_mhz = pmt::to_float(pmt::dict_ref(current.value, pmt::mp("burst_frequency_mhz"), pmt::PMT_NIL));
           float burst_magnitude = pmt::to_float(pmt::dict_ref(current.value, pmt::mp("magnitude"), pmt::PMT_NIL));
           d_current_burst_frequency_mhz = burst_frequency_mhz;
