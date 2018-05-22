@@ -71,6 +71,7 @@ namespace gr {
         d_n_to_catch = 400;
         d_current_burst_frequency_mhz = 0;
         d_current_burst_magnitude     = 0;
+        d_current_burst_id            = 0;
         sps_update();
 
         message_port_register_out(pmt::mp("packets"));
@@ -181,8 +182,10 @@ namespace gr {
           tag_t current = new_bursts[next_tag_position_index];
           float burst_frequency_mhz = pmt::to_float(pmt::dict_ref(current.value, pmt::mp("burst_frequency_mhz"), pmt::PMT_NIL));
           float burst_magnitude = pmt::to_float(pmt::dict_ref(current.value, pmt::mp("magnitude"), pmt::PMT_NIL));
+          uint64_t burst_id = pmt::to_uint64(pmt::dict_ref(current.value, pmt::mp("id"), pmt::PMT_NIL));
           d_current_burst_frequency_mhz = burst_frequency_mhz;
           d_current_burst_magnitude = burst_magnitude;
+          d_current_burst_id        = burst_id;
 
           next_tag_position_index++;
           if (next_tag_position_index == tag_positions.size()) {
@@ -318,6 +321,7 @@ namespace gr {
                         pmt::pmt_t pdu_vector = pmt::init_u8vector(d_receive_buffer.size(), d_receive_buffer);
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("freq"), pmt::from_float(d_current_burst_frequency_mhz));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("magnitude"), pmt::from_float(d_current_burst_magnitude));
+                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("id"), pmt::from_uint64(d_current_burst_id));
                         pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
                         message_port_pub(pmt::mp("packets"), out_msg);
 

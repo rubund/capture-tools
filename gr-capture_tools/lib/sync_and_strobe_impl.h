@@ -64,6 +64,7 @@ namespace gr {
 
         float d_current_burst_frequency_mhz;
         float d_current_burst_magnitude;
+        uint64_t d_current_burst_id;
 
         void sps_update();
 

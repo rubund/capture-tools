@@ -155,6 +155,7 @@ namespace gr {
                         pmt::pmt_t pdu_vector = pmt::init_u8vector(d_receive_buffer.size(), d_receive_buffer);
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("freq"), pmt::mp("0"));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("magnitude"), pmt::mp("0"));
+                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("id"), pmt::mp("0"));
                         pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
                         message_port_pub(pmt::mp("packets"), out_msg);
                         d_start_counter = 0;
