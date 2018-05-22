@@ -49,6 +49,11 @@ namespace gr {
       static sptr make(float sps, int npreamb);
 
       virtual void set_sync_word(const std::vector<uint8_t> s)=0;
+      virtual void set_strobe_offset(int val)=0;
+      virtual void set_preamble_timeout(int val)=0;
+      virtual void set_n_to_catch(int val)=0;
+      virtual void set_spsmargin(float val)=0;
+      virtual void set_hysteresis(float val)=0;
     };
 
   } // namespace capture_tools

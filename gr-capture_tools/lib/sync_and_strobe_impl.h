@@ -74,6 +74,11 @@ namespace gr {
          gr_vector_void_star &output_items);
 
       void set_sync_word(const std::vector<uint8_t> s);
+      void set_strobe_offset(int val);
+      void set_preamble_timeout(int val);
+      void set_n_to_catch(int val);
+      void set_spsmargin(float val);
+      void set_hysteresis(float val);
     };
 
   } // namespace capture_tools

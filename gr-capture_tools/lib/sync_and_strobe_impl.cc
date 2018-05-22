@@ -111,6 +111,36 @@ namespace gr {
         printf("d_sync_word: 0x%016llx, d_sync_word_mask: 0x%016llx, d_sync_word_len: %d\n",d_sync_word, d_sync_word_mask, d_sync_word_len);
     }
 
+    void
+    sync_and_strobe_impl::set_strobe_offset(int val)
+    {
+        d_strobe_offset = val;
+    }
+
+    void
+    sync_and_strobe_impl::set_preamble_timeout(int val)
+    {
+        d_preamble_timeout = val;
+    }
+
+    void
+    sync_and_strobe_impl::set_n_to_catch(int val)
+    {
+        d_n_to_catch = val;
+    }
+
+    void
+    sync_and_strobe_impl::set_spsmargin(float val)
+    {
+        d_spsmargin = val;
+    }
+
+    void
+    sync_and_strobe_impl::set_hysteresis(float val)
+    {
+        d_hysteresis = val;
+    }
+
     int
     sync_and_strobe_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
