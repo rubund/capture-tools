@@ -41,7 +41,7 @@ namespace gr {
     sync_and_strobe_impl::sync_and_strobe_impl(float sps, int npreamb)
       : gr::sync_block("sync_and_strobe",
               gr::io_signature::make(1, 1, sizeof(float)),
-              gr::io_signature::make(0, 1, sizeof(float)))
+              gr::io_signature::make(0, 2, sizeof(float)))
     {
         d_sps = sps;
         d_npreamb = npreamb;
@@ -118,6 +118,10 @@ namespace gr {
     {
       const float *in = (const float *) input_items[0];
       float *out = (float *) output_items[0];
+      float *out_avg = NULL;
+
+      if (output_items.size() >= 2)
+        out_avg = (float *) output_items[1];
 
       float avg_val;
       int nstate;
@@ -252,6 +256,8 @@ namespace gr {
                 }
             }
         }
+        if (out_avg != NULL)
+            out_avg[i] = avg_val;
         d_state = nstate;
       }
 

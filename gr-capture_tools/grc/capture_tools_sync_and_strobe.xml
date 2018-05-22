@@ -52,4 +52,10 @@ self.$(id).set_sync_word($syncword)</make>
     <name>out</name>
     <type>float</type>
   </source>
+
+  <source>
+    <name>out_avg</name>
+    <type>float</type>
+    <optional>1</optional>
+  </source>
 </block>
