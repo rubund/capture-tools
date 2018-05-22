@@ -22,6 +22,7 @@
 #include "config.h"
 #endif
 
+#include <ctime>
 #include <gnuradio/io_signature.h>
 #include "bit_sniffer_impl.h"
 
@@ -203,8 +204,12 @@ namespace gr {
             std::cout << "   ";
         if(d_ascii)
             std::cout << "[" << ascii_out.str() << "]";
-        if(d_info)
+        if(d_info) {
             printf(" Freq: %4.3f", burst_frequency_mhz);
+            time_t t = time(NULL);
+            struct tm tm = *localtime(&t);
+            printf(", Time: %04d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+        }
 
         if(d_scroll)
             printf("\n");
