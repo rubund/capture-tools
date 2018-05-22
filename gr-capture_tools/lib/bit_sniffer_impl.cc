@@ -208,9 +208,9 @@ namespace gr {
         if(d_ascii)
             std::cout << "[" << ascii_out.str() << "]";
         if(d_info) {
-            printf(" Freq: %4.3f", burst_frequency_mhz);
-            printf(", Mag: %03.2f", burst_magnitude);
-            printf(", ID: %04llu", burst_id);
+            printf(" Freq: %7.3f", burst_frequency_mhz);
+            printf(", Mag: %5.2f", burst_magnitude);
+            printf(", ID: %4llu", burst_id);
             printf(", offset: %4llu", offset_addressmatch);
             time_t t = time(NULL);
             struct tm tm = *localtime(&t);
