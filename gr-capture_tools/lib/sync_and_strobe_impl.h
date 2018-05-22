@@ -51,6 +51,16 @@ namespace gr {
         float d_min_swing;
         float d_extreme_val_high;
         float d_extreme_val_low;
+        float d_frozen_avg_val;
+        uint32_t d_input_buffer;
+
+        uint32_t d_sync_word;
+        uint32_t d_sync_word_mask;
+        int d_sync_word_len;
+        int d_start_counter;
+        int d_packet_counter;
+        std::vector<uint8_t> d_receive_buffer;
+        int d_n_to_catch;
 
         void sps_update();
 
@@ -62,6 +72,8 @@ namespace gr {
       int work(int noutput_items,
          gr_vector_const_void_star &input_items,
          gr_vector_void_star &output_items);
+
+      void set_sync_word(const std::vector<uint8_t> s);
     };
 
   } // namespace capture_tools

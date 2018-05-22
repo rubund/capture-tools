@@ -64,6 +64,11 @@ namespace gr {
         d_min_swing = 0.1;
         d_extreme_val_high = 0;
         d_extreme_val_low = 0;
+        d_input_buffer = 0;
+        d_start_counter = 0;
+        d_sync_word_len = 0;
+        d_packet_counter = 0;
+        d_n_to_catch = 200;
         sps_update();
     }
 
@@ -89,6 +94,23 @@ namespace gr {
         }
     }
 
+    void
+    sync_and_strobe_impl::set_sync_word(const std::vector<uint8_t> s)
+    {
+        d_sync_word = 0;
+        d_sync_word_mask = 0;
+        int swsize = s.size();
+        if (swsize > 32) {
+            throw std::runtime_error("Sync word can be max 32 bits long");
+        }
+        for(int i=0; i<swsize ;i++) {
+            d_sync_word = ((d_sync_word << 1) & 0xfffffffe) | (uint32_t)(s[i] & 0x01);
+            d_sync_word_mask |= (((uint32_t)1) << i);
+        }
+        d_sync_word_len = swsize;
+        printf("d_sync_word: 0x%08x, d_sync_word_mask: 0x%08x, d_sync_word_len: %d\n",d_sync_word, d_sync_word_mask, d_sync_word_len);
+    }
+
     int
     sync_and_strobe_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
@@ -98,9 +120,11 @@ namespace gr {
       float *out = (float *) output_items[0];
 
       float avg_val;
+      int nstate;
 
 
       for(int i=0;i<noutput_items;i++) {
+        nstate = d_state;
         //int subtractindex = d_avg_index < (d_navg-1) ? d_avg_index + 1 
         d_avg_sum -= d_avg_buffer[d_avg_index];
         d_avg_buffer[d_avg_index] = in[i];
@@ -142,26 +166,75 @@ namespace gr {
             bool wide_enough = (d_extreme_val_high - d_extreme_val_low) > d_min_swing;
             if (found_crossing && wide_enough) {
                 if(d_last_crossing_cnt > (d_sps - d_spsmargin) && d_last_crossing_cnt < (d_sps + d_spsmargin)) {
+                    //add_item_tag(0, nitems_written(0) + i, pmt::intern("correct_crossing"), pmt::intern("yes"), pmt::intern(""));
                     d_crossings++;
+                    //printf("d_crossings: %d, d_last_crossing_cnt: %d\n" , d_crossings, d_last_crossing_cnt);
                 }
                 else {
+                    //add_item_tag(0, nitems_written(0) + i, pmt::intern("correct_crossing"), pmt::intern("no"), pmt::intern(""));
                     d_crossings = 0;
                 }
                 d_last_crossing_cnt = 0;
 
                 if(d_crossings >= d_npreamb) {
-                    d_state = 1;
+                    nstate = 1;
                     d_symbol_cnt = 0;
                     d_residue = 0;
                     d_timeout_cnt = 0;
+                    d_frozen_avg_val = avg_val;
                     sps_update();
                     add_item_tag(0, nitems_written(0) + i, pmt::intern("preamble"), pmt::intern(""), pmt::intern(""));
+                    //printf("\n");
                 }
             }
         }
-        if (d_state == 1) {
+        if (d_state == 1 || d_state == 2) {
             if(d_symbol_cnt == d_strobe_offset) {
-                add_item_tag(0, nitems_written(0) + i, pmt::intern("strobe"), pmt::intern(""), pmt::intern(""));
+                uint8_t sliced;
+
+                if(d_direction == 1) {
+                    if (in[i] < (d_frozen_avg_val - d_hysteresis)) {
+                        sliced = 0;
+                        d_direction = -1;
+                    }
+                    else sliced = 1; 
+                }
+                else if(d_direction == -1) {
+                    if (in[i] > (d_frozen_avg_val + d_hysteresis)) {
+                        sliced = 1;
+                        d_direction = 1;
+                    }
+                    else sliced = 0; 
+                }
+                add_item_tag(0, nitems_written(0) + i, pmt::intern("strobe"), pmt::from_long(d_packet_counter), pmt::intern(""));
+                d_input_buffer = ((d_input_buffer << 1) & 0xfffffffe) | ((uint32_t)(sliced & 0x01));
+                if (d_state == 1) {
+                    if(d_sync_word_len > 0 && d_start_counter >= d_sync_word_len && (d_input_buffer & d_sync_word_mask) == d_sync_word) {
+                        add_item_tag(0, nitems_written(0) + i, pmt::intern("address"), pmt::intern(""), pmt::intern(""));
+                        nstate = 2;
+                        d_timeout_cnt = 0;
+                        d_packet_counter = 0;
+                        d_receive_buffer.clear();
+                        for(int i=0;i<d_sync_word_len;i++) {
+                            d_receive_buffer.push_back((d_sync_word >> (d_sync_word_len-i-1)) & 0x1);
+                        }
+                    }
+                }
+                else if (d_state == 2){
+                    d_receive_buffer.push_back(sliced);
+                    d_packet_counter ++;
+                    if(d_packet_counter >= d_n_to_catch) {
+                        d_direction = 0;
+                        d_last_crossing_cnt = -1;
+                        d_crossings = 0 ;
+                        nstate = 0;
+                        d_start_counter = 0;
+                    }
+                }
+
+              if(d_start_counter < 32)
+                  d_start_counter++;
+
             }
 
             d_symbol_cnt++;
@@ -170,14 +243,16 @@ namespace gr {
                 sps_update();
 
                 d_timeout_cnt++;
-                if(d_timeout_cnt == d_preamble_timeout) {
+                if(d_state == 1 && d_timeout_cnt == d_preamble_timeout) {
                     d_direction = 0;
                     d_last_crossing_cnt = -1;
                     d_crossings = 0 ;
-                    d_state = 0;
+                    nstate = 0;
+                    d_start_counter = 0;
                 }
             }
         }
+        d_state = nstate;
       }
 
 

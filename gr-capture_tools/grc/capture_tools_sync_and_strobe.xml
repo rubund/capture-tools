@@ -4,7 +4,11 @@
   <key>capture_tools_sync_and_strobe</key>
   <category>[capture_tools]</category>
   <import>import capture_tools</import>
-  <make>capture_tools.sync_and_strobe($sps, $npreamb)</make>
+  <make>capture_tools.sync_and_strobe($sps, $npreamb)
+self.$(id).set_sync_word($syncword)</make>
+<!--self.$(id).set_packet_length($packet_length)</make>-->
+  <callback>self.$(id).set_sync_word($syncword)</callback>
+  <!--<callback>self.$(id).set_packet_length($packet_length)</callback>-->
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
@@ -20,6 +24,13 @@
     <name>N preamble</name>
     <key>npreamb</key>
     <type>int</type>
+  </param>
+
+  <param>
+    <name>Sync word (list)</name>
+    <key>syncword</key>
+    <value></value>
+    <type>int_vector</type>
   </param>
 
   <!-- Make one 'sink' node per input. Sub-nodes:
