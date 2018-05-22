@@ -322,6 +322,7 @@ namespace gr {
                         for(int i=0;i<d_sync_word_len;i++) {
                             d_receive_buffer.push_back((d_sync_word >> (d_sync_word_len-i-1)) & 0x1);
                         }
+						d_cnt_at_addressmatch = d_cnt_since_burst_start;
                     }
                 }
                 else if (d_state == 2){
@@ -339,7 +340,7 @@ namespace gr {
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("freq"), pmt::from_float(d_current_burst_frequency_mhz));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("magnitude"), pmt::from_float(d_current_burst_magnitude));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("id"), pmt::from_uint64(d_current_burst_id));
-                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("offset_addressmatch"), pmt::from_uint64(d_current_burst_offset + d_cnt_since_burst_start*d_decim_in_front));
+                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("offset_addressmatch"), pmt::from_uint64(d_current_burst_offset + d_cnt_at_addressmatch*d_decim_in_front));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("sample_rate"), pmt::from_float(d_current_burst_sample_rate));
                         pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
                         message_port_pub(pmt::mp("packets"), out_msg);
