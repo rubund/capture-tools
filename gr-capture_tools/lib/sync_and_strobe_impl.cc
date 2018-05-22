@@ -140,6 +140,7 @@ namespace gr {
 
         if(d_state == 0 || d_state == 1) {
             bool found_crossing = false;
+            bool wide_enough = (d_extreme_val_high - d_extreme_val_low) > d_min_swing;
             if(d_direction == 0) {
                 d_direction = in[i] >= avg_val ? 1 : -1;
             }
@@ -167,7 +168,6 @@ namespace gr {
             if (d_last_crossing_cnt != -1) {
                 d_last_crossing_cnt ++;
             }
-            bool wide_enough = (d_extreme_val_high - d_extreme_val_low) > d_min_swing;
             if (found_crossing && wide_enough) {
                 if(d_last_crossing_cnt > (d_sps - d_spsmargin) && d_last_crossing_cnt < (d_sps + d_spsmargin)) {
                     //add_item_tag(0, nitems_written(0) + i, pmt::intern("correct_crossing"), pmt::intern("yes"), pmt::intern(""));
