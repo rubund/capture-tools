@@ -179,6 +179,7 @@ namespace gr {
                     value = pmt::dict_add(value, pmt::mp("relative_frequency"), pmt::from_float(relative_frequency));
                     value = pmt::dict_add(value, pmt::mp("center_frequency"), pmt::from_float(center_frequency));
                     value = pmt::dict_add(value, pmt::mp("magnitude"), pmt::from_float(magnitude));
+                    value = pmt::dict_add(value, pmt::mp("offset"), pmt::from_uint64(offset));
                     value = pmt::dict_add(value, pmt::mp("sample_rate"), pmt::from_float(sample_rate));
 
                     if(remaining_in_current > 0) {

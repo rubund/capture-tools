@@ -72,6 +72,7 @@ namespace gr {
         d_current_burst_frequency_mhz = 0;
         d_current_burst_magnitude     = 0;
         d_current_burst_id            = 0;
+		d_cnt_since_burst_start       = 0;
         sps_update();
 
         message_port_register_out(pmt::mp("packets"));
@@ -183,9 +184,12 @@ namespace gr {
           float burst_frequency_mhz = pmt::to_float(pmt::dict_ref(current.value, pmt::mp("burst_frequency_mhz"), pmt::PMT_NIL));
           float burst_magnitude = pmt::to_float(pmt::dict_ref(current.value, pmt::mp("magnitude"), pmt::PMT_NIL));
           uint64_t burst_id = pmt::to_uint64(pmt::dict_ref(current.value, pmt::mp("id"), pmt::PMT_NIL));
+          uint64_t burst_offset = pmt::to_uint64(pmt::dict_ref(current.value, pmt::mp("offset"), pmt::PMT_NIL));
           d_current_burst_frequency_mhz = burst_frequency_mhz;
           d_current_burst_magnitude = burst_magnitude;
           d_current_burst_id        = burst_id;
+          d_current_burst_offset    = burst_offset;
+		  d_cnt_since_burst_start = 0;
 
           next_tag_position_index++;
           if (next_tag_position_index == tag_positions.size()) {
@@ -196,6 +200,9 @@ namespace gr {
             next_tag_position = tag_positions[next_tag_position_index];
           }
         }
+		else {
+		  d_cnt_since_burst_start++;
+		}
 
         nstate = d_state;
         //int subtractindex = d_avg_index < (d_navg-1) ? d_avg_index + 1 
@@ -322,6 +329,7 @@ namespace gr {
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("freq"), pmt::from_float(d_current_burst_frequency_mhz));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("magnitude"), pmt::from_float(d_current_burst_magnitude));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("id"), pmt::from_uint64(d_current_burst_id));
+                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("offset_addressmatch"), pmt::from_uint64(d_current_burst_offset + d_cnt_since_burst_start));
                         pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
                         message_port_pub(pmt::mp("packets"), out_msg);
 
