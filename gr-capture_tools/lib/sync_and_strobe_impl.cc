@@ -40,7 +40,7 @@ namespace gr {
      */
     sync_and_strobe_impl::sync_and_strobe_impl(float sps, int npreamb)
       : gr::sync_block("sync_and_strobe",
-              gr::io_signature::make(1, 1, sizeof(float)),
+              gr::io_signature::make(1, 2, sizeof(float)),
               gr::io_signature::make(0, 2, sizeof(float)))
     {
         d_sps = sps;
@@ -70,6 +70,7 @@ namespace gr {
         d_packet_counter = 0;
         d_n_to_catch = 400;
 		d_decim_in_front = 0;
+        d_mag_at_addressmatch = 0;
         d_current_burst_frequency_mhz = 0;
         d_current_burst_magnitude     = 0;
         d_current_burst_id            = 0;
@@ -161,11 +162,14 @@ namespace gr {
         gr_vector_void_star &output_items)
     {
       const float *in = (const float *) input_items[0];
+      const float *in_mag = NULL;
       float *out = (float *) output_items[0];
       float *out_avg = NULL;
 
       if (output_items.size() >= 2)
         out_avg = (float *) output_items[1];
+      if (input_items.size() >= 2)
+        in_mag = (const float *) input_items[1];
 
       float avg_val;
       int nstate;
@@ -323,6 +327,9 @@ namespace gr {
                             d_receive_buffer.push_back((d_sync_word >> (d_sync_word_len-i-1)) & 0x1);
                         }
 						d_cnt_at_addressmatch = d_cnt_since_burst_start;
+                        if (in_mag != NULL) {
+                            d_mag_at_addressmatch = 20*log10(in_mag[i]);
+                        }
                     }
                 }
                 else if (d_state == 2){
@@ -338,10 +345,11 @@ namespace gr {
                         pmt::pmt_t pdu_meta = pmt::make_dict();
                         pmt::pmt_t pdu_vector = pmt::init_u8vector(d_receive_buffer.size(), d_receive_buffer);
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("freq"), pmt::from_float(d_current_burst_frequency_mhz));
-                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("magnitude"), pmt::from_float(d_current_burst_magnitude));
+                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("magnitude_burst"), pmt::from_float(d_current_burst_magnitude));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("id"), pmt::from_uint64(d_current_burst_id));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("offset_addressmatch"), pmt::from_uint64(d_current_burst_offset + d_cnt_at_addressmatch*d_decim_in_front));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("sample_rate"), pmt::from_float(d_current_burst_sample_rate));
+                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("magnitude"), pmt::from_float(d_mag_at_addressmatch));
                         pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
                         message_port_pub(pmt::mp("packets"), out_msg);
 

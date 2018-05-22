@@ -69,6 +69,7 @@ namespace gr {
         uint64_t d_current_burst_offset;
 		uint64_t d_cnt_since_burst_start;
 		uint64_t d_cnt_at_addressmatch;
+        float d_mag_at_addressmatch;
 		float d_current_burst_sample_rate;
 
         void sps_update();

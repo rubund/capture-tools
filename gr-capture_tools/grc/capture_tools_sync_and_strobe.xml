@@ -97,6 +97,12 @@ self.$(id).set_sync_word($syncword)</make>
     <type>float</type>
   </sink>
 
+  <sink>
+    <name>in_mag</name>
+    <type>float</type>
+    <optional>1</optional>
+  </sink>
+
   <!-- Make one 'source' node per output. Sub-nodes:
        * name (an identifier for the GUI)
        * type

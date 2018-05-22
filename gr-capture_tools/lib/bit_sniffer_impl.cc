@@ -210,7 +210,7 @@ namespace gr {
             std::cout << "[" << ascii_out.str() << "]";
         if(d_info) {
             printf(" Freq: %7.3f", burst_frequency_mhz);
-            printf(", Mag: %5.2f", burst_magnitude);
+            printf(", Mag: %6.2f", burst_magnitude);
             printf(", ID: %4llu", burst_id);
 
 			double seconds = ((double)offset_addressmatch)/((double)burst_sample_rate);
