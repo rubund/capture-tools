@@ -76,6 +76,7 @@ namespace gr {
         float burst_magnitude = pmt::to_float(pmt::dict_ref(bit_meta, pmt::mp("magnitude"), pmt::PMT_NIL));
         uint64_t burst_id = pmt::to_uint64(pmt::dict_ref(bit_meta, pmt::mp("id"), pmt::PMT_NIL));
         uint64_t offset_addressmatch = pmt::to_uint64(pmt::dict_ref(bit_meta, pmt::mp("offset_addressmatch"), pmt::PMT_NIL));
+        float burst_sample_rate = pmt::to_float(pmt::dict_ref(bit_meta, pmt::mp("sample_rate"), pmt::PMT_NIL));
 
         // TODO: Add optional manchester decoding here before (manipulate packet_length/bits before code below)
 
@@ -212,6 +213,7 @@ namespace gr {
             printf(", Mag: %5.2f", burst_magnitude);
             printf(", ID: %4llu", burst_id);
             printf(", offset: %4llu", offset_addressmatch);
+            printf(", Fs: %6.1f", burst_sample_rate);
             time_t t = time(NULL);
             struct tm tm = *localtime(&t);
             printf(", Time: %04d-%02d-%02d %02d:%02d:%02d", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);

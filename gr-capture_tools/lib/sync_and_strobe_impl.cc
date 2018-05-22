@@ -72,6 +72,7 @@ namespace gr {
         d_current_burst_frequency_mhz = 0;
         d_current_burst_magnitude     = 0;
         d_current_burst_id            = 0;
+		d_current_burst_sample_rate   = 0;
 		d_cnt_since_burst_start       = 0;
         sps_update();
 
@@ -185,10 +186,12 @@ namespace gr {
           float burst_magnitude = pmt::to_float(pmt::dict_ref(current.value, pmt::mp("magnitude"), pmt::PMT_NIL));
           uint64_t burst_id = pmt::to_uint64(pmt::dict_ref(current.value, pmt::mp("id"), pmt::PMT_NIL));
           uint64_t burst_offset = pmt::to_uint64(pmt::dict_ref(current.value, pmt::mp("offset"), pmt::PMT_NIL));
+          float burst_sample_rate = pmt::to_float(pmt::dict_ref(current.value, pmt::mp("sample_rate"), pmt::PMT_NIL));
           d_current_burst_frequency_mhz = burst_frequency_mhz;
           d_current_burst_magnitude = burst_magnitude;
           d_current_burst_id        = burst_id;
           d_current_burst_offset    = burst_offset;
+          d_current_burst_sample_rate = burst_sample_rate;
 		  d_cnt_since_burst_start = 0;
 
           next_tag_position_index++;
@@ -330,6 +333,7 @@ namespace gr {
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("magnitude"), pmt::from_float(d_current_burst_magnitude));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("id"), pmt::from_uint64(d_current_burst_id));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("offset_addressmatch"), pmt::from_uint64(d_current_burst_offset + d_cnt_since_burst_start));
+                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("sample_rate"), pmt::from_float(d_current_burst_sample_rate));
                         pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
                         message_port_pub(pmt::mp("packets"), out_msg);
 
