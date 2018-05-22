@@ -64,7 +64,7 @@ namespace gr {
         d_min_swing = 0.1;
         d_extreme_val_high = 0;
         d_extreme_val_low = 0;
-        d_input_buffer = 0;
+        d_input_buffer = 0ull;
         d_start_counter = 0;
         d_sync_word_len = 0;
         d_packet_counter = 0;
@@ -97,18 +97,18 @@ namespace gr {
     void
     sync_and_strobe_impl::set_sync_word(const std::vector<uint8_t> s)
     {
-        d_sync_word = 0;
-        d_sync_word_mask = 0;
+        d_sync_word = 0ull;
+        d_sync_word_mask = 0ull;
         int swsize = s.size();
-        if (swsize > 32) {
-            throw std::runtime_error("Sync word can be max 32 bits long");
+        if (swsize > 64) {
+            throw std::runtime_error("Sync word can be max 64 bits long");
         }
         for(int i=0; i<swsize ;i++) {
-            d_sync_word = ((d_sync_word << 1) & 0xfffffffe) | (uint32_t)(s[i] & 0x01);
-            d_sync_word_mask |= (((uint32_t)1) << i);
+            d_sync_word = ((d_sync_word << 1) & 0xfffffffffffffffeull) | (uint64_t)(s[i] & 0x01);
+            d_sync_word_mask |= (((uint64_t)1) << i);
         }
         d_sync_word_len = swsize;
-        printf("d_sync_word: 0x%08x, d_sync_word_mask: 0x%08x, d_sync_word_len: %d\n",d_sync_word, d_sync_word_mask, d_sync_word_len);
+        printf("d_sync_word: 0x%016llx, d_sync_word_mask: 0x%016llx, d_sync_word_len: %d\n",d_sync_word, d_sync_word_mask, d_sync_word_len);
     }
 
     int
@@ -210,7 +210,7 @@ namespace gr {
                     }
                     else sliced = 0; 
                 }
-                d_input_buffer = ((d_input_buffer << 1) & 0xfffffffe) | ((uint32_t)(sliced & 0x01));
+                d_input_buffer = ((d_input_buffer << 1) & 0xfffffffffffffffeull) | ((uint64_t)(sliced & 0x01));
                 if (d_state == 1) {
                     if(d_sync_word_len > 0 && d_start_counter >= d_sync_word_len && (d_input_buffer & d_sync_word_mask) == d_sync_word) {
                         add_item_tag(0, nitems_written(0) + i, pmt::intern("address"), pmt::intern(""), pmt::intern(""));
@@ -236,7 +236,7 @@ namespace gr {
                     }
                 }
 
-              if(d_start_counter < 32)
+              if(d_start_counter < 64)
                   d_start_counter++;
 
             }
