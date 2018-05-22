@@ -328,7 +328,7 @@ namespace gr {
                         }
 						d_cnt_at_addressmatch = d_cnt_since_burst_start;
                         if (in_mag != NULL) {
-                            d_mag_at_addressmatch = 20*log10(in_mag[i]);
+                            d_mag_at_addressmatch = in_mag[i];
                         }
                     }
                 }
@@ -336,11 +336,13 @@ namespace gr {
                     add_item_tag(0, nitems_written(0) + i, pmt::intern("strobe"), pmt::from_long(d_packet_counter), pmt::intern(""));
                     d_receive_buffer.push_back(sliced);
                     d_packet_counter ++;
-                    if(d_packet_counter >= d_n_to_catch) {
+                    if(d_packet_counter >= d_n_to_catch || in_mag[i] < 0.1*d_mag_at_addressmatch) {
                         d_direction = 0;
                         d_last_crossing_cnt = -1;
                         d_crossings = 0 ;
                         nstate = 0;
+                        if (in_mag[i] < 0.1*d_mag_at_addressmatch)
+                            add_item_tag(0, nitems_written(0) + i, pmt::intern("ramp_down"), pmt::intern(""), pmt::intern(""));
 
                         pmt::pmt_t pdu_meta = pmt::make_dict();
                         pmt::pmt_t pdu_vector = pmt::init_u8vector(d_receive_buffer.size(), d_receive_buffer);
@@ -349,7 +351,7 @@ namespace gr {
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("id"), pmt::from_uint64(d_current_burst_id));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("offset_addressmatch"), pmt::from_uint64(d_current_burst_offset + d_cnt_at_addressmatch*d_decim_in_front));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("sample_rate"), pmt::from_float(d_current_burst_sample_rate));
-                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("magnitude"), pmt::from_float(d_mag_at_addressmatch));
+                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("magnitude"), pmt::from_float(20*log10(d_mag_at_addressmatch)));
                         pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
                         message_port_pub(pmt::mp("packets"), out_msg);
 
