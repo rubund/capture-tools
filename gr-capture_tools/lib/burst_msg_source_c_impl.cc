@@ -261,7 +261,7 @@ namespace gr {
                         pmt::pmt_t handled_msg = pmt::from_uint64(d_current_id);
                         message_port_pub(pmt::mp("handled"), handled_msg);
                     }
-                    if (!d_running || (d_repeat && (lnow - i) <= 1)) {
+                    if ((!d_running || (d_repeat && (lnow - i) <= 1)) && (remaining_in_current > 0)) {
                         usleep(100000); // We throttle down if there is nothing more to produce for the current burst AND we have temporarily stopped or we are in repeat mode and there are no more packets in the queue.
                     }
                     if (toproduce > 0) {
