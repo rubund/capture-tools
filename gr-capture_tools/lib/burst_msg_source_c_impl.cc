@@ -68,6 +68,7 @@ namespace gr {
         d_n_zeros = 0;
         d_add_zeros_now = false;
         d_mag_threshold = -999999;
+        d_get_one = false;
         d_max_freq = 1e12;
         d_min_freq = -1;
 	}
@@ -117,6 +118,13 @@ namespace gr {
     {
         if(val == 1)
             d_running = true;
+    }
+
+    void
+    burst_msg_source_c_impl::set_get_next(int val)
+    {
+        if(val == 1 && !d_running)
+            d_get_one = true;
     }
 
     void
@@ -256,12 +264,14 @@ namespace gr {
                     }
                     d_in_burst = false;
                     d_current_burst_pos = 0;
-                    if((remaining_in_current == 0) || (!d_repeat && d_running) || (((lnow - i) > 1) && d_running)) {
+                    bool running_get_one = d_running || d_get_one;
+                    d_get_one = false;
+                    if((remaining_in_current == 0) || (!d_repeat && running_get_one) || (((lnow - i) > 1) && running_get_one)) {
                         d_bursts.pop_front();
                         pmt::pmt_t handled_msg = pmt::from_uint64(d_current_id);
                         message_port_pub(pmt::mp("handled"), handled_msg);
                     }
-                    if ((!d_running || (d_repeat && (lnow - i) <= 1)) && (remaining_in_current > 0)) {
+                    if ((!running_get_one || (d_repeat && (lnow - i) <= 1)) && (remaining_in_current > 0)) {
                         usleep(100000); // We throttle down if there is nothing more to produce for the current burst AND we have temporarily stopped or we are in repeat mode and there are no more packets in the queue.
                     }
                     if (toproduce > 0) {

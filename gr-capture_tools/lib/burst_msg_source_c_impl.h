@@ -47,6 +47,8 @@ namespace gr {
       int d_zeros_cnt;
       bool d_running;
 
+      bool d_get_one;
+
       float d_max_freq;
       float d_min_freq;
       float d_mag_threshold;
@@ -67,6 +69,7 @@ namespace gr {
 
       void set_start(int val);
       void set_stop(int val);
+      void set_get_next(int val);
 
       void set_max_freq(float  val);
       void set_min_freq(float  val);

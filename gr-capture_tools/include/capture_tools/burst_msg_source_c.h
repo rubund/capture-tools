@@ -54,6 +54,7 @@ namespace gr {
 
       virtual void set_start(int val)=0;
       virtual void set_stop(int val)=0;
+      virtual void set_get_next(int val)=0;
 
       virtual void set_max_freq(float val)=0;
       virtual void set_min_freq(float val)=0;
