@@ -29,9 +29,13 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Outputs the estimated frequency of the bin with most power
      * \ingroup capture_tools
      *
+     * \details
+     * Accepts the output from a FFT block. The output is a float stream
+     * where the value indicates the frequency of the estimated peak in
+     * the FFT.
      */
     class CAPTURE_TOOLS_API freqest : virtual public gr::sync_block
     {

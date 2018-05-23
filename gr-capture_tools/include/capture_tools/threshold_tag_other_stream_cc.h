@@ -29,9 +29,12 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Add a tag on the first input when second input (float) crosses a threshold
      * \ingroup capture_tools
      *
+     * \details
+     * When it crosses the threshold on the way up, it adds the tag 'going_high'.
+     * On the way down, it adds the tag 'going_low'.
      */
     class CAPTURE_TOOLS_API threshold_tag_other_stream_cc : virtual public gr::sync_block
     {

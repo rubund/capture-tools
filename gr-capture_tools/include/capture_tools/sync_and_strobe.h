@@ -29,9 +29,16 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Search for preamble, then sync word and output message and tagged stream
      * \ingroup capture_tools
      *
+     * \details
+     * Accepts a quadrature demodulated input (float). If preamble present, it starts
+     * searching for sync word. If found, an array is filled up. When done, the array
+     * is sent out as a message. Additionally the output contains a 'strobe-tagged' version
+     * of the input.
+     *
+     * There are also many other configurable settings for this block. See set-methods.
      */
     class CAPTURE_TOOLS_API sync_and_strobe : virtual public gr::sync_block
     {

@@ -30,9 +30,15 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Output samples from file when tag is present in input
      * \ingroup capture_tools
      *
+     * \details
+     * The input signal is used to sync. Its values have no significance.
+     * However, a tag 'tag_str' at the input causes the file to be sent
+     * to the output.
+     *
+     * The tags 'file_begin' and 'file_end' are also added to the output stream.
      */
     class CAPTURE_TOOLS_API file_source_on_tag : virtual public gr::sync_block
     {

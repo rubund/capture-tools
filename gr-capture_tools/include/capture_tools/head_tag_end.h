@@ -31,11 +31,11 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief copies the first N items to the output then signals done
+     * \brief as gr::block::head but adds an 'end' tag
      * \ingroup misc_blk
      *
      * \details
-     * Useful for building test cases
+     * Useful for blocks which require an 'end' tag.
      */
     class CAPTURE_TOOLS_API head_tag_end : virtual public gr::sync_block
     {

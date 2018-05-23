@@ -29,9 +29,12 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Make messages of bursts tagged with fft_burst_tagger
      * \ingroup capture_tools
      *
+     * \details
+     * This block is typically connected at the output of fft_burst_tagger.
+     * It can then also be followed by burst_msg_source_c.
      */
     class CAPTURE_TOOLS_API tagged_burst_to_pdu : virtual public gr::sync_block
     {

@@ -30,9 +30,19 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Save samples after tag has been received
      * \ingroup capture_tools
      *
+     * When a tag named 'tag_str' is seen in the input stream,
+     * number_buffered + number_to_write samples are written
+     * to the file 'filename'.
+     *
+     * In addition, if metadata_output is set, another file is
+     * filled with some information every time a burst is saved.
+     *
+     * set_burst_extra_data_output(1) causes some specific metadata
+     * to be present together with the tag. This information is also
+     * stored in the metadata file.
      */
     class CAPTURE_TOOLS_API file_sink_on_tag : virtual public gr::sync_block, virtual public gr::blocks::file_sink_base
     {

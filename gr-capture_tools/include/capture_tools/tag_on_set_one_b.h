@@ -29,9 +29,13 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Make a single tag when a set method is called with the value 1 (char)
      * \ingroup capture_tools
      *
+     * \details
+     * The set method can be connected to a button in gnuradio-companion. A click
+     * on the button then injects a tag into the stream.
+     * The stream is otherwise copied from the input to the output.
      */
     class CAPTURE_TOOLS_API tag_on_set_one_b : virtual public gr::sync_block
     {

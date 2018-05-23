@@ -30,7 +30,7 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief MSK/GMSK timing recovery
+     * \brief MSK/GMSK timing recovery with synchronous output
      * \ingroup synchronizers_blk
      *
      * This block performs timing synchronization on CPM modulations using a

@@ -29,9 +29,12 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Replace every occurence of the sample value 'search' with replace
      * \ingroup capture_tools
      *
+     * \details
+     * Float input and output. If the input is 'search', we replace it with
+     * 'replace'. Nothing more than that.
      */
     class CAPTURE_TOOLS_API replace_value_ff : virtual public gr::sync_block
     {

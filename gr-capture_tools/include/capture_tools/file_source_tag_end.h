@@ -28,9 +28,11 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Add a tag to the last sample of the file
      * \ingroup capture_tools
      *
+     * \details
+     * Same as file_source, but a tag 'end' is added to the last sample in the file.
      */
     class CAPTURE_TOOLS_API file_source_tag_end : virtual public gr::sync_block
     {

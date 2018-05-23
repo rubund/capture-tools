@@ -29,9 +29,11 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Convert an infinite complex stream to a finite stream
      * \ingroup capture_tools
      *
+     * \details
+     * All samples after the first 'n' samples will be discarded.
      */
     class CAPTURE_TOOLS_API cut_samples_cc : virtual public gr::block
     {

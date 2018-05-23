@@ -30,7 +30,7 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief Generate message when magnitude of input is above a threshold
+     * \brief Generate message on queue when magnitude of input is above a threshold
      * \ingroup ble
      *
      * \details

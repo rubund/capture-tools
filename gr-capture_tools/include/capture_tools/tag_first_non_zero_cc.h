@@ -29,9 +29,14 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief First sample after a row of zeros is tagged.
      * \ingroup capture_tools
      *
+     * \details
+     * Complex input and output.
+     * If there are 20 or more zeros after each other, the
+     * first sample afterwards will be tagged with a configurable
+     * tag.
      */
     class CAPTURE_TOOLS_API tag_first_non_zero_cc : virtual public gr::sync_block
     {

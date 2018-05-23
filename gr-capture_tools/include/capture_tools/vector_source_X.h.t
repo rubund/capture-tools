@@ -32,7 +32,7 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief Source that streams @TYPE@ items based on the input \p data vector.
+     * \brief Source that streams @TYPE@ items based on the input \p data vector. (with end tag)
      * \ingroup misc_blk
      *
      * \details

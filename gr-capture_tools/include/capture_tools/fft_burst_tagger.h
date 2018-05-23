@@ -29,9 +29,13 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Get peaks in FFT
      * \ingroup capture_tools
      *
+     * \details
+     * Performs an FFT and gets the average values for all bins
+     * If any bin suddenly gets a higher magnitude, the output stream (same as input stream)
+     * is tagged with 'new_burst', and the tag contains some metadata about the burst.
      */
     class CAPTURE_TOOLS_API fft_burst_tagger : virtual public gr::sync_block
     {

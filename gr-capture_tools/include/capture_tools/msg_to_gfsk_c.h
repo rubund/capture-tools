@@ -29,9 +29,13 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Generate gfsk packet with many features (rampup etc)
      * \ingroup capture_tools
      *
+     * \details
+     * Packet content is supplied via message inputs. It supports
+     * generating packets at a fixed spacing, or randomized etc.
+     * See the setter methods.
      */
     class CAPTURE_TOOLS_API msg_to_gfsk_c : virtual public gr::block
     {
