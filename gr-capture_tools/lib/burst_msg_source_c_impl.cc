@@ -71,6 +71,7 @@ namespace gr {
         d_get_one = false;
         d_save_now = false;
         d_saving_now = false;
+        d_running = true;
         d_max_freq = 1e12;
         d_min_freq = -1;
 	}
