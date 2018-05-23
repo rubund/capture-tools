@@ -19,6 +19,7 @@ self.$(id).set_round_factor($round_factor)</make>
   <callback>self.$(id).set_start($start_button)</callback>
   <callback>self.$(id).set_stop($stop_button)</callback>
   <callback>self.$(id).set_get_next($get_next_button)</callback>
+  <callback>self.$(id).set_save_current($save_current_button)</callback>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
@@ -90,6 +91,13 @@ self.$(id).set_round_factor($round_factor)</make>
     <name>Connect to get button</name>
     <key>get_next_button</key>
     <value>get_next_button</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Connect to save button</name>
+    <key>save_current_button</key>
+    <value>save_current_button</value>
     <type>int</type>
   </param>
 

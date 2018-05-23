@@ -69,6 +69,8 @@ namespace gr {
         d_add_zeros_now = false;
         d_mag_threshold = -999999;
         d_get_one = false;
+        d_save_now = false;
+        d_saving_now = false;
         d_max_freq = 1e12;
         d_min_freq = -1;
 	}
@@ -125,6 +127,13 @@ namespace gr {
     {
         if(val == 1 && !d_running)
             d_get_one = true;
+    }
+
+    void
+    burst_msg_source_c_impl::set_save_current(int val)
+    {
+        if(val == 1)
+            d_save_now = true;
     }
 
     void
@@ -219,6 +228,12 @@ namespace gr {
                     if (magnitude < d_mag_threshold) remaining_in_current = 0;
                     //
 
+                    if (d_save_now && !d_saving_now && remaining_in_current != 0) {
+                        d_fp = fopen("/tmp/burst.cfile","wb");
+                        d_saving_now = true;
+                        d_save_now = false;
+                    }
+
                     d_current_inc = 2*M_PI* burst_shift_freq / sample_rate;
                     d_current_phase = 0;
 
@@ -251,6 +266,8 @@ namespace gr {
                     if      (d_current_phase > M_PI)  d_current_phase -= 2*M_PI;
                     else if (d_current_phase < -M_PI) d_current_phase += 2*M_PI;
                     produced++;
+                    if(d_saving_now)
+                        fwrite(out+produced, sizeof(gr_complex), 1, d_fp);
                 }
                 if (toproduce < remaining_in_current) {
                     d_in_burst = true;
@@ -261,6 +278,12 @@ namespace gr {
                     if (toproduce > 0) {
                         pmt::pmt_t key = pmt::string_to_symbol("end_burst");
                         add_item_tag(0, nitems_written(0) + produced, key, pmt::PMT_NIL);
+
+                        if(d_saving_now) {
+                            d_saving_now = false;
+                            fclose(d_fp);
+                            printf("Done saving to file /tmp/burst.cfile\n");
+                        }
                     }
                     d_in_burst = false;
                     d_current_burst_pos = 0;
