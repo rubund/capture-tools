@@ -256,10 +256,13 @@ namespace gr {
                     }
                     d_in_burst = false;
                     d_current_burst_pos = 0;
-                    if((remaining_in_current == 0) || (!d_repeat) || (((lnow - i) > 1) && d_running)) {
+                    if((remaining_in_current == 0) || (!d_repeat && d_running) || (((lnow - i) > 1) && d_running)) {
                         d_bursts.pop_front();
                         pmt::pmt_t handled_msg = pmt::from_uint64(d_current_id);
                         message_port_pub(pmt::mp("handled"), handled_msg);
+                    }
+                    if (!d_running || (d_repeat && (lnow - i) <= 1)) {
+                        usleep(100000); // We throttle down if there is nothing more to produce for the current burst AND we have temporarily stopped or we are in repeat mode and there are no more packets in the queue.
                     }
                     if (toproduce > 0) {
                         if (d_n_zeros > 0) {
