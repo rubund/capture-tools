@@ -29,9 +29,18 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Create new stream from message from tagged_burst_to_pdu
      * \ingroup capture_tools
      *
+     * \details
+     * tagged_burst_to_pdu creates a GR message from the stream which is
+     * tagged with 'new_burst' and 'gone_burst* tags.
+     * This block then converts the PDUs back to a stream.
+     *
+     * This makes it possible to use normal GR block for processing bursts
+     * at multiple frequencies at the same time:
+     *
+     * fft_burst_tagger -> tagged_burst_to_pdu -> burst_msg_source_c
      */
     class CAPTURE_TOOLS_API burst_msg_source_c : virtual public gr::sync_block
     {

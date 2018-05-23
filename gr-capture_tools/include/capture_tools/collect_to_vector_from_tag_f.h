@@ -29,9 +29,12 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Takes float stream input and converts to float vector stream
      * \ingroup capture_tools
      *
+     * \details
+     * Whenever a tag 'burst' is present at the input, we take n samples
+     * and output them as a vector.
      */
     class CAPTURE_TOOLS_API collect_to_vector_from_tag_f : virtual public gr::block
     {

@@ -29,9 +29,13 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Concatenates the inputs to a longer stream
      * \ingroup capture_tools
      *
+     * \details
+     * Accepts 'inputs' number of complex input streams of finite length.
+     * At first the first stream is copied to the output. When ended,
+     * it will continue with the second and so on.
      */
     class CAPTURE_TOOLS_API concatenate_cc : virtual public gr::block
     {

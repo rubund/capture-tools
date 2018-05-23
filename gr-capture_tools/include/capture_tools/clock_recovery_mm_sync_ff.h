@@ -29,9 +29,14 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Same as clock_recovery_mm but with just tagging
      * \ingroup capture_tools
      *
+     * \details
+     * Instead of outputting the bit output, this block
+     * only tags the input float stream with the strobe
+     * points which would normally be the output bits from
+     * clock_recovery_mm.
      */
     class CAPTURE_TOOLS_API clock_recovery_mm_sync_ff : virtual public gr::sync_block
     {

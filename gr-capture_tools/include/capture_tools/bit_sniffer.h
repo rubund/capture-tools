@@ -29,9 +29,16 @@ namespace gr {
   namespace capture_tools {
 
     /*!
-     * \brief <+description of block+>
+     * \brief Presents packet content in console for various settings
      * \ingroup capture_tools
      *
+     * \details
+     * Accepts a message input containing a bit array. Depending
+     * on various settings it presents the bit array in binary, hex
+     * or string format. It also shows with color codes which values
+     * have recently changed.
+     *
+     * Scrolling can be turned on and off.
      */
     class CAPTURE_TOOLS_API bit_sniffer : virtual public gr::sync_block
     {
