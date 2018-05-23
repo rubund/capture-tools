@@ -47,7 +47,6 @@ install(FILES
     clock_recovery_mm_sync_ff.h
     add_at_tag_cc.h
     file_source_tag_end.h
-    concatenate_cc.h
     head_tag_end.h
     pfb_clock_sync_sync_fff.h
     msk_timing_recovery_sync_cc.h

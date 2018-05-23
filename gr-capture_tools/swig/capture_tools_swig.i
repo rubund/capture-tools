@@ -24,7 +24,6 @@
 #include "capture_tools/clock_recovery_mm_sync_ff.h"
 #include "capture_tools/add_at_tag_cc.h"
 #include "capture_tools/file_source_tag_end.h"
-#include "capture_tools/concatenate_cc.h"
 #include "capture_tools/vector_source_b.h"
 #include "capture_tools/vector_source_s.h"
 #include "capture_tools/vector_source_i.h"
@@ -83,8 +82,7 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, clock_recovery_mm_sync_ff);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, add_at_tag_cc);
 %include "capture_tools/file_source_tag_end.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, file_source_tag_end);
-%include "capture_tools/concatenate_cc.h"
-GR_SWIG_BLOCK_MAGIC2(capture_tools, concatenate_cc);
+
 
 %include "capture_tools/vector_source_b.h"
 %include "capture_tools/vector_source_s.h"

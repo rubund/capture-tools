@@ -27,7 +27,6 @@ GR_EXPAND_X_CC_H_IMPL(blocks vector_source_X    b s i f c)
 
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
-
 list(APPEND capture_tools_sources
     ${generated_sources}
     file_sink_text_impl.cc
@@ -46,7 +45,6 @@ list(APPEND capture_tools_sources
     clock_recovery_mm_sync_ff_impl.cc
     add_at_tag_cc_impl.cc
     file_source_tag_end_impl.cc
-    concatenate_cc_impl.cc
     head_tag_end_impl.cc
     pfb_clock_sync_sync_fff_impl.cc
     msk_timing_recovery_sync_cc_impl.cc

@@ -16,7 +16,6 @@
 # along with GNU Radio; see the file COPYING.  If not, write to
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
-
 install(FILES
     capture_tools_file_sink_text.xml
     capture_tools_one_then_zero.xml
@@ -34,7 +33,6 @@ install(FILES
     capture_tools_clock_recovery_mm_sync_ff.xml
     capture_tools_add_at_tag_cc.xml
     capture_tools_file_source_tag_end.xml
-    capture_tools_concatenate_cc.xml
     capture_tools_vector_source_x.xml
     capture_tools_head_tag_end.xml
     capture_tools_pfb_clock_sync_sync_fff.xml
