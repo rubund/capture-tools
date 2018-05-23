@@ -342,12 +342,16 @@ namespace gr {
                     add_item_tag(0, nitems_written(0) + i, pmt::intern("strobe"), pmt::from_long(d_packet_counter), pmt::intern(""));
                     d_receive_buffer.push_back(sliced);
                     d_packet_counter ++;
-                    if(d_packet_counter >= d_n_to_catch || in_mag[i] < 0.4*d_mag_at_addressmatch) {
+                    bool level_down = false;
+                    if (in_mag != NULL)
+                        level_down = in_mag[i] < 0.4*d_mag_at_addressmatch;
+
+                    if(d_packet_counter >= d_n_to_catch || level_down) {
                         d_direction = 0;
                         d_last_crossing_cnt = -1;
                         d_crossings = 0 ;
                         nstate = 0;
-                        if (in_mag[i] < 0.4*d_mag_at_addressmatch)
+                        if (level_down)
                             add_item_tag(0, nitems_written(0) + i, pmt::intern("ramp_down"), pmt::intern(""), pmt::intern(""));
 
                         pmt::pmt_t pdu_meta = pmt::make_dict();
