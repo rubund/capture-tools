@@ -90,6 +90,7 @@ namespace gr {
       void set_spsmargin(float val);
       void set_hysteresis(float val);
       void set_decim_in_front(int val);
+      void set_min_swing(float val);
     };
 
   } // namespace capture_tools

@@ -11,6 +11,7 @@ self.$(id).set_n_to_catch($n_to_catch)
 self.$(id).set_spsmargin($spsmargin)
 self.$(id).set_hysteresis($hysteresis)
 self.$(id).set_decim_in_front($decim_in_front)
+self.$(id).set_min_swing($min_swing)
 self.$(id).set_sync_word($syncword)</make>
 <!--self.$(id).set_packet_length($packet_length)</make>-->
   <callback>self.$(id).set_sync_word($syncword)</callback>
@@ -20,6 +21,7 @@ self.$(id).set_sync_word($syncword)</make>
   <callback>self.$(id).set_spsmargin($spsmargin)</callback>
   <callback>self.$(id).set_hysteresis($hysteresis)</callback>
   <callback>self.$(id).set_decim_in_front($decim_in_front)</callback>
+  <callback>self.$(id).set_min_swing($min_swing)</callback>
   <!--<callback>self.$(id).set_packet_length($packet_length)</callback>-->
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
@@ -70,6 +72,13 @@ self.$(id).set_sync_word($syncword)</make>
     <name>Sample per symbol margin</name>
     <key>spsmargin</key>
     <value>7</value>
+    <type>float</type>
+  </param>
+
+  <param>
+    <name>Minimum swing</name>
+    <key>min_swing</key>
+    <value>0.1</value>
     <type>float</type>
   </param>
 

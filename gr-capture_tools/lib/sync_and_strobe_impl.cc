@@ -61,7 +61,7 @@ namespace gr {
         d_timeout_cnt = 0;
         d_state = 0;
         d_strobe_offset = 7;
-        d_min_swing = 0.1;
+        d_min_swing = 0.005;
         d_extreme_val_high = 0;
         d_extreme_val_low = 0;
         d_input_buffer = 0ull;
@@ -148,6 +148,12 @@ namespace gr {
     sync_and_strobe_impl::set_hysteresis(float val)
     {
         d_hysteresis = val;
+    }
+
+    void
+    sync_and_strobe_impl::set_min_swing(float val)
+    {
+        d_min_swing = val;
     }
 
     void

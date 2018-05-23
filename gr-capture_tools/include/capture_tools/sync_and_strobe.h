@@ -55,6 +55,7 @@ namespace gr {
       virtual void set_spsmargin(float val)=0;
       virtual void set_hysteresis(float val)=0;
       virtual void set_decim_in_front(int val)=0;
+      virtual void set_min_swing(float val)=0;
     };
 
   } // namespace capture_tools
