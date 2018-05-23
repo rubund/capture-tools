@@ -7,9 +7,17 @@
   <make>capture_tools.burst_msg_source_c($n)
 self.$(id).set_repeat($repeat)
 self.$(id).set_n_zeros($n_zeros)
+self.$(id).set_min_freq($min_frequency)
+self.$(id).set_max_freq($max_frequency)
+self.$(id).set_mag_threshold($mag_threshold)
 self.$(id).set_round_factor($round_factor)</make>
   <callback>self.$(id).set_round_factor($round_factor)</callback>
   <callback>self.$(id).set_n_zeros($n_zeros)</callback>
+  <callback>self.$(id).set_min_freq($min_frequency)</callback>
+  <callback>self.$(id).set_max_freq($max_frequency)</callback>
+  <callback>self.$(id).set_mag_threshold($mag_threshold)</callback>
+  <callback>self.$(id).set_start($start_button)</callback>
+  <callback>self.$(id).set_stop($stop_button)</callback>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
@@ -39,6 +47,41 @@ self.$(id).set_round_factor($round_factor)</make>
     <name>N zeros</name>
     <key>n_zeros</key>
     <value>0</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Magnitude threshold</name>
+    <key>mag_threshold</key>
+    <value>-9999</value>
+    <type>float</type>
+  </param>
+
+  <param>
+    <name>Min frequency</name>
+    <key>min_frequency</key>
+    <value>-1</value>
+    <type>float</type>
+  </param>
+
+  <param>
+    <name>Max frequency</name>
+    <key>max_frequency</key>
+    <value>1e12</value>
+    <type>float</type>
+  </param>
+
+  <param>
+    <name>Connect to start button</name>
+    <key>start_button</key>
+    <value>start_button</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Connect to stop button</name>
+    <key>stop_button</key>
+    <value>stop_button</value>
     <type>int</type>
   </param>
 

@@ -45,6 +45,11 @@ namespace gr {
       int d_n_zeros;
       bool d_add_zeros_now;
       int d_zeros_cnt;
+      bool d_running;
+
+      float d_max_freq;
+      float d_min_freq;
+      float d_mag_threshold;
 
      public:
       burst_msg_source_c_impl(int n);
@@ -59,6 +64,14 @@ namespace gr {
       void set_repeat(bool val);
       void set_round_factor(float val);
       void set_n_zeros(int val);
+
+      void set_start(int val);
+      void set_stop(int val);
+
+      void set_max_freq(float  val);
+      void set_min_freq(float  val);
+
+      void set_mag_threshold(float val);
     };
 
   } // namespace capture_tools

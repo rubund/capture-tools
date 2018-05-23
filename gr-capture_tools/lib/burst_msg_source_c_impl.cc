@@ -67,6 +67,9 @@ namespace gr {
         d_round_factor = 1;
         d_n_zeros = 0;
         d_add_zeros_now = false;
+        d_mag_threshold = -999999;
+        d_max_freq = 1e12;
+        d_min_freq = -1;
 	}
 
     /*
@@ -100,6 +103,38 @@ namespace gr {
     burst_msg_source_c_impl::set_n_zeros(int val)
     {
         d_n_zeros = val;
+    }
+
+    void
+    burst_msg_source_c_impl::set_stop(int val)
+    {
+        if(val == 1)
+            d_running = false;
+    }
+
+    void
+    burst_msg_source_c_impl::set_start(int val)
+    {
+        if(val == 1)
+            d_running = true;
+    }
+
+    void
+    burst_msg_source_c_impl::set_max_freq(float val)
+    {
+        d_max_freq = val;
+    }
+
+    void
+    burst_msg_source_c_impl::set_min_freq(float val)
+    {
+        d_min_freq = val;
+    }
+
+    void
+    burst_msg_source_c_impl::set_mag_threshold(float val)
+    {
+        d_mag_threshold = val;
     }
 
     int
@@ -160,6 +195,7 @@ namespace gr {
                     float burst_shift_freq;
                     burst_shift_freq = relative_frequency * ((float)sample_rate);
 
+
                     // Round to every 50 kHz:
                     float factor = d_round_factor;
                     float divided = burst_shift_freq / factor;
@@ -169,6 +205,12 @@ namespace gr {
 
                     float burst_freq;
                     burst_freq = center_frequency + burst_shift_freq;
+
+                    // Filtering out bursts
+                    if (burst_freq < d_min_freq || burst_freq > d_max_freq) remaining_in_current = 0;
+                    if (magnitude < d_mag_threshold) remaining_in_current = 0;
+                    //
+
                     d_current_inc = 2*M_PI* burst_shift_freq / sample_rate;
                     d_current_phase = 0;
 
@@ -214,7 +256,7 @@ namespace gr {
                     }
                     d_in_burst = false;
                     d_current_burst_pos = 0;
-                    if((!d_repeat) || (lnow - i) > 1) {
+                    if((remaining_in_current == 0) || (!d_repeat) || (((lnow - i) > 1) && d_running)) {
                         d_bursts.pop_front();
                         pmt::pmt_t handled_msg = pmt::from_uint64(d_current_id);
                         message_port_pub(pmt::mp("handled"), handled_msg);
