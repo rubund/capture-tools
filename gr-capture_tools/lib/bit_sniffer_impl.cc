@@ -72,11 +72,22 @@ namespace gr {
         pmt::pmt_t bit_meta = pmt::car(msg);
         size_t packet_length = pmt::length(bit_msg);
         const uint8_t * bits = pmt::u8vector_elements(bit_msg, packet_length);
-        float burst_frequency_mhz = pmt::to_float(pmt::dict_ref(bit_meta, pmt::mp("freq"), pmt::PMT_NIL));
-        float burst_magnitude = pmt::to_float(pmt::dict_ref(bit_meta, pmt::mp("magnitude"), pmt::PMT_NIL));
-        uint64_t burst_id = pmt::to_uint64(pmt::dict_ref(bit_meta, pmt::mp("id"), pmt::PMT_NIL));
-        uint64_t offset_addressmatch = pmt::to_uint64(pmt::dict_ref(bit_meta, pmt::mp("offset_addressmatch"), pmt::PMT_NIL));
-        float burst_sample_rate = pmt::to_float(pmt::dict_ref(bit_meta, pmt::mp("sample_rate"), pmt::PMT_NIL));
+
+        float burst_frequency_mhz = 0;
+        float burst_magnitude = 0;
+        uint64_t burst_id = -1;
+        uint64_t offset_addressmatch = 0;
+        float burst_sample_rate = 0;
+        if (pmt::dict_has_key(bit_meta, pmt::mp("freq")))
+            burst_frequency_mhz = pmt::to_float(pmt::dict_ref(bit_meta, pmt::mp("freq"), pmt::PMT_NIL));
+        if (pmt::dict_has_key(bit_meta, pmt::mp("magnitude")))
+            burst_magnitude = pmt::to_float(pmt::dict_ref(bit_meta, pmt::mp("magnitude"), pmt::PMT_NIL));
+        if (pmt::dict_has_key(bit_meta, pmt::mp("id")))
+            burst_id = pmt::to_uint64(pmt::dict_ref(bit_meta, pmt::mp("id"), pmt::PMT_NIL));
+        if (pmt::dict_has_key(bit_meta, pmt::mp("offset_addressmatch")))
+            offset_addressmatch = pmt::to_uint64(pmt::dict_ref(bit_meta, pmt::mp("offset_addressmatch"), pmt::PMT_NIL));
+        if (pmt::dict_has_key(bit_meta, pmt::mp("sample_rate")))
+            burst_sample_rate = pmt::to_float(pmt::dict_ref(bit_meta, pmt::mp("sample_rate"), pmt::PMT_NIL));
 
         // TODO: Add optional manchester decoding here before (manipulate packet_length/bits before code below)
 
@@ -123,7 +134,9 @@ namespace gr {
             printf(", Mag: %7.2f", burst_magnitude);
             printf(", ID: %4llu", burst_id);
 
-			double seconds = ((double)offset_addressmatch)/((double)burst_sample_rate);
+			double seconds = 0;
+            if (burst_sample_rate > 0)
+                ((double)offset_addressmatch)/((double)burst_sample_rate);
             printf(", offset (s): %10.5lf", seconds);
             //printf(", offset: %4llu", offset_addressmatch);
             //printf(", Fs: %6.1f", burst_sample_rate);
