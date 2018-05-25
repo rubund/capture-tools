@@ -178,8 +178,8 @@ namespace gr {
     void
     fft_burst_tagger_impl::update_bursts(void)
     {
-      auto b = std::begin(d_bursts);
-      while (b != std::end(d_bursts)) {
+      std::vector<burst>::iterator b = d_bursts.begin();
+      while (b != d_bursts.end()) {
         if(d_relative_magnitude_f[b->center_bin-1] > d_threshold ||
            d_relative_magnitude_f[b->center_bin] > d_threshold ||
            d_relative_magnitude_f[b->center_bin+1] > d_threshold) {
@@ -192,9 +192,9 @@ namespace gr {
     void
     fft_burst_tagger_impl::delete_gone_bursts(void)
     {
-      auto b = std::begin(d_bursts);
+      std::vector<burst>::iterator b = d_bursts.begin();
 
-      while (b != std::end(d_bursts)) {
+      while (b != d_bursts.end()) {
         if((b->last_active + d_burst_post_len) < d_index) {
           //printf("Deleting gone burst %" PRIu64 " (start=%" PRIu64 ", d_index=%" PRIu64 ")\n", b->id, b->start, d_index); 
           b->stop = d_index;
@@ -328,9 +328,9 @@ namespace gr {
     void
     fft_burst_tagger_impl::tag_gone_bursts(int noutput_items)
     {
-      auto b = std::begin(d_gone_bursts);
+      std::vector<burst>::iterator b = d_gone_bursts.begin();
 
-      while (b != std::end(d_gone_bursts)) {
+      while (b != d_gone_bursts.end()) {
         uint64_t output_index = b->stop + d_burst_pre_len;
 
         if(nitems_read(0) <= output_index && output_index < nitems_read(0) + noutput_items) {
