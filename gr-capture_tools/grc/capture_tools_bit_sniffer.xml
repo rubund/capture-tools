@@ -6,6 +6,7 @@
   <import>import capture_tools</import>
   <make>capture_tools.bit_sniffer($fade_out, $hexadecimal, $offset, $bits_per_word, $lsb, $parity, $ascii, $binary, $special, $scroll)
 self.$(id).set_info($info)
+self.$(id).set_output($filename)
 self.$(id).set_invert($invert)</make>
 <callback>set_fade_out($fade_out)</callback>
 <callback>set_hexadecimal($hexadecimal)</callback>
@@ -188,6 +189,13 @@ self.$(id).set_invert($invert)</make>
           <name>No</name>
           <key>False</key>
       </option>
+  </param>
+
+  <param>
+    <name>File name</name>
+    <key>filename</key>
+    <value>""</value>
+    <type>string</type>
   </param>
 
   <!-- Make one 'sink' node per input. Sub-nodes:

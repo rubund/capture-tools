@@ -51,6 +51,7 @@ namespace gr {
         d_last = NULL;
         d_since_change = NULL;
         d_info = false;
+        d_fp = NULL;
         message_port_register_in(pmt::mp("packets"));
         set_msg_handler(pmt::mp("packets"), boost::bind(&bit_sniffer_impl::handler, this, _1));
     }
@@ -89,6 +90,8 @@ namespace gr {
         if (pmt::dict_has_key(bit_meta, pmt::mp("sample_rate")))
             burst_sample_rate = pmt::to_float(pmt::dict_ref(bit_meta, pmt::mp("sample_rate"), pmt::PMT_NIL));
 
+        FILE *tmp = stdout;
+        if (d_fp != NULL) tmp = d_fp;
         // TODO: Add optional manchester decoding here before (manipulate packet_length/bits before code below)
 
         if (d_last_size < packet_length) {
@@ -117,9 +120,12 @@ namespace gr {
             }
             d_last_size = packet_length;
         }
-        if(!d_scroll)
+        if(!d_scroll && d_fp == NULL)
             printf("\33[2K\r");
-        printf("%08d: ", d_cnt);
+        if (d_fp == NULL)
+            printf("%08d: ", d_cnt);
+        else
+            fprintf(d_fp, "%08d: ", d_cnt);
         uint8_t current_byte;
         int bitcounter = 0;
         bool recent_changed = 0;
@@ -130,19 +136,19 @@ namespace gr {
         std::ostringstream ascii_out;
 
         if(d_info) {
-            printf(" Freq: %7.3f", burst_frequency_mhz);
-            printf(", Mag: %7.2f", burst_magnitude);
-            printf(", ID: %4llu", burst_id);
+            fprintf(tmp, " Freq: %7.3f", burst_frequency_mhz);
+            fprintf(tmp, ", Mag: %7.2f", burst_magnitude);
+            fprintf(tmp, ", ID: %4llu", burst_id);
 
 			double seconds = 0;
             if (burst_sample_rate > 0)
                 ((double)offset_addressmatch)/((double)burst_sample_rate);
-            printf(", offset (s): %10.5lf", seconds);
+            fprintf(tmp, ", offset (s): %10.5lf", seconds);
             //printf(", offset: %4llu", offset_addressmatch);
             //printf(", Fs: %6.1f", burst_sample_rate);
             time_t t = time(NULL);
             struct tm tm = *localtime(&t);
-            printf(", Time: %04d-%02d-%02d %02d:%02d:%02d ", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+            fprintf(tmp, ", Time: %04d-%02d-%02d %02d:%02d:%02d ", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         }
 
         for(int i=0;i<packet_length;i++) {
@@ -166,20 +172,28 @@ namespace gr {
                 }
             }
             if (current_bit != d_last[i] && d_last[i] != 255) {
-                if(d_binary)
-                    printf("\033[91;1m%1d\033[0m", current_bit);
+                if(d_binary) {
+                    if (d_fp == NULL)
+                        printf("\033[91;1m%1d\033[0m", current_bit);
+                    else
+                        fprintf(d_fp, "%1d", current_bit);
+                }
                 d_since_change[i] = 0;
                 just_changed = 1;
             }
             else {
                 if(d_since_change[i] < d_fade_out) {
-                    if(d_binary)
-                        printf("\033[91;2m%1d\033[0m", current_bit);
+                    if(d_binary) {
+                        if (d_fp == NULL)
+                            printf("\033[91;2m%1d\033[0m", current_bit);
+                        else
+                            fprintf(d_fp, "%1d", current_bit);
+                    }
                     recent_changed = 1;
                 }
                 else {
                     if(d_binary)
-                        printf("%1d", current_bit);
+                        fprintf(tmp, "%1d", current_bit);
                 }
                 d_since_change[i]++;
             }
@@ -187,12 +201,24 @@ namespace gr {
             if ((bitcounter % bits_per_word_practice) == (bits_per_word_practice - 1)) {
                 if(d_hexadecimal || d_ascii) {
                     if(just_changed){
-                        hex_out << boost::format("\033[91;1m%02x\033[0m") % ((int)current_byte);
-                        ascii_out << "\033[91;1m" << printable_char(current_byte) << "\033[0m";
+                        if (d_fp == NULL) {
+                            hex_out << boost::format("\033[91;1m%02x\033[0m") % ((int)current_byte);
+                            ascii_out << "\033[91;1m" << printable_char(current_byte) << "\033[0m";
+                        }
+                        else {
+                            hex_out << boost::format("%02x") % ((int)current_byte);
+                            ascii_out << printable_char(current_byte) << "";
+                        }
                     }
                     else if(recent_changed){
-                        hex_out << boost::format("\033[91;2m%02x\033[0m") % ((int)current_byte);
-                        ascii_out << "\033[91;2m" << printable_char(current_byte) << "\033[0m";
+                        if (d_fp == NULL) {
+                            hex_out << boost::format("\033[91;2m%02x\033[0m") % ((int)current_byte);
+                            ascii_out << "\033[91;2m" << printable_char(current_byte) << "\033[0m";
+                        }
+                        else {
+                            hex_out << boost::format("%02x") % ((int)current_byte);
+                            ascii_out << printable_char(current_byte);
+                        }
                     }
                     else {
                         hex_out << boost::format("%02x") % ((int)current_byte);
@@ -201,7 +227,7 @@ namespace gr {
                 }
                 if(d_binary) {
                     if (i<(packet_length - 1)) {
-                        printf(" ");
+                        fprintf(tmp, " ");
                     }
                 }
                 do_afterwards = 0;
@@ -214,12 +240,24 @@ namespace gr {
         if(d_hexadecimal || d_ascii) {
             if (do_afterwards) {
                 if(just_changed){
-                    hex_out << boost::format("\033[91;1m%02x..\033[0m") % ((int)current_byte);
-                    ascii_out << "\033[91;1m" << printable_char(current_byte) << "--\033[0m";
+                    if (d_fp == NULL) {
+                        hex_out << boost::format("\033[91;1m%02x..\033[0m") % ((int)current_byte);
+                        ascii_out << "\033[91;1m" << printable_char(current_byte) << "--\033[0m";
+                    }
+                    else {
+                        hex_out << boost::format("%02x..") % ((int)current_byte);
+                        ascii_out << printable_char(current_byte) << "--";
+                    }
                 }
                 else if(recent_changed) {
-                    hex_out << boost::format("\033[91;2m%02x..\033[0m") % ((int)current_byte);
-                    ascii_out << "\033[91;2m" << printable_char(current_byte) << "--\033[0m";
+                    if (d_fp == NULL) {
+                        hex_out << boost::format("\033[91;2m%02x..\033[0m") % ((int)current_byte);
+                        ascii_out << "\033[91;2m" << printable_char(current_byte) << "--\033[0m";
+                    }
+                    else {
+                        hex_out << boost::format("%02x..") % ((int)current_byte);
+                        ascii_out << printable_char(current_byte) << "--";
+                    }
                 }
                 else {
                     hex_out << boost::format("%02x..") % ((int)current_byte);
@@ -229,17 +267,17 @@ namespace gr {
         }
 
         if(d_binary && d_hexadecimal)
-            std::cout << "   ";
+            fprintf(tmp, "   ");
         if(d_hexadecimal)
-            std::cout << "[" << hex_out.str() << "]";
+            fprintf(tmp, "[%s]", hex_out.str().c_str());
         if((d_binary || d_hexadecimal) && d_ascii)
-            std::cout << "   ";
+            fprintf(tmp, "   ");
         if(d_ascii)
-            std::cout << "[" << ascii_out.str() << "]";
+            fprintf(tmp, "[%s]", ascii_out.str().c_str());
 
-        if(d_scroll)
-            printf("\n");
-        fflush(stdout);
+        if(d_scroll || d_fp != NULL)
+            fprintf(tmp, "\n");
+        fflush(tmp);
 
         d_cnt++;
     }
@@ -309,6 +347,16 @@ namespace gr {
         void bit_sniffer_impl::set_info(bool val)
         {
             d_info = val;
+        }
+
+        void bit_sniffer_impl::set_output(const char *filename)
+        {
+            if (strcmp(filename, "") == 0 || strcmp(filename, "stdout") == 0) {
+                d_fp = NULL;
+            }
+            else {
+                d_fp = fopen(filename, "a");
+            }
         }
 
     int
