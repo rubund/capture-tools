@@ -297,7 +297,7 @@ namespace gr {
                     }
                     d_in_burst = false;
                     d_current_burst_pos = 0;
-                    if((remaining_in_current == 0) || (!d_repeat) || (((lnow - i) > 1))) {
+                    if((remaining_in_current == 0) || (!d_repeat && running_get_one) || (((lnow - i) > 1) && !(d_repeat && !running_get_one))) {
                         d_bursts.pop_front();
                         pmt::pmt_t handled_msg = pmt::from_uint64(d_current_id);
                         message_port_pub(pmt::mp("handled"), handled_msg);
