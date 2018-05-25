@@ -142,7 +142,7 @@ namespace gr {
 
 			double seconds = 0;
             if (burst_sample_rate > 0)
-                ((double)offset_addressmatch)/((double)burst_sample_rate);
+                seconds = ((double)offset_addressmatch)/((double)burst_sample_rate);
             fprintf(tmp, ", offset (s): %10.5lf", seconds);
             //printf(", offset: %4llu", offset_addressmatch);
             //printf(", Fs: %6.1f", burst_sample_rate);
