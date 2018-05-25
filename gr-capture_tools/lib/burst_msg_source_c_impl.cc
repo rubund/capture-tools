@@ -165,8 +165,6 @@ namespace gr {
 		pmt::pmt_t current_burst;
 
 		gr::thread::scoped_lock lock(common_mutex);
-        bool running_get_one = d_running || d_get_one;
-
         if(d_add_zeros_now) {
             int remaining = d_n_zeros - d_zeros_cnt;
             int tomake = std::min(remaining, noutput_items);
@@ -187,15 +185,8 @@ namespace gr {
                 usleep(100000);
             }
 		}
-        else if (!running_get_one && !d_repeat) { // If not running and not repeat, we just sleep a bit and return nothing.
-            usleep(100000);
-        }
 		else {
-            int lnow;
-            if (d_get_one)
-                lnow = 1;
-            else
-                lnow = d_bursts.size();
+            int lnow = d_bursts.size();
             for(int i=0;i<lnow;i++) {
 		        current_burst = d_bursts.front();
                 pmt::pmt_t samples = pmt::cdr(current_burst);
@@ -297,13 +288,14 @@ namespace gr {
                     }
                     d_in_burst = false;
                     d_current_burst_pos = 0;
-                    if((remaining_in_current == 0) || (!d_repeat && running_get_one) || (((lnow - i) > 1) && !(d_repeat && !running_get_one))) {
+                    bool running_get_one = d_running || d_get_one;
+                    d_get_one = false;
+                    if((remaining_in_current == 0) || (!d_repeat && running_get_one) || (((lnow - i) > 1) && running_get_one)) {
                         d_bursts.pop_front();
                         pmt::pmt_t handled_msg = pmt::from_uint64(d_current_id);
                         message_port_pub(pmt::mp("handled"), handled_msg);
-                        d_get_one = false;
                     }
-                    if ((d_repeat && (lnow - i) <= 1) && (remaining_in_current > 0)) {
+                    if ((!running_get_one || (d_repeat && (lnow - i) <= 1)) && (remaining_in_current > 0)) {
                         usleep(100000); // We throttle down if there is nothing more to produce for the current burst AND we have temporarily stopped or we are in repeat mode and there are no more packets in the queue.
                     }
                     if (toproduce > 0) {
