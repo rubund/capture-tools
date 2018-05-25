@@ -209,14 +209,15 @@ namespace gr {
     void
     fft_burst_tagger_impl::create_new_bursts(void)
     {
-      for(peak p : d_peaks) {
-        if(d_burst_mask_f[p.bin]) {
+      std::vector<peak>::iterator p;
+      for(p = d_peaks.begin(); p != d_peaks.end() ; p++) {
+        if(d_burst_mask_f[p->bin]) {
           burst b;
           b.id = d_burst_id++;
-          b.center_bin = p.bin;
+          b.center_bin = p->bin;
 
           // Normalize the relative magnitude
-          b.magnitude = 10 * log10(p.relative_magnitude * d_history_size);
+          b.magnitude = 10 * log10(p->relative_magnitude * d_history_size);
           // The burst might have started one FFT earlier
           b.start = d_index - d_burst_pre_len;
           b.last_active = b.start;
@@ -236,8 +237,8 @@ namespace gr {
         d_new_bursts.clear();
       }
       else {
-        for(burst b : d_new_bursts) {
-          d_bursts.push_back(b);
+        for(std::vector<burst>::iterator b = d_new_bursts.begin(); b != d_new_bursts.end() ; b++) {
+          d_bursts.push_back(*b);
         }
       }
     }
@@ -254,8 +255,8 @@ namespace gr {
     fft_burst_tagger_impl::update_burst_mask(void)
     {
       memcpy(d_burst_mask_f, d_ones_f, sizeof(float) * d_fft_size);
-      for(burst b : d_bursts) {
-        mask_burst(b);
+      for(std::vector<burst>::iterator b = d_bursts.begin() ; b != d_bursts.end() ; b++) {
+        mask_burst(*b);
       }
     }
 
@@ -294,8 +295,8 @@ namespace gr {
     fft_burst_tagger_impl::save_peaks_to_debug_file(char * filename)
     {
       FILE * file = fopen(filename, "a");
-      for(peak p : d_peaks) {
-        fprintf(file, "%" PRIu64 ",%d,x\n", d_index, p.bin);
+      for(std::vector<peak>::iterator p = d_peaks.begin() ; p != d_peaks.end() ; p++) {
+        fprintf(file, "%" PRIu64 ",%d,x\n", d_index, p->bin);
         //float f_rel = (p.bin - d_fft_size / 2) / float(d_fft_size);
         //fprintf(file, "%f,%f,x\n", d_index/4e6, f_rel * 4e6 + 1624800000);
       }
@@ -305,22 +306,22 @@ namespace gr {
     void
     fft_burst_tagger_impl::tag_new_bursts(void)
     {
-      for(burst b : d_new_bursts) {
+      for(std::vector<burst>::iterator b = d_new_bursts.begin() ; b != d_new_bursts.end() ; b++) {
         //printf("new burst %" PRIu64 " %" PRIu64 " %" PRIu64 "\n", nitems_read(0), b.start, nitems_read(0) - b.start);
         pmt::pmt_t key = pmt::string_to_symbol("new_burst");
-        float relative_frequency = (b.center_bin - d_fft_size / 2) / float(d_fft_size);
+        float relative_frequency = (b->center_bin - d_fft_size / 2) / float(d_fft_size);
 
         pmt::pmt_t value = pmt::make_dict();
-        value = pmt::dict_add(value, pmt::mp("id"), pmt::from_uint64(b.id));
+        value = pmt::dict_add(value, pmt::mp("id"), pmt::from_uint64(b->id));
         value = pmt::dict_add(value, pmt::mp("relative_frequency"), pmt::from_float(relative_frequency));
         value = pmt::dict_add(value, pmt::mp("center_frequency"), pmt::from_float(d_center_frequency));
-        value = pmt::dict_add(value, pmt::mp("magnitude"), pmt::from_float(b.magnitude));
+        value = pmt::dict_add(value, pmt::mp("magnitude"), pmt::from_float(b->magnitude));
         value = pmt::dict_add(value, pmt::mp("sample_rate"), pmt::from_float(d_sample_rate));
 
         // Our output is lagging by d_burst_pre_len samples.
         // Compensate by moving the tag into the past
         //printf("Tagging new burst %" PRIu64 " on sample %" PRIu64 " (nitems_read(0)=%" PRIu64 ")\n", b.id, b.start + d_burst_pre_len, nitems_read(0));
-        add_item_tag(0, b.start + d_burst_pre_len, key, value);
+        add_item_tag(0, b->start + d_burst_pre_len, key, value);
       }
       d_new_bursts.clear();
     }
