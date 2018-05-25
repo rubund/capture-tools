@@ -10,8 +10,10 @@ self.$(id).set_n_zeros($n_zeros)
 self.$(id).set_min_freq($min_frequency)
 self.$(id).set_max_freq($max_frequency)
 self.$(id).set_mag_threshold($mag_threshold)
+self.$(id).set_round_add($round_add)
 self.$(id).set_round_factor($round_factor)</make>
   <callback>self.$(id).set_round_factor($round_factor)</callback>
+  <callback>self.$(id).set_round_add($round_add)</callback>
   <callback>self.$(id).set_n_zeros($n_zeros)</callback>
   <callback>self.$(id).set_min_freq($min_frequency)</callback>
   <callback>self.$(id).set_max_freq($max_frequency)</callback>
@@ -42,6 +44,13 @@ self.$(id).set_round_factor($round_factor)</make>
     <name>Round factor</name>
     <key>round_factor</key>
     <value>1.0</value>
+    <type>float</type>
+  </param>
+
+  <param>
+    <name>Round add</name>
+    <key>round_add</key>
+    <value>0.0</value>
     <type>float</type>
   </param>
 

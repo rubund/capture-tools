@@ -41,6 +41,7 @@ namespace gr {
       float d_current_phase;
       bool d_repeat;
       float d_round_factor;
+      float d_round_add;
       uint64_t d_current_id;
       int d_n_zeros;
       bool d_add_zeros_now;
@@ -68,6 +69,7 @@ namespace gr {
 
       void set_repeat(bool val);
       void set_round_factor(float val);
+      void set_round_add(float val);
       void set_n_zeros(int val);
 
       void set_start(int val);

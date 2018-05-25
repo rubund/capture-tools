@@ -65,6 +65,7 @@ namespace gr {
         d_current_phase = 0;
         d_repeat = false;
         d_round_factor = 1;
+        d_round_add = 0;
         d_n_zeros = 0;
         d_add_zeros_now = false;
         d_mag_threshold = -999999;
@@ -101,6 +102,12 @@ namespace gr {
     burst_msg_source_c_impl::set_round_factor(float val)
     {
         d_round_factor = val;
+    }
+
+	void
+    burst_msg_source_c_impl::set_round_add(float val)
+    {
+        d_round_add = val;
     }
 
 	void
@@ -216,9 +223,9 @@ namespace gr {
 
                     // Round to every 50 kHz:
                     float factor = d_round_factor;
-                    float divided = burst_shift_freq / factor;
+                    float divided = (burst_shift_freq-d_round_add) / factor;
                     float rounded = round(divided);
-                    burst_shift_freq = rounded * factor;
+                    burst_shift_freq = rounded * factor + d_round_add;
                     //
 
                     float burst_freq;
