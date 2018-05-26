@@ -41,6 +41,7 @@ namespace gr {
         float d_hysteresis;
         int d_last_crossing_cnt;
         int d_direction;
+        int d_direction_preamble;
         float d_spsmargin;
         int d_crossings;
         int d_preamble_timeout;

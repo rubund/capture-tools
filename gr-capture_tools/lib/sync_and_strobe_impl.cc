@@ -55,6 +55,7 @@ namespace gr {
         d_hysteresis = 0;
         d_last_crossing_cnt = -1;
         d_direction = 0;
+        d_direction_preamble = 0;
         d_spsmargin = 7;
         d_crossings = 0;
         d_preamble_timeout = 50;
@@ -237,23 +238,23 @@ namespace gr {
         if(d_state == 0 || d_state == 1) {
             bool found_crossing = false;
             bool wide_enough = (d_extreme_val_high - d_extreme_val_low) > d_min_swing;
-            if(d_direction == 0) {
-                d_direction = in[i] >= avg_val ? 1 : -1;
+            if(d_direction_preamble == 0) {
+                d_direction_preamble = in[i] >= avg_val ? 1 : -1;
             }
-            else if (d_direction == 1) {
+            else if (d_direction_preamble == 1) {
                 if (in[i] < (avg_val - d_hysteresis)) {
                     found_crossing = true;
-                    d_direction = -1;
+                    d_direction_preamble = -1;
                     d_extreme_val_low = 0;
                 }
                 else {
                     d_extreme_val_high = in[i] > d_extreme_val_high ? in[i] : d_extreme_val_high;
                 }
             }
-            else if (d_direction == -1) {
+            else if (d_direction_preamble == -1) {
                 if (in[i] > (avg_val + d_hysteresis)) {
                     found_crossing = true;
-                    d_direction = 1;
+                    d_direction_preamble = 1;
                     d_extreme_val_high = 0;
                 }
                 else {
@@ -282,6 +283,7 @@ namespace gr {
                     d_residue = 0;
                     d_timeout_cnt = 0;
                     d_frozen_avg_val = avg_val;
+                    d_direction = d_direction_preamble;
                     sps_update();
                     add_item_tag(0, nitems_written(0) + i, pmt::intern("preamble"), pmt::intern(""), pmt::intern(""));
 
@@ -289,7 +291,7 @@ namespace gr {
                         uint8_t sliced;
                         d_start_counter = d_npreamb;
                         bool odd = (d_npreamb % 2) != 0;
-                        if((d_direction == 1 && odd) || (d_direction == -1 && !odd))
+                        if((d_direction_preamble == 1 && odd) || (d_direction_preamble == -1 && !odd))
                             sliced = 0;
                         else
                             sliced = 1;
@@ -347,7 +349,7 @@ namespace gr {
                         level_down = in_mag[i] < 0.4*d_mag_at_addressmatch;
 
                     if(d_packet_counter >= d_n_to_catch || level_down) {
-                        d_direction = 0;
+                        d_direction_preamble = 0;
                         d_last_crossing_cnt = -1;
                         d_crossings = 0 ;
                         nstate = 0;
@@ -381,7 +383,7 @@ namespace gr {
 
                 d_timeout_cnt++;
                 if(d_state == 1 && d_timeout_cnt == d_preamble_timeout) {
-                    d_direction = 0;
+                    d_direction_preamble = 0;
                     d_last_crossing_cnt = -1;
                     d_crossings = 0 ;
                     nstate = 0;
