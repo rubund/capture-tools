@@ -251,7 +251,7 @@ namespace gr {
                 if (in[i] < (avg_val - d_hysteresis)) {
                     found_crossing = true;
                     d_direction_preamble = -1;
-                    d_extreme_val_low = 0;
+                    d_extreme_val_low = 1e12;
                 }
                 else {
                     d_extreme_val_high = in[i] > d_extreme_val_high ? in[i] : d_extreme_val_high;
@@ -261,7 +261,7 @@ namespace gr {
                 if (in[i] > (avg_val + d_hysteresis)) {
                     found_crossing = true;
                     d_direction_preamble = 1;
-                    d_extreme_val_high = 0;
+                    d_extreme_val_high = -1e12;
                 }
                 else {
                     d_extreme_val_low = in[i] < d_extreme_val_low ? in[i] : d_extreme_val_low;
