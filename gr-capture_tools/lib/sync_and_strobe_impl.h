@@ -89,6 +89,7 @@ namespace gr {
       void set_preamble_timeout(int val);
       void set_n_to_catch(int val);
       void set_spsmargin(float val);
+      void set_sps(float val);
       void set_hysteresis(float val);
       void set_decim_in_front(int val);
       void set_min_swing(float val);

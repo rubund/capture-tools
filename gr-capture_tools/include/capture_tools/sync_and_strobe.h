@@ -59,6 +59,7 @@ namespace gr {
       virtual void set_strobe_offset(int val)=0;
       virtual void set_preamble_timeout(int val)=0;
       virtual void set_n_to_catch(int val)=0;
+      virtual void set_sps(float val)=0;
       virtual void set_spsmargin(float val)=0;
       virtual void set_hysteresis(float val)=0;
       virtual void set_decim_in_front(int val)=0;
