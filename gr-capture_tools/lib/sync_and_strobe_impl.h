@@ -64,6 +64,8 @@ namespace gr {
         std::vector<uint8_t> d_receive_buffer;
         int d_n_to_catch;
 
+        boost::mutex common_mutex;
+
         float d_current_burst_frequency_mhz;
         float d_current_burst_magnitude;
         uint64_t d_current_burst_id;
@@ -93,6 +95,7 @@ namespace gr {
       void set_hysteresis(float val);
       void set_decim_in_front(int val);
       void set_min_swing(float val);
+      void set_sps(float val);
     };
 
   } // namespace capture_tools

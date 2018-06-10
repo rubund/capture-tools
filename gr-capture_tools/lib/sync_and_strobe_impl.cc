@@ -90,6 +90,19 @@ namespace gr {
         delete(d_avg_buffer);
     }
 
+    void
+    sync_and_strobe_impl::set_sps(float val)
+    {
+        gr::thread::scoped_lock lock(common_mutex);
+        d_sps = val;
+        sps_update();
+        d_direction_preamble = 0;
+        d_last_crossing_cnt = -1;
+        d_crossings = 0 ;
+        d_state = 0;
+        d_start_counter = 0;
+    }
+
     void sync_and_strobe_impl::sps_update()
     {
         float effective_sps = d_sps + d_residue;
@@ -190,6 +203,8 @@ namespace gr {
       std::vector<int> tag_positions;
       int next_tag_position = -1;
       int next_tag_position_index = -1;
+
+      gr::thread::scoped_lock lock(common_mutex);
 
       std::vector<tag_t> new_bursts;
       get_tags_in_window(new_bursts, 0, 0, noutput_items, pmt::mp("new_burst"));
