@@ -210,14 +210,14 @@ self.$(id).set_bitstuff($bitstuff)</make>
   <param>
     <name>diff</name>
     <key>diff</key>
-    <value>false</value>
+    <value>False</value>
     <type>raw</type>
   </param>
 
   <param>
     <name>bitstuff</name>
     <key>bitstuff</key>
-    <value>false</value>
+    <value>False</value>
     <type>raw</type>
   </param>
 
