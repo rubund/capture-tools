@@ -12,7 +12,9 @@ self.$(id).set_spsmargin($spsmargin)
 self.$(id).set_hysteresis($hysteresis)
 self.$(id).set_decim_in_front($decim_in_front)
 self.$(id).set_min_swing($min_swing)
-self.$(id).set_sync_word($syncword)</make>
+self.$(id).set_sync_word($syncword)
+self.$(id).set_preamble_longer($preamble_longer)</make>
+  <callback>self.$(id).set_preamble_longer($preamble_longer)</callback>
   <callback>self.$(id).set_sps($sps)</callback>
 <!--self.$(id).set_packet_length($packet_length)</make>-->
   <callback>self.$(id).set_sync_word($syncword)</callback>
@@ -103,6 +105,13 @@ self.$(id).set_sync_word($syncword)</make>
        * type
        * vlen
        * optional (set to 1 for optional inputs) -->
+  <param>
+    <name>preamble_longer</name>
+    <key>preamble_longer</key>
+    <value>1</value>
+    <type>int</type>
+  </param>
+
   <sink>
     <name>in</name>
     <type>float</type>

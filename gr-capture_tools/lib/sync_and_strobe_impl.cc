@@ -43,6 +43,7 @@ namespace gr {
               gr::io_signature::make(1, 2, sizeof(float)),
               gr::io_signature::make(0, 2, sizeof(float)))
     {
+        d_preamble_longer = 1;
         d_sps = sps;
         d_npreamb = npreamb;
         d_navg = (int)(sps*6);
@@ -88,6 +89,12 @@ namespace gr {
     sync_and_strobe_impl::~sync_and_strobe_impl()
     {
         delete(d_avg_buffer);
+    }
+
+    void
+    sync_and_strobe_impl::set_preamble_longer(int val)
+    {
+        d_preamble_longer = val;
     }
 
     void
