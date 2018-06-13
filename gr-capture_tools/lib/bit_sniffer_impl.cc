@@ -81,6 +81,22 @@ namespace gr {
         d_diff = val;
     }
 
+    unsigned long bit_sniffer_impl::henten(int from, int size, const uint8_t *frame, FILE *o)
+    {
+        int i=0;
+        unsigned long tmp = 0;
+        fprintf(o, "Chosen: ");
+        for(i=0;i<size;i++)
+        {
+            fprintf(o, "%d",frame[from+i]);
+            tmp |= (frame[from+i]) << (size-1-i);
+        }
+        fprintf(o, "\n");
+        return tmp;
+
+    }
+
+
     void bit_sniffer_impl::handler(pmt::pmt_t msg)
     {
         pmt::pmt_t bit_msg = pmt::cdr(msg);
@@ -221,6 +237,11 @@ namespace gr {
             fprintf(tmp, ", Time: %04d-%02d-%02d %02d:%02d:%02d ", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         }
 
+
+
+        uint8_t * converted_bits = new uint8_t[packet_length+10]; // a little margin here
+        int produced2 = 0;
+
         for(int i=0;i<packet_length;i++) {
             uint8_t current_bit;
             current_bit = d_invert ? 1-bits[i] : bits[i];
@@ -234,6 +255,8 @@ namespace gr {
                 just_changed = 0;
             }
             if(!d_parity || (bitcounter % bits_per_word_practice) <= (d_bits_per_word)) {
+                converted_bits[produced2] = current_bit;
+                produced2++;
                 if(d_lsb) {
                     current_byte |= current_bit ? (1 << (bitcounter % bits_per_word_practice)) : 0;
                 }
@@ -335,6 +358,10 @@ namespace gr {
                 }
             }
         }
+
+        unsigned char type = henten(17,6,converted_bits, tmp);
+        fprintf(tmp, "Type: %d\n", type);
+        delete converted_bits;
 
         if(d_binary && d_hexadecimal)
             fprintf(tmp, "   ");

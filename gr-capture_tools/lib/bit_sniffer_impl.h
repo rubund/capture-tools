@@ -53,6 +53,8 @@ namespace gr {
         bool d_info;
         FILE *d_fp;
 
+      unsigned long henten(int from, int size, const uint8_t *frame, FILE *tmp);
+
      public:
       bit_sniffer_impl(int fade_out=200, bool hexadecimal=0, int offset=0, int bits_per_word=8, bool lsb=0, bool parity=0, bool ascii=0, bool binary=1, int special=0, bool scroll=0);
       ~bit_sniffer_impl();
