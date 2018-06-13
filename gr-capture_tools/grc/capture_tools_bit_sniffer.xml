@@ -7,7 +7,11 @@
   <make>capture_tools.bit_sniffer($fade_out, $hexadecimal, $offset, $bits_per_word, $lsb, $parity, $ascii, $binary, $special, $scroll)
 self.$(id).set_info($info)
 self.$(id).set_output($filename)
-self.$(id).set_invert($invert)</make>
+self.$(id).set_invert($invert)
+self.$(id).set_diff($diff)
+self.$(id).set_bitstuff($bitstuff)</make>
+  <callback>self.$(id).set_bitstuff($bitstuff)</callback>
+  <callback>self.$(id).set_diff($diff)</callback>
 <callback>set_fade_out($fade_out)</callback>
 <callback>set_hexadecimal($hexadecimal)</callback>
 <callback>set_offset($offset)</callback>
@@ -203,6 +207,20 @@ self.$(id).set_invert($invert)</make>
        * type
        * vlen
        * optional (set to 1 for optional inputs) -->
+  <param>
+    <name>diff</name>
+    <key>diff</key>
+    <value>false</value>
+    <type>raw</type>
+  </param>
+
+  <param>
+    <name>bitstuff</name>
+    <key>bitstuff</key>
+    <value>false</value>
+    <type>raw</type>
+  </param>
+
   <sink>
     <name>packets</name>
     <type>message</type>

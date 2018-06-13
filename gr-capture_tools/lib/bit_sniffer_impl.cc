@@ -46,6 +46,8 @@ namespace gr {
         d_fade_out(fade_out), d_hexadecimal(hexadecimal), d_offset(offset), d_bits_per_word(bits_per_word), d_lsb(lsb), d_parity(parity),
         d_ascii(ascii), d_binary(binary), d_special(special), d_scroll(scroll), d_invert(false)
     {
+        d_bitstuff = false;
+        d_diff = false;
         d_cnt = 0;
         d_last_size = 0;
         d_last = NULL;
@@ -65,6 +67,18 @@ namespace gr {
             delete d_last;
             delete d_since_change;
         }
+
+    void
+    bit_sniffer_impl::set_bitstuff(bool val)
+    {
+        d_bitstuff = val;
+    }
+
+    void
+    bit_sniffer_impl::set_diff(bool val)
+    {
+        d_diff = val;
+    }
     }
 
     void bit_sniffer_impl::handler(pmt::pmt_t msg)

@@ -29,6 +29,8 @@ namespace gr {
     class bit_sniffer_impl : public bit_sniffer
     {
      private:
+      bool d_bitstuff;
+      bool d_diff;
       // Nothing to declare in this block.
     void handler(pmt::pmt_t msg);
     char printable_char(char ch);
@@ -74,6 +76,8 @@ namespace gr {
         void set_invert(bool);
         void set_info(bool);
         void set_output(const char *filename);
+      void set_diff(bool val);
+      void set_bitstuff(bool val);
     };
 
   } // namespace capture_tools
