@@ -115,14 +115,21 @@ namespace gr {
             int nzeros = 0;
             int produced = 0;
             bool bitstuffnow = false;
+            int startstop = 0;
             current = 0;
             for(int i=0;i<packet_length;i++) {
                 diff_val = bits[i] != current ? 1 : 0;
                 if (bitstuffnow) {
                     if(diff_val == 0) {
-                        printf("Done!");
                         bitstuffnow = false;
-                        break;
+                        if(startstop == 0) {
+                            startstop = 1;
+                        }
+                        else if (startstop == 1) {
+                            printf("Done!");
+                            startstop = 0;
+                            //break;
+                        }
                     }
                     else {
                         bitstuffnow = false;
@@ -133,7 +140,7 @@ namespace gr {
                         if (diff_val == 0) nzeros++;
                         else               nzeros = 0;
                     }
-                    if (nzeros == 4) {
+                    if (nzeros == 5) {
                         nzeros = 0;
                         bitstuffnow = true;
                     }
