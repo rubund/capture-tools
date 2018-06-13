@@ -109,7 +109,7 @@ namespace gr {
         // TODO: Add optional manchester decoding here before (manipulate packet_length/bits before code below)
 
         if (d_diff) {
-            uint8_t * new_bits = new uint8_t[packet_length];
+            uint8_t * new_bits = new uint8_t[packet_length+10]; // a little margin here
             uint8_t current;
             uint8_t diff_val;
             int nzeros = 0;
@@ -124,11 +124,20 @@ namespace gr {
                         bitstuffnow = false;
                         if(startstop == 0) {
                             startstop = 1;
+                            new_bits[produced] = 0;
+                            produced++;
+                            new_bits[produced] = 0;
+                            produced++;
                         }
                         else if (startstop == 1) {
-                            printf("Done!");
                             startstop = 0;
-                            //break;
+                            new_bits[produced] = 0;
+                            produced++;
+                            new_bits[produced] = 0;
+                            produced++;
+                            new_bits[produced] = 1;
+                            produced++;
+                            break;
                         }
                     }
                     else {
