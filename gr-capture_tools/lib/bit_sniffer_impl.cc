@@ -239,8 +239,8 @@ namespace gr {
 
 
 
-        uint8_t * converted_bits = new uint8_t[packet_length+10]; // a little margin here
-        int produced2 = 0;
+        uint8_t *received_bytes = new uint8_t[packet_length];
+        int bytecounter = 0;
 
         for(int i=0;i<packet_length;i++) {
             uint8_t current_bit;
@@ -255,13 +255,15 @@ namespace gr {
                 just_changed = 0;
             }
             if(!d_parity || (bitcounter % bits_per_word_practice) <= (d_bits_per_word)) {
-                converted_bits[produced2] = current_bit;
-                produced2++;
                 if(d_lsb) {
                     current_byte |= current_bit ? (1 << (bitcounter % bits_per_word_practice)) : 0;
                 }
                 else {
                     current_byte |= current_bit ? (1 << ((bits_per_word_practice - 1) - (bitcounter % bits_per_word_practice))) : 0;
+                }
+                if ((bitcounter % bits_per_word_practice) == (bits_per_word_practice - 1)) {
+                    received_bytes[bytecounter] = current_byte;
+                    bytecounter++;
                 }
             }
             if (current_bit != d_last[i] && d_last[i] != 255) {
@@ -358,11 +360,34 @@ namespace gr {
                 }
             }
         }
+        uint8_t * converted_bits = new uint8_t[packet_length+10]; // a little margin here
+        int produced2 = 0;
 
-        unsigned char type = henten(17,6,converted_bits, tmp);
+        int k,l;
+        fprintf(tmp,"\nAfter mirroring bytes: ");
+        for(k=0;k<bytecounter;k++) {
+            for(l=0;l<8;l++) {
+                char thisbit = (received_bytes[k] >> (l)) & 0x01;
+                fprintf(tmp, "%d", thisbit);
+                converted_bits[k*8+l] = thisbit;
+                produced2++;
+            }
+            fprintf(tmp," ");
+        }
+        fprintf(tmp,"\n");
+        delete received_bytes;
+
+        unsigned char type = henten(8,6,converted_bits, tmp);
         fprintf(tmp, "Type: %d\n", type);
 
-        unsigned long mmsi = henten(8+17,30,converted_bits, tmp);
+        unsigned long mmsi;
+        mmsi = henten(8+8,30,converted_bits, tmp);
+        fprintf(tmp, "MMSI: %09d\n",mmsi);
+        mmsi = henten(8+9,30,converted_bits, tmp);
+        fprintf(tmp, "MMSI: %09d\n",mmsi);
+        mmsi = henten(8+18,30,converted_bits, tmp);
+        fprintf(tmp, "MMSI: %09d\n",mmsi);
+        mmsi = henten(8+19,30,converted_bits, tmp);
         fprintf(tmp, "MMSI: %09d\n",mmsi);
 
         delete converted_bits;
