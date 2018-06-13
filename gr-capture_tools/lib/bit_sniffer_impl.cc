@@ -383,12 +383,6 @@ namespace gr {
         unsigned long mmsi;
         mmsi = henten(8+8,30,converted_bits, tmp);
         fprintf(tmp, "MMSI: %09d\n",mmsi);
-        mmsi = henten(8+9,30,converted_bits, tmp);
-        fprintf(tmp, "MMSI: %09d\n",mmsi);
-        mmsi = henten(8+18,30,converted_bits, tmp);
-        fprintf(tmp, "MMSI: %09d\n",mmsi);
-        mmsi = henten(8+19,30,converted_bits, tmp);
-        fprintf(tmp, "MMSI: %09d\n",mmsi);
 
         delete converted_bits;
 
