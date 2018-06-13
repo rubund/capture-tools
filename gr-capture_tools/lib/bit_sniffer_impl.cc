@@ -67,18 +67,18 @@ namespace gr {
             delete d_last;
             delete d_since_change;
         }
+    }
 
     void
-    bit_sniffer_impl::set_bitstuff(bool val)
+    bit_sniffer_impl::set_bitstuff (bool val)
     {
         d_bitstuff = val;
     }
 
     void
-    bit_sniffer_impl::set_diff(bool val)
+    bit_sniffer_impl::set_diff (bool val)
     {
         d_diff = val;
-    }
     }
 
     void bit_sniffer_impl::handler(pmt::pmt_t msg)
@@ -107,6 +107,18 @@ namespace gr {
         FILE *tmp = stdout;
         if (d_fp != NULL) tmp = d_fp;
         // TODO: Add optional manchester decoding here before (manipulate packet_length/bits before code below)
+
+        if (d_diff) {
+            uint8_t * new_bits = new uint8_t[packet_length];
+            uint8_t current;
+            current = 0;
+            for(int i=0;i<packet_length;i++) {
+                new_bits[i] = bits[i] != current ? 1 : 0;
+                current = bits[i];
+            }
+            delete bits;
+            bits = new_bits;
+        }
 
         if (d_last_size < packet_length) {
             if (d_last != NULL) {
