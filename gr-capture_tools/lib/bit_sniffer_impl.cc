@@ -384,6 +384,20 @@ namespace gr {
         mmsi = henten(8+8,30,converted_bits, tmp);
         fprintf(tmp, "MMSI: %09d\n",mmsi);
 
+        if (type == 1 || type == 2 || type == 3) {
+            int longitude = henten(8+61, 28, converted_bits, tmp);
+            if (((longitude >> 27) & 1) == 1)
+                 longitude |= 0xF0000000;
+            fprintf(tmp, "Longitude: %.5f\n", (float) longitude / 600000.0);
+
+            int latitude = henten(8+38 + 22 + 29, 27, converted_bits, tmp);
+            if (((latitude >> 26) & 1) == 1)
+                latitude |= 0xf8000000;
+            fprintf(tmp, "Latitude: %.5f\n", (float) latitude / 600000.0);
+        }
+
+
+
         delete converted_bits;
 
         if(d_binary && d_hexadecimal)
