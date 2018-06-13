@@ -361,6 +361,10 @@ namespace gr {
 
         unsigned char type = henten(17,6,converted_bits, tmp);
         fprintf(tmp, "Type: %d\n", type);
+
+        unsigned long mmsi = henten(8+17,30,converted_bits, tmp);
+        fprintf(tmp, "MMSI: %09d\n",mmsi);
+
         delete converted_bits;
 
         if(d_binary && d_hexadecimal)
