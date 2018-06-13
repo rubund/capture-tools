@@ -294,7 +294,7 @@ namespace gr {
                 d_last_crossing_cnt ++;
             }
             if (found_crossing && wide_enough) {
-                if(d_last_crossing_cnt > (d_sps - d_spsmargin) && d_last_crossing_cnt < (d_sps + d_spsmargin)) {
+                if(d_last_crossing_cnt > (d_preamble_longer*(d_sps - d_spsmargin)) && d_last_crossing_cnt < (d_preamble_longer*(d_sps + d_spsmargin))) {
                     //add_item_tag(0, nitems_written(0) + i, pmt::intern("correct_crossing"), pmt::intern("yes"), pmt::intern(""));
                     d_crossings++;
                     //printf("d_crossings: %d, d_last_crossing_cnt: %d\n" , d_crossings, d_last_crossing_cnt);
@@ -325,7 +325,8 @@ namespace gr {
                             sliced = 1;
                         add_item_tag(0, nitems_written(0) + i, pmt::intern("sliced"), pmt::from_bool(sliced), pmt::intern(""));
                         for (int j=0;j<d_npreamb;j++) {
-                            d_input_buffer = ((d_input_buffer << 1) & 0xfffffffffffffffeull) | ((uint64_t)(sliced & 0x01));
+                            for(int k=0;k<d_preamble_longer;k++)
+                                d_input_buffer = ((d_input_buffer << 1) & 0xfffffffffffffffeull) | ((uint64_t)(sliced & 0x01));
                             sliced = (sliced == 1) ? 0 : 1;
                         }
                     }
