@@ -111,13 +111,42 @@ namespace gr {
         if (d_diff) {
             uint8_t * new_bits = new uint8_t[packet_length];
             uint8_t current;
+            uint8_t diff_val;
+            int nzeros = 0;
+            int produced = 0;
+            bool bitstuffnow = false;
             current = 0;
             for(int i=0;i<packet_length;i++) {
-                new_bits[i] = bits[i] != current ? 1 : 0;
+                diff_val = bits[i] != current ? 1 : 0;
+                if (bitstuffnow) {
+                    if(diff_val == 0) {
+                        printf("Done!");
+                        bitstuffnow = false;
+                        break;
+                    }
+                    else {
+                        bitstuffnow = false;
+                    }
+                }
+                else {
+                    if (d_bitstuff) {
+                        if (diff_val == 0) nzeros++;
+                        else               nzeros = 0;
+                    }
+                    if (nzeros == 4) {
+                        nzeros = 0;
+                        bitstuffnow = true;
+                    }
+                    else {
+                        new_bits[produced] = diff_val;
+                        produced++;
+                    }
+                }
                 current = bits[i];
             }
             delete bits;
             bits = new_bits;
+            packet_length = produced;
         }
 
         if (d_last_size < packet_length) {
