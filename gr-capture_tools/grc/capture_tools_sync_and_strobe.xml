@@ -25,7 +25,6 @@ self.$(id).set_preamble_longer($preamble_longer)</make>
   <callback>self.$(id).set_hysteresis($hysteresis)</callback>
   <callback>self.$(id).set_decim_in_front($decim_in_front)</callback>
   <callback>self.$(id).set_min_swing($min_swing)</callback>
-  <callback>self.$(id).set_sps($sps)</callback>
   <!--<callback>self.$(id).set_packet_length($packet_length)</callback>-->
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:

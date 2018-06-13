@@ -159,11 +159,6 @@ namespace gr {
         d_n_to_catch = val;
     }
 
-    void
-    sync_and_strobe_impl::set_sps(float val)
-    {
-        d_sps = val;
-    }
 
     void
     sync_and_strobe_impl::set_spsmargin(float val)
