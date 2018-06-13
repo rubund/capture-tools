@@ -144,7 +144,6 @@ namespace gr {
                 }
                 current = bits[i];
             }
-            delete bits;
             bits = new_bits;
             packet_length = produced;
         }
