@@ -13,7 +13,9 @@ self.$(id).set_hysteresis($hysteresis)
 self.$(id).set_decim_in_front($decim_in_front)
 self.$(id).set_min_swing($min_swing)
 self.$(id).set_sync_word($syncword)
-self.$(id).set_preamble_longer($preamble_longer)</make>
+self.$(id).set_preamble_longer($preamble_longer)
+self.$(id).set_also_match_inverted($also_match_inverted)</make>
+  <callback>self.$(id).set_also_match_inverted($also_match_inverted)</callback>
   <callback>self.$(id).set_preamble_longer($preamble_longer)</callback>
   <callback>self.$(id).set_sps($sps)</callback>
 <!--self.$(id).set_packet_length($packet_length)</make>-->
@@ -111,6 +113,20 @@ self.$(id).set_preamble_longer($preamble_longer)</make>
     <type>int</type>
   </param>
 
+  <param>
+      <name>also_match_inverted</name>
+      <key>also_match_inverted</key>
+      <value>False</value>
+      <type>bool</type>
+      <option>
+          <name>Yes</name>
+          <key>True</key>
+      </option>
+      <option>
+          <name>No</name>
+          <key>False</key>
+      </option>
+  </param>
   <sink>
     <name>in</name>
     <type>float</type>
