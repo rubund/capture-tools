@@ -356,7 +356,7 @@ namespace gr {
                 }
                 d_input_buffer = ((d_input_buffer << 1) & 0xfffffffffffffffeull) | ((uint64_t)(sliced & 0x01));
                 if (d_state == 1) {
-                    if(d_sync_word_len > 0 && d_start_counter >= d_sync_word_len && (d_input_buffer & d_sync_word_mask) == d_sync_word) {
+                    if(d_sync_word_len > 0 && d_start_counter >= d_sync_word_len && (((d_input_buffer & d_sync_word_mask) == d_sync_word) || (d_also_match_inverted && (((d_input_buffer ^ 0xffffffffffffffffull) & d_sync_word_mask) == d_sync_word)))) {
                         add_item_tag(0, nitems_written(0) + i, pmt::intern("address"), pmt::intern(""), pmt::intern(""));
                         nstate = 2;
                         d_timeout_cnt = 0;
