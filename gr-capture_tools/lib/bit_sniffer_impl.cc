@@ -169,10 +169,9 @@ namespace gr {
                         nzeros = 0;
                         bitstuffnow = true;
                     }
-                    else {
-                        new_bits[produced] = diff_val;
-                        produced++;
-                    }
+                    if (diff_val) after << "1"; else after << "0";
+                    new_bits[produced] = diff_val;
+                    produced++;
                 }
                 current = bits[i];
             }
