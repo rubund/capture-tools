@@ -43,6 +43,7 @@ namespace gr {
               gr::io_signature::make(1, 2, sizeof(float)),
               gr::io_signature::make(0, 2, sizeof(float)))
     {
+        d_also_match_inverted = false;
         d_preamble_longer = 1;
         d_sps = sps;
         d_npreamb = npreamb;
@@ -89,6 +90,12 @@ namespace gr {
     sync_and_strobe_impl::~sync_and_strobe_impl()
     {
         delete(d_avg_buffer);
+    }
+
+    void
+    sync_and_strobe_impl::set_also_match_inverted(bool val)
+    {
+        d_also_match_inverted = val;
     }
 
     void

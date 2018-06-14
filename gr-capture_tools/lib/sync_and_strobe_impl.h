@@ -29,6 +29,7 @@ namespace gr {
     class sync_and_strobe_impl : public sync_and_strobe
     {
      private:
+      bool d_also_match_inverted;
       int d_preamble_longer;
       // Nothing to declare in this block.
         float * d_avg_buffer;
@@ -97,6 +98,7 @@ namespace gr {
       void set_decim_in_front(int val);
       void set_min_swing(float val);
       void set_preamble_longer(int val);
+      void set_also_match_inverted(bool val);
     };
 
   } // namespace capture_tools
