@@ -24,6 +24,7 @@
 
 #include <ctime>
 #include <gnuradio/io_signature.h>
+#include <sstream>
 #include "bit_sniffer_impl.h"
 
 namespace gr {
@@ -125,6 +126,8 @@ namespace gr {
         // TODO: Add optional manchester decoding here before (manipulate packet_length/bits before code below)
 
         if (d_diff) {
+            std::ostringstream before;
+            std::ostringstream after;
             uint8_t * new_bits = new uint8_t[packet_length+10]; // a little margin here
             uint8_t current;
             uint8_t diff_val;
@@ -135,6 +138,7 @@ namespace gr {
             current = 0;
             for(int i=0;i<packet_length;i++) {
                 diff_val = bits[i] != current ? 1 : 0;
+                if (diff_val) before << "1"; else before << "0";
                 if (bitstuffnow) {
                     if(diff_val == 0) {
                         bitstuffnow = false;
@@ -177,6 +181,8 @@ namespace gr {
             }
             bits = new_bits;
             packet_length = produced;
+            fprintf(tmp, "\nBefore: %s\n" , before.str().c_str());
+            fprintf(tmp,   "After:  %s\n" , after.str().c_str());
         }
 
         if (d_last_size < packet_length) {
