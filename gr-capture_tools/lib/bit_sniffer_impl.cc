@@ -105,6 +105,10 @@ namespace gr {
         if (pmt::dict_has_key(bit_meta, pmt::mp("sample_rate")))
             burst_sample_rate = pmt::to_float(pmt::dict_ref(bit_meta, pmt::mp("sample_rate"), pmt::PMT_NIL));
 
+        uint8_t * new_bits_diff = NULL;
+        uint8_t * new_bits_invert = NULL;
+
+
         FILE *tmp = stdout;
         if (d_fp != NULL) tmp = d_fp;
         // TODO: Add optional manchester decoding here before (manipulate packet_length/bits before code below)
@@ -112,7 +116,7 @@ namespace gr {
         if (d_diff) {
             std::ostringstream before;
             std::ostringstream after;
-            uint8_t * new_bits = new uint8_t[packet_length+10]; // a little margin here
+            new_bits_diff = new uint8_t[packet_length+10]; // a little margin here
             uint8_t current;
             uint8_t diff_val;
             int nzeros = 0;
@@ -128,18 +132,18 @@ namespace gr {
                         bitstuffnow = false;
                         if(startstop == 0) {
                             startstop = 1;
-                            new_bits[produced] = 0;
+                            new_bits_diff[produced] = 0;
                             produced++;
-                            new_bits[produced] = 0;
+                            new_bits_diff[produced] = 0;
                             produced++;
                         }
                         else if (startstop == 1) {
                             startstop = 0;
-                            new_bits[produced] = 0;
+                            new_bits_diff[produced] = 0;
                             produced++;
-                            new_bits[produced] = 0;
+                            new_bits_diff[produced] = 0;
                             produced++;
-                            new_bits[produced] = 1;
+                            new_bits_diff[produced] = 1;
                             produced++;
                             break;
                         }
@@ -158,12 +162,12 @@ namespace gr {
                         bitstuffnow = true;
                     }
                     //if (diff_val) after << "1"; else after << "0";
-                    new_bits[produced] = diff_val;
+                    new_bits_diff[produced] = diff_val;
                     produced++;
                 }
                 current = bits[i];
             }
-            bits = new_bits;
+            bits = new_bits_diff;
             packet_length = produced;
             //fprintf(tmp, "\nBefore: %s\n" , before.str().c_str());
             //fprintf(tmp,   "After:  %s\n" , after.str().c_str());
@@ -226,9 +230,18 @@ namespace gr {
             fprintf(tmp, ", Time: %04d-%02d-%02d %02d:%02d:%02d ", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         }
 
+        if (d_invert) {
+            new_bits_invert = new uint8_t[packet_length+10]; // a little margin here
+
+            for(int i=0;i<packet_length;i++) {
+                new_bits_invert[i] = 1-bits[i];
+            }
+            bits = new_bits_invert;
+        }
+
         for(int i=0;i<packet_length;i++) {
             uint8_t current_bit;
-            current_bit = d_invert ? 1-bits[i] : bits[i];
+            current_bit = bits[i];
             if (i < d_offset){
                 bitcounter = 0;
                 continue;
@@ -340,6 +353,10 @@ namespace gr {
                 }
             }
         }
+
+        if (new_bits_diff != NULL) delete(new_bits_diff);
+        if (new_bits_invert != NULL) delete(new_bits_invert);
+
 
         if(d_binary && d_hexadecimal)
             fprintf(tmp, "   ");
