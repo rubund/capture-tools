@@ -32,6 +32,10 @@ namespace gr {
       // Nothing to declare in this block.
       int d_n;
       int d_produce_per;
+      float *d_buffer;
+      int d_write_index;
+      int d_read_index;
+      int d_length;
 
      public:
       xrun_monitor_ff_impl();
