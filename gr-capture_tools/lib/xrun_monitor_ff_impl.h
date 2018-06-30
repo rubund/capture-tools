@@ -36,6 +36,8 @@ namespace gr {
       xrun_monitor_ff_impl();
       ~xrun_monitor_ff_impl();
 
+      void forecast (int noutput_items, gr_vector_int &ninput_items_required);
+
       // Where all the action really happens
       int general_work(int noutput_items,
          gr_vector_int &ninpnut_items,

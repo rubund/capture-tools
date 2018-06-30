@@ -53,6 +53,12 @@ namespace gr {
     {
     }
 
+    void
+    xrun_monitor_ff_impl::forecast (int noutput_items, gr_vector_int &ninput_items_required)
+    {
+        ninput_items_required[0] = noutput_items;
+    }
+
     int
     xrun_monitor_ff_impl::general_work(int noutput_items,
         gr_vector_int &ninput_items,
@@ -71,6 +77,7 @@ namespace gr {
       // Do <+signal processing+>
       memcpy(out, in, sizeof(float) * noutput_items);
 
+      consume_each(noutput_items);
       // Tell runtime system how many output items we produced.
       return noutput_items;
     }
