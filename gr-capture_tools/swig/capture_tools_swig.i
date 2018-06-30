@@ -46,6 +46,7 @@
 #include "capture_tools/fft_burst_tagger.h"
 #include "capture_tools/tagged_burst_to_pdu.h"
 #include "capture_tools/sync_and_strobe.h"
+#include "capture_tools/xrun_monitor_ff.h"
 
 %}
 
@@ -130,3 +131,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, fft_burst_tagger);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, tagged_burst_to_pdu);
 %include "capture_tools/sync_and_strobe.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, sync_and_strobe);
+%include "capture_tools/xrun_monitor_ff.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, xrun_monitor_ff);

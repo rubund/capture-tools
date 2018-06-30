@@ -62,6 +62,7 @@ list(APPEND capture_tools_sources
     fft_burst_tagger_impl.cc
     tagged_burst_to_pdu_impl.cc
     sync_and_strobe_impl.cc
+    xrun_monitor_ff_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)

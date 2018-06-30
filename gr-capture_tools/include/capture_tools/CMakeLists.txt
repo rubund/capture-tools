@@ -63,5 +63,6 @@ install(FILES
     burst_msg_source_c.h
     fft_burst_tagger.h
     tagged_burst_to_pdu.h
-    sync_and_strobe.h DESTINATION include/capture_tools
+    sync_and_strobe.h
+    xrun_monitor_ff.h DESTINATION include/capture_tools
 )
