@@ -31,6 +31,7 @@ namespace gr {
      private:
       // Nothing to declare in this block.
       int d_n;
+      int d_produce_per;
 
      public:
       xrun_monitor_ff_impl();

@@ -44,6 +44,7 @@ namespace gr {
               gr::io_signature::make(1, 1, sizeof(float)))
     {
         d_n = 0;
+        d_produce_per = 100;
     }
 
     /*
@@ -56,7 +57,7 @@ namespace gr {
     void
     xrun_monitor_ff_impl::forecast (int noutput_items, gr_vector_int &ninput_items_required)
     {
-        ninput_items_required[0] = noutput_items;
+        ninput_items_required[0] = d_produce_per; //noutput_items;
     }
 
     int
@@ -68,18 +69,20 @@ namespace gr {
       const float *in = (const float *) input_items[0];
       float *out = (float *) output_items[0];
 
-      d_n += noutput_items;
+      // Do <+signal processing+>
+      int to_produce = std::min(ninput_items[0], noutput_items);
+      memcpy(out, in, sizeof(float) * to_produce);
+
+      d_n += to_produce;
 
         if (d_n > 100000) {
             printf("ninput_items: %d, noutput_items: %d\n", ninput_items[0], noutput_items);
             d_n = 0;
         }
-      // Do <+signal processing+>
-      memcpy(out, in, sizeof(float) * noutput_items);
 
-      consume_each(noutput_items);
+      consume_each(to_produce);
       // Tell runtime system how many output items we produced.
-      return noutput_items;
+      return to_produce;
     }
 
   } /* namespace capture_tools */
