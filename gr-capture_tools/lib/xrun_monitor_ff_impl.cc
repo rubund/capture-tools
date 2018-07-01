@@ -83,6 +83,7 @@ namespace gr {
       float *out = (float *) output_items[0];
 
       // Do <+signal processing+>
+      int zeros_to_produce = 0;
       int current_fill;
       if (d_read_index < d_write_index)
         current_fill = d_write_index - d_read_index;
@@ -94,6 +95,7 @@ namespace gr {
       float fill_percentage;
       fill_percentage = (((float)current_fill)/((float)d_length))*100;
       if (d_starting && fill_percentage < 50) {
+        zeros_to_produce = noutput_items;
         noutput_items = 0;
       }
       else {
@@ -197,6 +199,11 @@ namespace gr {
         current_fill = 0;
       else {
         current_fill = d_length - d_read_index + d_write_index;
+      }
+
+      for(int i=0;i<zeros_to_produce;i++) {
+        out[i] = 0;
+        produced++;
       }
 
       consume_each(consumed);
