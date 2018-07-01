@@ -135,6 +135,20 @@ namespace gr {
       //}
       int tosave = ninput_items[0] - (to_produce);
 
+      int current_fill;
+      if (d_read_index < d_write_index)
+        current_fill = d_write_index - d_read_index;
+      else if (d_read_index == d_write_index)
+        current_fill = 0;
+      else {
+        current_fill = d_length - d_read_index + d_write_index;
+      }
+
+      if(tosave >= (d_length-current_fill)) {
+        printf("Buffer full!\n");
+        tosave = d_length - current_fill - 1;
+      }
+
       if ((d_write_index + tosave) < d_length) {
         memcpy(d_buffer + d_write_index, in + to_produce, sizeof(float) * tosave);
         d_write_index = d_write_index + tosave;
@@ -153,7 +167,6 @@ namespace gr {
             d_n = 0;
         }
 
-      int current_fill;
       if (d_read_index < d_write_index)
         current_fill = d_write_index - d_read_index;
       else if (d_read_index == d_write_index)
