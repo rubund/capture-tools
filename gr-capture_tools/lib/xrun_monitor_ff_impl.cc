@@ -82,6 +82,8 @@ namespace gr {
             }
             else {
                 ninput_items_required[0] = noutput_items;
+                d_starting = true;
+                printf("Fill fell below 30%% Starting again\n");
             }
         }
 
