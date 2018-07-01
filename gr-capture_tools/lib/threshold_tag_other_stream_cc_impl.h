@@ -33,9 +33,13 @@ namespace gr {
       float d_high_thresh;
       bool d_is_above;
       bool d_just_started;
+      int d_vlen;
+
+      pmt::pmt_t d_going_high_tag;
+      pmt::pmt_t d_going_low_tag;
 
      public:
-      threshold_tag_other_stream_cc_impl(float low_thresh, float high_thresh);
+      threshold_tag_other_stream_cc_impl(float low_thresh, float high_thresh, int vlen);
       ~threshold_tag_other_stream_cc_impl();
 
       // Where all the action really happens
@@ -45,6 +49,9 @@ namespace gr {
 
       void set_low_thresh(float);
       void set_high_thresh(float);
+
+      void set_going_high_tag(const std::string &tag_str);
+      void set_going_low_tag(const std::string &tag_str);
     };
 
   } // namespace capture_tools

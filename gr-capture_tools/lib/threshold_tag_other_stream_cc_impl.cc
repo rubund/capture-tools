@@ -29,28 +29,44 @@ namespace gr {
   namespace capture_tools {
 
     threshold_tag_other_stream_cc::sptr
-    threshold_tag_other_stream_cc::make(float low_thresh, float high_thresh)
+    threshold_tag_other_stream_cc::make(float low_thresh, float high_thresh, int vlen)
     {
       return gnuradio::get_initial_sptr
-        (new threshold_tag_other_stream_cc_impl(low_thresh, high_thresh));
+        (new threshold_tag_other_stream_cc_impl(low_thresh, high_thresh, vlen));
     }
 
     /*
      * The private constructor
      */
-    threshold_tag_other_stream_cc_impl::threshold_tag_other_stream_cc_impl(float low_thresh, float high_thresh)
+    threshold_tag_other_stream_cc_impl::threshold_tag_other_stream_cc_impl(float low_thresh, float high_thresh, int vlen)
       : gr::sync_block("threshold_tag_other_stream_cc",
-              gr::io_signature::make2(2, 2, sizeof(gr_complex), sizeof(float)),
-              gr::io_signature::make(1, 1, sizeof(gr_complex))),
+              gr::io_signature::make2(2, 2, sizeof(gr_complex) * vlen, sizeof(float)),
+              gr::io_signature::make(1, 1, sizeof(gr_complex) * vlen)),
             d_low_thresh(low_thresh), d_high_thresh(high_thresh), d_is_above(false),
             d_just_started(true)
-    {}
+    {
+        d_vlen = vlen;
+        d_going_high_tag = pmt::intern("going_high");
+        d_going_low_tag = pmt::intern("going_low");
+    }
 
     /*
      * Our virtual destructor.
      */
     threshold_tag_other_stream_cc_impl::~threshold_tag_other_stream_cc_impl()
     {
+    }
+
+    void
+    threshold_tag_other_stream_cc_impl::set_going_high_tag(const std::string &tag_str)
+    {
+      d_going_high_tag = pmt::intern(tag_str);
+    }
+
+    void
+    threshold_tag_other_stream_cc_impl::set_going_low_tag(const std::string &tag_str)
+    {
+      d_going_low_tag = pmt::intern(tag_str);
     }
 
     void
@@ -89,18 +105,18 @@ namespace gr {
           if (d_is_above) {
             if(in_float[i] < d_low_thresh) {
               d_is_above = false;
-              add_item_tag(0, nitems_written(0) + i, pmt::intern("going_low"), pmt::intern(""), pmt::intern(""));
+              add_item_tag(0, nitems_written(0) + i, d_going_low_tag, pmt::intern(""), pmt::intern(""));
             }
           }
           else {
             if(in_float[i] > d_high_thresh) {
               d_is_above = true;
-              add_item_tag(0, nitems_written(0) + i, pmt::intern("going_high"), pmt::intern(""), pmt::intern(""));
+              add_item_tag(0, nitems_written(0) + i, d_going_high_tag, pmt::intern(""), pmt::intern(""));
             }
           }
         }
       }
-      memcpy(out, in, sizeof(gr_complex)*noutput_items);
+      memcpy(out, in, sizeof(gr_complex)*d_vlen*noutput_items);
 
       // Tell runtime system how many output items we produced.
       return noutput_items;

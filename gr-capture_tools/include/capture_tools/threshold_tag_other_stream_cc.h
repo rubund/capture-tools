@@ -49,10 +49,14 @@ namespace gr {
        * class. capture_tools::threshold_tag_other_stream_cc::make is the public interface for
        * creating new instances.
        */
-      static sptr make(float low_thres, float high_thres);
+      static sptr make(float low_thres, float high_thres, int vlen=1);
 
       virtual void set_low_thresh(float)  = 0;
       virtual void set_high_thresh(float) = 0;
+
+      virtual void set_going_high_tag(const std::string &tag_str) = 0;
+      virtual void set_going_low_tag(const std::string &tag_str) = 0;
+
     };
 
   } // namespace capture_tools
