@@ -50,6 +50,7 @@ namespace gr {
         d_length = 1000000;
         d_buffer = new float[d_length];
         d_first = true;
+        d_starting = true;
     }
 
     /*
@@ -82,6 +83,23 @@ namespace gr {
       float *out = (float *) output_items[0];
 
       // Do <+signal processing+>
+      int current_fill;
+      if (d_read_index < d_write_index)
+        current_fill = d_write_index - d_read_index;
+      else if (d_read_index == d_write_index)
+        current_fill = 0;
+      else {
+        current_fill = d_length - d_read_index + d_write_index;
+      }
+      float fill_percentage;
+      fill_percentage = (((float)current_fill)/((float)d_length))*100;
+      if (d_starting && fill_percentage < 50) {
+        noutput_items = 0;
+      }
+      else {
+        d_starting = false;
+      }
+
 
       int produced = 0;
       int consumed = 0;
@@ -142,7 +160,6 @@ namespace gr {
       //}
       int tosave = ninput_items[0] - (to_produce);
 
-      int current_fill;
       if (d_read_index < d_write_index)
         current_fill = d_write_index - d_read_index;
       else if (d_read_index == d_write_index)
