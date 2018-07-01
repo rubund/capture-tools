@@ -47,8 +47,9 @@ namespace gr {
         d_produce_per = 100;
         d_write_index = 0;
         d_read_index = 0;
-        d_length = 100000;
+        d_length = 1000000;
         d_buffer = new float[d_length];
+        d_first = true;
     }
 
     /*
@@ -62,7 +63,13 @@ namespace gr {
     void
     xrun_monitor_ff_impl::forecast (int noutput_items, gr_vector_int &ninput_items_required)
     {
-        ninput_items_required[0] = d_produce_per; //noutput_items;
+        if (d_first) {
+            ninput_items_required[0] = d_length / 2;
+            d_first = false;
+        }
+        else
+            ninput_items_required[0] = d_produce_per; //noutput_items;
+
     }
 
     int

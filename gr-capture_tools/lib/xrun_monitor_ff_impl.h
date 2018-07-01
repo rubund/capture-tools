@@ -36,6 +36,7 @@ namespace gr {
       int d_write_index;
       int d_read_index;
       int d_length;
+      bool d_first;
 
      public:
       xrun_monitor_ff_impl();
