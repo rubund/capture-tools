@@ -47,7 +47,7 @@ namespace gr {
         d_produce_per = 100;
         d_write_index = 0;
         d_read_index = 0;
-        d_length = 1000000;
+        d_length = 500000;
         d_buffer = new float[d_length];
         d_first = true;
         d_starting = true;
@@ -64,12 +64,38 @@ namespace gr {
     void
     xrun_monitor_ff_impl::forecast (int noutput_items, gr_vector_int &ninput_items_required)
     {
+        //ninput_items_required[0] = noutput_items;
+        //if (d_first) {
+        //    ninput_items_required[0] = d_length / 2;
+        //    d_first = false;
+        //}
+        //else
         if (d_first) {
-            ninput_items_required[0] = d_length / 2;
+            ninput_items_required[0] = 0;// noutput_items;
             d_first = false;
         }
-        else
-            ninput_items_required[0] = d_produce_per; //noutput_items;
+        else {
+            if (noutput_items >= 10) {
+                ninput_items_required[0] = noutput_items; //ceil(noutput_items * 0.1);
+            }
+            else {
+                int current_fill;
+                if (d_read_index < d_write_index)
+                    current_fill = d_write_index - d_read_index;
+                else if (d_read_index == d_write_index)
+                    current_fill = 0;
+                else
+                    current_fill = d_length - d_read_index + d_write_index;
+
+                float fill_percentage = (((float)current_fill)/((float)d_length))*100;
+                if(fill_percentage > 30 || d_starting) {
+                    ninput_items_required[0] = 0;// noutput_items;
+                }
+                else {
+                    ninput_items_required[0] = noutput_items;
+                }
+            }
+        }
 
     }
 
@@ -79,7 +105,9 @@ namespace gr {
         gr_vector_const_void_star &input_items,
         gr_vector_void_star &output_items)
     {
-      const float *in = (const float *) input_items[0];
+      const float *in = NULL;
+      if (input_items.size() > 0)
+        in  = (const float *) input_items[0];
       float *out = (float *) output_items[0];
 
       // Do <+signal processing+>
@@ -188,10 +216,6 @@ namespace gr {
 
       d_n += noutput_items;
 
-        if (d_n > 100000) {
-            printf("ninput_items: %d, noutput_items: %d\n", ninput_items[0], noutput_items);
-            d_n = 0;
-        }
 
       if (d_read_index < d_write_index)
         current_fill = d_write_index - d_read_index;
@@ -200,6 +224,12 @@ namespace gr {
       else {
         current_fill = d_length - d_read_index + d_write_index;
       }
+
+        if (d_n > 10000) {
+            //printf("ninput_items: %d, noutput_items: %d\n", ninput_items[0], noutput_items);
+            printf("Fill: %f %\n", (((float)current_fill)/((float)d_length))*100);
+            d_n = 0;
+        }
 
       for(int i=0;i<zeros_to_produce;i++) {
         out[i] = 0;
