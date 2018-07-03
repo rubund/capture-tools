@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <block>
-  <name>xrun_monitor_ff</name>
+  <name>xrun_monitor</name>
   <key>capture_tools_xrun_monitor_ff</key>
   <category>capture_tools</category>
   <import>import capture_tools</import>
-  <make>capture_tools.xrun_monitor_ff($length)
+  <make>capture_tools.xrun_monitor_$(type.fcn)($length)
 self.$(id).set_drop_when_full($drop_when_full)</make>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
@@ -25,6 +25,37 @@ self.$(id).set_drop_when_full($drop_when_full)</make>
     <type>bool</type>
   </param>
 
+  <param>
+      <name>IO Type</name>
+      <key>type</key>
+      <type>enum</type>
+      <option>
+          <name>Float</name>
+          <key>float</key>
+          <opt>const_type:real_vector</opt>
+          <opt>fcn:ff</opt>
+      </option>
+      <option>
+          <name>Complex</name>
+          <key>complex</key>
+          <opt>const_type:complex_vector</opt>
+          <opt>fcn:cc</opt>
+      </option>
+      <!--<option>
+          <name>Int</name>
+          <key>int</key>
+          <opt>const_type:int_vector</opt>
+          <opt>fcn:ii</opt>
+      </option>
+      <option>
+          <name>Short</name>
+          <key>short</key>
+          <opt>const_type:int_vector</opt>
+          <opt>fcn:ss</opt>
+      </option>-->
+  </param>
+
+
   <!-- Make one 'sink' node per input. Sub-nodes:
        * name (an identifier for the GUI)
        * type
@@ -32,7 +63,7 @@ self.$(id).set_drop_when_full($drop_when_full)</make>
        * optional (set to 1 for optional inputs) -->
   <sink>
     <name>in</name>
-    <type>float</type>
+    <type>$type</type>
   </sink>
 
   <!-- Make one 'source' node per output. Sub-nodes:
@@ -42,6 +73,6 @@ self.$(id).set_drop_when_full($drop_when_full)</make>
        * optional (set to 1 for optional inputs) -->
   <source>
     <name>out</name>
-    <type>float</type>
+    <type>$type</type>
   </source>
 </block>
