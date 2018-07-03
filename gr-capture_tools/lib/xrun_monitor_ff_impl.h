@@ -38,9 +38,10 @@ namespace gr {
       int d_length;
       bool d_first;
       bool d_starting;
+      bool d_drop_when_full;
 
      public:
-      xrun_monitor_ff_impl();
+      xrun_monitor_ff_impl(int length);
       ~xrun_monitor_ff_impl();
 
       void forecast (int noutput_items, gr_vector_int &ninput_items_required);
@@ -50,6 +51,8 @@ namespace gr {
          gr_vector_int &ninpnut_items,
          gr_vector_const_void_star &input_items,
          gr_vector_void_star &output_items);
+
+      void set_drop_when_full(bool val);
 
     };
 

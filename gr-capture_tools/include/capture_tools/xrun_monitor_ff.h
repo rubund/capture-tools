@@ -46,7 +46,9 @@ namespace gr {
        * class. capture_tools::xrun_monitor_ff::make is the public interface for
        * creating new instances.
        */
-      static sptr make();
+      static sptr make(int length=500000);
+
+      virtual void set_drop_when_full(bool val)=0;
     };
 
   } // namespace capture_tools

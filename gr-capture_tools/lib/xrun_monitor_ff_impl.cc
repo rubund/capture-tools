@@ -29,16 +29,16 @@ namespace gr {
   namespace capture_tools {
 
     xrun_monitor_ff::sptr
-    xrun_monitor_ff::make()
+    xrun_monitor_ff::make(int length)
     {
       return gnuradio::get_initial_sptr
-        (new xrun_monitor_ff_impl());
+        (new xrun_monitor_ff_impl(length));
     }
 
     /*
      * The private constructor
      */
-    xrun_monitor_ff_impl::xrun_monitor_ff_impl()
+    xrun_monitor_ff_impl::xrun_monitor_ff_impl(int length)
       : gr::block("xrun_monitor_ff",
               gr::io_signature::make(1, 1, sizeof(float)),
               gr::io_signature::make(1, 1, sizeof(float)))
@@ -47,10 +47,11 @@ namespace gr {
         d_produce_per = 100;
         d_write_index = 0;
         d_read_index = 0;
-        d_length = 500000;
+        d_length = length;
         d_buffer = new float[d_length];
         d_first = true;
         d_starting = true;
+        d_drop_when_full = false;
     }
 
     /*
@@ -59,6 +60,12 @@ namespace gr {
     xrun_monitor_ff_impl::~xrun_monitor_ff_impl()
     {
         delete(d_buffer);
+    }
+
+    void
+    xrun_monitor_ff_impl::set_drop_when_full(bool val)
+    {
+        d_drop_when_full = val;
     }
 
     void

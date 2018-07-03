@@ -4,17 +4,26 @@
   <key>capture_tools_xrun_monitor_ff</key>
   <category>capture_tools</category>
   <import>import capture_tools</import>
-  <make>capture_tools.xrun_monitor_ff()</make>
+  <make>capture_tools.xrun_monitor_ff($length)
+self.$(id).set_drop_when_full($drop_when_full)</make>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
        * key (makes the value accessible as $keyname, e.g. in the make node)
        * type -->
-  <!--<param>
-    <name>...</name>
-    <key>...</key>
-    <type>...</type>
-  </param>-->
+  <param>
+    <name>length</name>
+    <key>length</key>
+    <value>500000</value>
+    <type>int</type>
+  </param>
+
+  <param>
+    <name>Drop when full</name>
+    <key>drop_when_full</key>
+    <value>False</value>
+    <type>bool</type>
+  </param>
 
   <!-- Make one 'sink' node per input. Sub-nodes:
        * name (an identifier for the GUI)
