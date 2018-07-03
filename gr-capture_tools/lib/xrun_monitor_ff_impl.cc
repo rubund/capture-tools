@@ -233,7 +233,10 @@ namespace gr {
         produced++;
       }
 
-      consume_each(consumed);
+      if (d_drop_when_full)
+        consume_each(ninput_items[0]);
+      else
+        consume_each(consumed);
       // Tell runtime system how many output items we produced.
       return produced;
     }
