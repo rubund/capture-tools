@@ -75,3 +75,4 @@ GR_ADD_TEST(qa_tagged_burst_to_pdu ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_D
 GR_ADD_TEST(qa_sync_and_strobe ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_sync_and_strobe.py)
 GR_ADD_TEST(qa_xrun_monitor_ff ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_xrun_monitor_ff.py)
 GR_ADD_TEST(qa_xrun_monitor_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_xrun_monitor_cc.py)
+GR_ADD_TEST(qa_save_iq_for_failed ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_save_iq_for_failed.py)

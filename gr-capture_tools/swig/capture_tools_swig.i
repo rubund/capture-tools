@@ -48,6 +48,7 @@
 #include "capture_tools/sync_and_strobe.h"
 #include "capture_tools/xrun_monitor_ff.h"
 #include "capture_tools/xrun_monitor_cc.h"
+#include "capture_tools/save_iq_for_failed.h"
 
 %}
 
@@ -136,3 +137,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, sync_and_strobe);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, xrun_monitor_ff);
 %include "capture_tools/xrun_monitor_cc.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, xrun_monitor_cc);
+%include "capture_tools/save_iq_for_failed.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, save_iq_for_failed);

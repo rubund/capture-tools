@@ -65,5 +65,6 @@ install(FILES
     tagged_burst_to_pdu.h
     sync_and_strobe.h
     xrun_monitor_ff.h
-    xrun_monitor_cc.h DESTINATION include/capture_tools
+    xrun_monitor_cc.h
+    save_iq_for_failed.h DESTINATION include/capture_tools
 )

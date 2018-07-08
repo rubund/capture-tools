@@ -64,6 +64,7 @@ list(APPEND capture_tools_sources
     sync_and_strobe_impl.cc
     xrun_monitor_ff_impl.cc
     xrun_monitor_cc_impl.cc
+    save_iq_for_failed_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)

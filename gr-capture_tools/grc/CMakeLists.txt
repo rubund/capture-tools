@@ -51,5 +51,6 @@ install(FILES
     capture_tools_fft_burst_tagger.xml
     capture_tools_tagged_burst_to_pdu.xml
     capture_tools_sync_and_strobe.xml
-    capture_tools_xrun_monitor_ff.xml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_xrun_monitor_ff.xml
+    capture_tools_save_iq_for_failed.xml DESTINATION share/gnuradio/grc/blocks
 )
