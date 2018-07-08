@@ -23,6 +23,8 @@
 
 #include <capture_tools/save_iq_for_failed.h>
 
+#include <list>
+
 namespace gr {
   namespace capture_tools {
 
@@ -36,7 +38,14 @@ namespace gr {
         std::string d_save_path;
         int d_length_to_save;
 
+        std::list<gr_complex *> d_chunks;
+
+        gr_complex *d_current_chunk;
+        int d_saved;
+        bool d_saving;
+
         void handler(pmt::pmt_t msg);
+        void complete_save();
 
      public:
       save_iq_for_failed_impl(int length_to_save, int max_in_queue, const char *save_path, int history);

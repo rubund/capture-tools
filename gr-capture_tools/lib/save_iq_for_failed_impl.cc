@@ -24,6 +24,7 @@
 
 #include <gnuradio/io_signature.h>
 #include "save_iq_for_failed_impl.h"
+#include <list>
 
 namespace gr {
   namespace capture_tools {
@@ -49,6 +50,10 @@ namespace gr {
         d_save_path = std::string(save_path);
         message_port_register_in(pmt::mp("passfail"));
         set_msg_handler(pmt::mp("passfail"),boost::bind(&save_iq_for_failed_impl::handler, this, _1));
+
+        d_current_chunk = NULL;
+        d_saving = false;
+        d_saved = 0;
     }
 
     /*
@@ -69,6 +74,12 @@ namespace gr {
     {
     }
 
+    void
+    save_iq_for_failed_impl::complete_save() {
+        d_saving = false;
+        delete d_current_chunk;
+    }
+
     int
     save_iq_for_failed_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
@@ -79,6 +90,9 @@ namespace gr {
 
       if (input_items.size() > 1)
           in_f = (const float *) input_items[1];
+
+      int curpos = 0;
+      int consumed = 0;
 
       std::vector<int> tag_positions;
       int next_tag_position_index = -1;
@@ -95,11 +109,41 @@ namespace gr {
           next_tag_position_index = 0;
       }
 
-      
-      // Do <+signal processing+>
+
+      if(!d_saving) {
+          if(next_tag_position_index >= 0) {
+            curpos = tag_positions[next_tag_position_index];
+            consumed += curpos;
+            next_tag_position_index++;
+            if (next_tag_position_index >= tag_positions.size())
+                next_tag_position_index = -1;
+            d_saving = true;
+            d_current_chunk = new gr_complex[d_length_to_save];
+            int tocopy = std::min(d_length_to_save, (noutput_items + d_nhistory - curpos));
+            memcpy(d_current_chunk, in+curpos, tocopy*sizeof(gr_complex));
+            consumed += tocopy;
+            d_saved += tocopy;
+            if (d_saved >= d_length_to_save) {
+                complete_save();
+            }
+          }
+          else {
+            consumed = noutput_items + d_nhistory;
+          }
+      }
+      else {
+            int tocopy = std::min(d_length_to_save - d_saved, noutput_items + d_nhistory);
+            memcpy(d_current_chunk + d_saved, in + d_nhistory, tocopy*sizeof(gr_complex));
+            consumed += tocopy;
+            d_saved += tocopy;
+            if (d_saved >= d_length_to_save) {
+                complete_save();
+            }
+      }
+
 
       // Tell runtime system how many output items we produced.
-      return noutput_items;
+      return consumed;
     }
 
   } /* namespace capture_tools */
