@@ -113,6 +113,7 @@ namespace gr {
       if(!d_saving) {
           if(next_tag_position_index >= 0) {
             curpos = tag_positions[next_tag_position_index];
+            uint64_t id_packet = pmt::to_uint64(tags[next_tag_position_index].value);
             consumed += curpos;
             next_tag_position_index++;
             if (next_tag_position_index >= tag_positions.size())
