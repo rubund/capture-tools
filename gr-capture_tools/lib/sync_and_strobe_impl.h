@@ -65,6 +65,7 @@ namespace gr {
         int d_packet_counter;
         std::vector<uint8_t> d_receive_buffer;
         int d_n_to_catch;
+        uint64_t d_address_cnt;
 
         boost::mutex common_mutex;
 
