@@ -22,7 +22,7 @@ self.$(id).set_search_tag($search_tag)</make>
   <param>
     <name>History</name>
     <key>history</key>
-    <value>0</value>
+    <value>1</value>
     <type>int</type>
   </param>
 

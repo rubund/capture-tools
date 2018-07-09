@@ -120,7 +120,7 @@ namespace gr {
                 next_tag_position_index = -1;
             d_saving = true;
             d_current_chunk = new gr_complex[d_length_to_save];
-            int tocopy = std::min(d_length_to_save, (noutput_items + d_nhistory - curpos));
+            int tocopy = std::min(d_length_to_save, (noutput_items + d_nhistory - 1 - curpos));
             memcpy(d_current_chunk, in+curpos, tocopy*sizeof(gr_complex));
             consumed += tocopy;
             d_saved += tocopy;
@@ -129,12 +129,12 @@ namespace gr {
             }
           }
           else {
-            consumed = noutput_items + d_nhistory;
+            consumed = noutput_items + d_nhistory - 1;
           }
       }
       else {
-            int tocopy = std::min(d_length_to_save - d_saved, noutput_items + d_nhistory);
-            memcpy(d_current_chunk + d_saved, in + d_nhistory, tocopy*sizeof(gr_complex));
+            int tocopy = std::min(d_length_to_save - d_saved, noutput_items + d_nhistory - 1);
+            memcpy(d_current_chunk + d_saved, in + d_nhistory - 1, tocopy*sizeof(gr_complex));
             consumed += tocopy;
             d_saved += tocopy;
             if (d_saved >= d_length_to_save) {
