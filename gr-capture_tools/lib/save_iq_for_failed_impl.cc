@@ -73,6 +73,17 @@ namespace gr {
     void
     save_iq_for_failed_impl::handler(pmt::pmt_t msg)
     {
+        uint64_t packet_id;
+        bool passfail;
+        if (pmt::dict_has_key(msg, pmt::mp("packet_id")))
+            packet_id = pmt::to_uint64(pmt::dict_ref(msg, pmt::mp("packet_id"), pmt::PMT_NIL));
+        if (pmt::dict_has_key(msg, pmt::mp("passfail")))
+            passfail = pmt::to_bool(pmt::dict_ref(msg, pmt::mp("passfail"), pmt::PMT_NIL));
+
+        std::tuple<uint64_t, bool> *new_tuple = new std::tuple<uint64_t, bool>(packet_id, passfail);
+
+        d_passfail.push_back(new_tuple);
+        //delete new_tuple;
     }
 
     void
@@ -80,6 +91,10 @@ namespace gr {
         d_saving = false;
         d_saved = 0;
         delete d_current_chunk;
+        std::list<std::tuple<uint64_t,bool> *>::iterator it;
+        for(it=d_passfail.begin(); it != d_passfail.end(); ++it) {
+            std::cout << std::get<0>(**it) << std::endl;
+        }
     }
 
     int

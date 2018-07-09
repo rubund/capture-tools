@@ -24,6 +24,7 @@
 #include <capture_tools/save_iq_for_failed.h>
 
 #include <list>
+#include <tuple>
 
 namespace gr {
   namespace capture_tools {
@@ -39,6 +40,8 @@ namespace gr {
         int d_length_to_save;
 
         std::list<gr_complex *> d_chunks;
+        std::list<int> d_indices;
+        std::list<std::tuple<uint64_t,bool> *> d_passfail;
 
         gr_complex *d_current_chunk;
         int d_saved;
