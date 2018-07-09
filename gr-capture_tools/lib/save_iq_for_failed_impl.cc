@@ -148,6 +148,10 @@ namespace gr {
                 location++;
             }
         }
+
+        //std::cout << "Size list d_passfail: " << d_passfail.size() << std::endl;
+        //std::cout << "Size list d_chunks:   " << d_chunks.size() << std::endl;
+        //std::cout << "Size list d_indices:  " << d_indices.size() << std::endl;
     }
 
     void
