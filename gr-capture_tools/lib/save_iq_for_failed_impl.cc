@@ -52,6 +52,7 @@ namespace gr {
 
         assert(length_to_save > history);
 
+        d_current_id = -1;
         d_current_chunk = NULL;
         d_saving = false;
         d_saved = 0;
@@ -81,20 +82,77 @@ namespace gr {
             passfail = pmt::to_bool(pmt::dict_ref(msg, pmt::mp("passfail"), pmt::PMT_NIL));
 
         std::tuple<uint64_t, bool> *new_tuple = new std::tuple<uint64_t, bool>(packet_id, passfail);
+        printf("packet id: %d, passfail: %d\n", packet_id, passfail);
+
+        gr::thread::scoped_lock lock(fp_merge_lock);
 
         d_passfail.push_back(new_tuple);
-        //delete new_tuple;
+        merge_them();
     }
 
     void
     save_iq_for_failed_impl::complete_save() {
         d_saving = false;
         d_saved = 0;
-        delete d_current_chunk;
+
+        gr::thread::scoped_lock lock(fp_merge_lock);
+
+        d_chunks.push_back(d_current_chunk);
+        d_indices.push_back(d_current_id);
+        //delete d_current_chunk;
         std::list<std::tuple<uint64_t,bool> *>::iterator it;
         for(it=d_passfail.begin(); it != d_passfail.end(); ++it) {
-            std::cout << std::get<0>(**it) << std::endl;
         }
+        merge_them();
+    }
+
+    void
+    save_iq_for_failed_impl::merge_them() {
+        std::list<std::tuple<uint64_t,bool> *>::iterator it_passfail;
+        std::list<uint64_t>::iterator it_indices;
+        std::list<gr_complex *>::iterator it_chunks;
+
+        int location = 0;
+        bool didsomething = true;
+        while(didsomething) {
+            didsomething = false;
+            for(it_indices=d_indices.begin(); it_indices != d_indices.end(); ++it_indices) {
+                bool found = false;
+                bool iscrcok;
+                for (it_passfail=d_passfail.begin(); it_passfail != d_passfail.end(); ++it_passfail) {
+                    int passfail_index = std::get<0>(**it_passfail);
+                    if ((*it_indices) == passfail_index) {
+                        iscrcok = std::get<1>(**it_passfail);
+                        found = true;
+                        delete *it_passfail;
+                        d_passfail.remove(*it_passfail);
+                        break;
+                    }
+                }
+
+                if(found) {
+                    didsomething = true;
+                    int chunk_location = 0;
+                    for(it_chunks=d_chunks.begin(); it_chunks != d_chunks.end() ; ++it_chunks) {
+                        if(chunk_location == location) {
+                            save_chunk_to_file(*it_chunks);
+                            delete *it_chunks;
+                            d_chunks.remove(*it_chunks);
+                            break;
+                        }
+                        chunk_location++;
+                    }
+                    d_indices.remove(*it_indices);
+                    break;
+                }
+                location++;
+            }
+        }
+    }
+
+    void
+    save_iq_for_failed_impl::save_chunk_to_file(gr_complex * chunk) {
+        printf("Saving to file\n");
     }
 
     int
@@ -131,6 +189,7 @@ namespace gr {
           if(next_tag_position_index >= 0) {
             curpos = tag_positions[next_tag_position_index];
             uint64_t id_packet = pmt::to_uint64(tags[next_tag_position_index].value);
+            d_current_id = id_packet;
             consumed += curpos;
             next_tag_position_index++;
             if (next_tag_position_index >= tag_positions.size())

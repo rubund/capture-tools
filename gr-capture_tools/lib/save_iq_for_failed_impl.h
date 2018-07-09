@@ -25,6 +25,7 @@
 
 #include <list>
 #include <tuple>
+#include <boost/thread/mutex.hpp>
 
 namespace gr {
   namespace capture_tools {
@@ -40,15 +41,20 @@ namespace gr {
         int d_length_to_save;
 
         std::list<gr_complex *> d_chunks;
-        std::list<int> d_indices;
+        std::list<uint64_t> d_indices;
         std::list<std::tuple<uint64_t,bool> *> d_passfail;
 
         gr_complex *d_current_chunk;
+        int d_current_id;
         int d_saved;
         bool d_saving;
 
+        boost::mutex fp_merge_lock;
+
         void handler(pmt::pmt_t msg);
         void complete_save();
+        void merge_them();
+        void save_chunk_to_file(gr_complex * chunk);
 
      public:
       save_iq_for_failed_impl(int length_to_save, int max_in_queue, const char *save_path, int history);
