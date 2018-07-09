@@ -361,6 +361,7 @@ namespace gr {
                         add_item_tag(0, nitems_written(0) + i, pmt::intern("address"), pmt::from_uint64(d_address_cnt), pmt::intern(""));
                         nstate = 2;
                         d_timeout_cnt = 0;
+                        d_this_address_cnt = d_address_cnt;
                         d_address_cnt++;
                         d_packet_counter = 0;
                         d_receive_buffer.clear();
@@ -397,7 +398,7 @@ namespace gr {
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("offset_addressmatch"), pmt::from_uint64(d_current_burst_offset + d_cnt_at_addressmatch*d_decim_in_front));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("sample_rate"), pmt::from_float(d_current_burst_sample_rate));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("magnitude"), pmt::from_float(20*log10(d_mag_at_addressmatch)));
-                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("address_cnt"), pmt::from_uint64(d_address_cnt));
+                        pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("address_cnt"), pmt::from_uint64(d_this_address_cnt));
                         pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
                         message_port_pub(pmt::mp("packets"), out_msg);
 
