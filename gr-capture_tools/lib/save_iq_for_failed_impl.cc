@@ -135,7 +135,7 @@ namespace gr {
                     int chunk_location = 0;
                     for(it_chunks=d_chunks.begin(); it_chunks != d_chunks.end() ; ++it_chunks) {
                         if(chunk_location == location) {
-                            save_chunk_to_file(*it_chunks);
+                            save_chunk_to_file(*it_chunks, *it_indices);
                             delete *it_chunks;
                             d_chunks.remove(*it_chunks);
                             break;
@@ -155,8 +155,19 @@ namespace gr {
     }
 
     void
-    save_iq_for_failed_impl::save_chunk_to_file(gr_complex * chunk) {
-        printf("Saving to file\n");
+    save_iq_for_failed_impl::save_chunk_to_file(gr_complex * chunk, uint64_t id) {
+        std::ostringstream full_path_ss;
+        full_path_ss << d_save_path << "/" <<  id << ".cfile";
+        std::string full_path = full_path_ss.str();
+        FILE *fp = fopen(full_path.c_str(), "w");
+        printf("Saving to file: %d\n"), id;
+        int written;
+        int left_to_write = d_length_to_save;
+        while (left_to_write > 0) {
+            written = fwrite(chunk,sizeof(gr_complex),left_to_write,fp);
+            left_to_write -= written;
+        }
+        fclose(fp);
     }
 
     int

@@ -54,7 +54,7 @@ namespace gr {
         void handler(pmt::pmt_t msg);
         void complete_save();
         void merge_them();
-        void save_chunk_to_file(gr_complex * chunk);
+        void save_chunk_to_file(gr_complex * chunk, uint64_t id);
 
      public:
       save_iq_for_failed_impl(int length_to_save, int max_in_queue, const char *save_path, int history);
