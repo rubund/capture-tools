@@ -45,11 +45,12 @@ namespace gr {
               gr::io_signature::make(0, 0, 0)),
             d_nhistory(history), d_max_in_queue(max_in_queue), d_length_to_save(length_to_save)
     {
-        if (history > 0)
-            set_history(history);
+        set_history(history);
         d_save_path = std::string(save_path);
         message_port_register_in(pmt::mp("passfail"));
         set_msg_handler(pmt::mp("passfail"),boost::bind(&save_iq_for_failed_impl::handler, this, _1));
+
+        assert(length_to_save > history);
 
         d_current_chunk = NULL;
         d_saving = false;
@@ -77,6 +78,7 @@ namespace gr {
     void
     save_iq_for_failed_impl::complete_save() {
         d_saving = false;
+        d_saved = 0;
         delete d_current_chunk;
     }
 
@@ -122,18 +124,18 @@ namespace gr {
             d_current_chunk = new gr_complex[d_length_to_save];
             int tocopy = std::min(d_length_to_save, (noutput_items + d_nhistory - 1 - curpos));
             memcpy(d_current_chunk, in+curpos, tocopy*sizeof(gr_complex));
-            consumed += tocopy;
-            d_saved += tocopy;
+            consumed += tocopy - d_nhistory + 1;
+            d_saved = tocopy;
             if (d_saved >= d_length_to_save) {
                 complete_save();
             }
           }
           else {
-            consumed = noutput_items + d_nhistory - 1;
+            consumed = noutput_items;
           }
       }
       else {
-            int tocopy = std::min(d_length_to_save - d_saved, noutput_items + d_nhistory - 1);
+            int tocopy = std::min(d_length_to_save - d_saved, noutput_items);
             memcpy(d_current_chunk + d_saved, in + d_nhistory - 1, tocopy*sizeof(gr_complex));
             consumed += tocopy;
             d_saved += tocopy;
