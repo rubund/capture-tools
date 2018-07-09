@@ -46,6 +46,7 @@ namespace gr {
             d_nhistory(history), d_max_in_queue(max_in_queue), d_length_to_save(length_to_save)
     {
         set_history(history);
+        mkdir(save_path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
         d_save_path = std::string(save_path);
         message_port_register_in(pmt::mp("passfail"));
         set_msg_handler(pmt::mp("passfail"),boost::bind(&save_iq_for_failed_impl::handler, this, _1));
@@ -135,7 +136,8 @@ namespace gr {
                     int chunk_location = 0;
                     for(it_chunks=d_chunks.begin(); it_chunks != d_chunks.end() ; ++it_chunks) {
                         if(chunk_location == location) {
-                            save_chunk_to_file(*it_chunks, *it_indices);
+                            if (!iscrcok)
+                                save_chunk_to_file(*it_chunks, *it_indices);
                             delete *it_chunks;
                             d_chunks.remove(*it_chunks);
                             break;
