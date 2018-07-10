@@ -45,6 +45,7 @@ namespace gr {
               gr::io_signature::make(0, 0, 0)),
             d_nhistory(history), d_max_in_queue(max_in_queue), d_length_to_save(length_to_save)
     {
+        d_mag_threshold = -1e12;
         set_history(history);
         mkdir(save_path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
         d_save_path = std::string(save_path);
@@ -67,6 +68,12 @@ namespace gr {
     }
 
     void
+    save_iq_for_failed_impl::set_mag_threshold(float val)
+    {
+        d_mag_threshold = val;
+    }
+
+    void
     save_iq_for_failed_impl::set_search_tag(const std::string &tag_str)
     {
       d_search_tag = pmt::intern(tag_str);
@@ -75,15 +82,18 @@ namespace gr {
     void
     save_iq_for_failed_impl::handler(pmt::pmt_t msg)
     {
-        uint64_t packet_id;
+        uint64_t packet_id = -1;
         bool passfail;
+        float magnitude = -1e12;
         if (pmt::dict_has_key(msg, pmt::mp("packet_id")))
             packet_id = pmt::to_uint64(pmt::dict_ref(msg, pmt::mp("packet_id"), pmt::PMT_NIL));
         if (pmt::dict_has_key(msg, pmt::mp("passfail")))
             passfail = pmt::to_bool(pmt::dict_ref(msg, pmt::mp("passfail"), pmt::PMT_NIL));
+        if (pmt::dict_has_key(msg, pmt::mp("magnitude")))
+            magnitude = pmt::to_float(pmt::dict_ref(msg, pmt::mp("magnitude"), pmt::PMT_NIL));
 
-        std::tuple<uint64_t, bool> *new_tuple = new std::tuple<uint64_t, bool>(packet_id, passfail);
-        printf("packet id: %d, passfail: %d\n", packet_id, passfail);
+        std::tuple<uint64_t, bool, float> *new_tuple = new std::tuple<uint64_t, bool, float>(packet_id, passfail, magnitude);
+        printf("packet id: %d, passfail: %d, magnitude: %f\n", packet_id, passfail, magnitude);
 
         gr::thread::scoped_lock lock(fp_merge_lock);
 
@@ -101,7 +111,7 @@ namespace gr {
         d_chunks.push_back(d_current_chunk);
         d_indices.push_back(d_current_id);
         //delete d_current_chunk;
-        std::list<std::tuple<uint64_t,bool> *>::iterator it;
+        std::list<std::tuple<uint64_t,bool,float> *>::iterator it;
         for(it=d_passfail.begin(); it != d_passfail.end(); ++it) {
         }
         merge_them();
@@ -109,7 +119,7 @@ namespace gr {
 
     void
     save_iq_for_failed_impl::merge_them() {
-        std::list<std::tuple<uint64_t,bool> *>::iterator it_passfail;
+        std::list<std::tuple<uint64_t,bool,float> *>::iterator it_passfail;
         std::list<uint64_t>::iterator it_indices;
         std::list<gr_complex *>::iterator it_chunks;
 
@@ -120,10 +130,12 @@ namespace gr {
             for(it_indices=d_indices.begin(); it_indices != d_indices.end(); ++it_indices) {
                 bool found = false;
                 bool iscrcok;
+                float magnitude;
                 for (it_passfail=d_passfail.begin(); it_passfail != d_passfail.end(); ++it_passfail) {
                     int passfail_index = std::get<0>(**it_passfail);
                     if ((*it_indices) == passfail_index) {
                         iscrcok = std::get<1>(**it_passfail);
+                        magnitude = std::get<2>(**it_passfail);
                         found = true;
                         delete *it_passfail;
                         d_passfail.remove(*it_passfail);
@@ -136,7 +148,7 @@ namespace gr {
                     int chunk_location = 0;
                     for(it_chunks=d_chunks.begin(); it_chunks != d_chunks.end() ; ++it_chunks) {
                         if(chunk_location == location) {
-                            if (!iscrcok)
+                            if (!iscrcok && magnitude > d_mag_threshold)
                                 save_chunk_to_file(*it_chunks, *it_indices);
                             delete *it_chunks;
                             d_chunks.remove(*it_chunks);

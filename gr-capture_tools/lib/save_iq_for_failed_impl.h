@@ -33,6 +33,7 @@ namespace gr {
     class save_iq_for_failed_impl : public save_iq_for_failed
     {
      private:
+      float d_mag_threshold;
       // Nothing to declare in this block.
         int d_nhistory;
       pmt::pmt_t d_search_tag;
@@ -42,7 +43,7 @@ namespace gr {
 
         std::list<gr_complex *> d_chunks;
         std::list<uint64_t> d_indices;
-        std::list<std::tuple<uint64_t,bool> *> d_passfail;
+        std::list<std::tuple<uint64_t,bool,float> *> d_passfail;
 
         gr_complex *d_current_chunk;
         int d_current_id;
@@ -67,6 +68,7 @@ namespace gr {
 
        
       void set_search_tag(const std::string &);
+      void set_mag_threshold(float val);
     };
 
   } // namespace capture_tools

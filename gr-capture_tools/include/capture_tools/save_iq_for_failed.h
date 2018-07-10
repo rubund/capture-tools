@@ -49,6 +49,7 @@ namespace gr {
       static sptr make(int length_to_save, int max_in_queue, const char *save_path, int history=0);
 
       virtual void set_search_tag(const std::string &)=0;
+      virtual void set_mag_threshold(float val)=0;
     };
 
   } // namespace capture_tools

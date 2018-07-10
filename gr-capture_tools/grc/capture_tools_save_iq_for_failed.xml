@@ -5,7 +5,9 @@
   <category>[capture_tools]</category>
   <import>import capture_tools</import>
   <make>capture_tools.save_iq_for_failed($length_to_save, $max_in_queue, $save_path, $history)
-self.$(id).set_search_tag($search_tag)</make>
+self.$(id).set_search_tag($search_tag)
+self.$(id).set_mag_threshold($mag_threshold)</make>
+  <callback>self.$(id).set_mag_threshold($mag_threshold)</callback>
   <callback>self.$(id).set_search_tag($search_tag)</callback>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
@@ -52,6 +54,13 @@ self.$(id).set_search_tag($search_tag)</make>
        * type
        * vlen
        * optional (set to 1 for optional inputs) -->
+  <param>
+    <name>mag_threshold</name>
+    <key>mag_threshold</key>
+    <value>-1e12</value>
+    <type>float</type>
+  </param>
+
   <sink>
     <name>in</name>
     <type>complex</type>
