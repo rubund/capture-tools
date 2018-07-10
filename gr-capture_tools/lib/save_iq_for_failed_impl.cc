@@ -58,6 +58,7 @@ namespace gr {
         d_current_chunk = NULL;
         d_saving = false;
         d_saved = 0;
+        d_file_counter = 1;
     }
 
     /*
@@ -171,7 +172,7 @@ namespace gr {
     void
     save_iq_for_failed_impl::save_chunk_to_file(gr_complex * chunk, uint64_t id) {
         std::ostringstream full_path_ss;
-        full_path_ss << d_save_path << "/" <<  id << ".cfile";
+        full_path_ss << d_save_path << "/" <<  d_file_counter << ".cfile";
         std::string full_path = full_path_ss.str();
         FILE *fp = fopen(full_path.c_str(), "w");
         printf("Saving to file: %d\n", id);
@@ -182,6 +183,7 @@ namespace gr {
             left_to_write -= written;
         }
         fclose(fp);
+        d_file_counter++;
     }
 
     int

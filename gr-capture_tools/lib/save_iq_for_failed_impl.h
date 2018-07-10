@@ -40,6 +40,7 @@ namespace gr {
         int d_max_in_queue;
         std::string d_save_path;
         int d_length_to_save;
+        uint64_t d_file_counter;
 
         std::list<gr_complex *> d_chunks;
         std::list<uint64_t> d_indices;
