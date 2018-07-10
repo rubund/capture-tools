@@ -41,6 +41,7 @@ namespace gr {
         std::string d_save_path;
         int d_length_to_save;
         uint64_t d_file_counter;
+        std::string d_log_file_path;
 
         std::list<gr_complex *> d_chunks;
         std::list<uint64_t> d_indices;
@@ -56,7 +57,7 @@ namespace gr {
         void handler(pmt::pmt_t msg);
         void complete_save();
         void merge_them();
-        void save_chunk_to_file(gr_complex * chunk, uint64_t id);
+        void save_chunk_to_file(gr_complex * chunk, uint64_t id, float magnitude, bool iscrcok);
 
      public:
       save_iq_for_failed_impl(int length_to_save, int max_in_queue, const char *save_path, int history);

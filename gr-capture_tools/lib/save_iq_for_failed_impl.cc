@@ -59,6 +59,12 @@ namespace gr {
         d_saving = false;
         d_saved = 0;
         d_file_counter = 1;
+
+        std::ostringstream log_file_path_ss;
+        log_file_path_ss << d_save_path << "/packets.log";
+        d_log_file_path = log_file_path_ss.str();
+        FILE *fp = fopen(d_log_file_path.c_str(), "w");
+        fclose(fp);
     }
 
     /*
@@ -150,7 +156,7 @@ namespace gr {
                     for(it_chunks=d_chunks.begin(); it_chunks != d_chunks.end() ; ++it_chunks) {
                         if(chunk_location == location) {
                             if (!iscrcok && magnitude > d_mag_threshold)
-                                save_chunk_to_file(*it_chunks, *it_indices);
+                                save_chunk_to_file(*it_chunks, *it_indices, magnitude, iscrcok);
                             delete *it_chunks;
                             d_chunks.remove(*it_chunks);
                             break;
@@ -170,7 +176,7 @@ namespace gr {
     }
 
     void
-    save_iq_for_failed_impl::save_chunk_to_file(gr_complex * chunk, uint64_t id) {
+    save_iq_for_failed_impl::save_chunk_to_file(gr_complex * chunk, uint64_t id, float magnitude, bool iscrcok) {
         std::ostringstream full_path_ss;
         full_path_ss << d_save_path << "/" <<  d_file_counter << ".cfile";
         std::string full_path = full_path_ss.str();
@@ -183,6 +189,10 @@ namespace gr {
             left_to_write -= written;
         }
         fclose(fp);
+        FILE *fp_log = fopen(d_log_file_path.c_str(), "a");
+        fprintf(fp_log, "filename: %s, id: %d, magnitude: %f, iscrcok: %d\n", full_path.c_str(), id, magnitude, iscrcok);
+        fflush(fp_log);
+        fclose(fp_log);
         d_file_counter++;
     }
 
