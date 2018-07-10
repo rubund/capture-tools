@@ -162,7 +162,7 @@ namespace gr {
         full_path_ss << d_save_path << "/" <<  id << ".cfile";
         std::string full_path = full_path_ss.str();
         FILE *fp = fopen(full_path.c_str(), "w");
-        printf("Saving to file: %d\n"), id;
+        printf("Saving to file: %d\n", id);
         int written;
         int left_to_write = d_length_to_save;
         while (left_to_write > 0) {
