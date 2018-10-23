@@ -23,6 +23,9 @@
 #endif
 
 #include <gnuradio/io_signature.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <string>
 #include "save_iq_for_failed_impl.h"
 #include <list>
 
