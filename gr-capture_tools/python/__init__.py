@@ -26,7 +26,7 @@ description here (python/__init__.py).
 # import swig generated symbols into the capture_tools namespace
 try:
 	# this might fail if the module is python-only
-	from capture_tools_swig import *
+	from .capture_tools_swig import *
 except ImportError:
 	pass
 
