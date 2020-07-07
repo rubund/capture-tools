@@ -87,17 +87,14 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, add_at_tag_cc);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, file_source_tag_end);
 
 
-%include "capture_tools/vector_source_b.h"
-%include "capture_tools/vector_source_s.h"
-%include "capture_tools/vector_source_i.h"
-%include "capture_tools/vector_source_f.h"
-%include "capture_tools/vector_source_c.h"
+%include "capture_tools/vector_source.h"
 
-GR_SWIG_BLOCK_MAGIC2(capture_tools, vector_source_b);
-GR_SWIG_BLOCK_MAGIC2(capture_tools, vector_source_s);
-GR_SWIG_BLOCK_MAGIC2(capture_tools, vector_source_i);
-GR_SWIG_BLOCK_MAGIC2(capture_tools, vector_source_f);
-GR_SWIG_BLOCK_MAGIC2(capture_tools, vector_source_c);
+GR_SWIG_BLOCK_MAGIC2_TMPL(capture_tools, vector_source_b, vector_source<std::uint8_t>);
+GR_SWIG_BLOCK_MAGIC2_TMPL(capture_tools, vector_source_s, vector_source<std::int16_t>);
+GR_SWIG_BLOCK_MAGIC2_TMPL(capture_tools, vector_source_i, vector_source<std::int32_t>);
+GR_SWIG_BLOCK_MAGIC2_TMPL(capture_tools, vector_source_f, vector_source<float>);
+GR_SWIG_BLOCK_MAGIC2_TMPL(capture_tools, vector_source_c, vector_source<gr_complex>);
+
 
 %include "capture_tools/head_tag_end.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, head_tag_end);

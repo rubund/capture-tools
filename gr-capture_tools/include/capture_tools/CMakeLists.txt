@@ -59,5 +59,6 @@ install(FILES
     sync_and_strobe.h
     xrun_monitor_ff.h
     xrun_monitor_cc.h
+    vector_source.h
     save_iq_for_failed.h DESTINATION include/capture_tools
 )

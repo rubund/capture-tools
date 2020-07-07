@@ -23,7 +23,6 @@
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 
-
 include_directories(${Boost_INCLUDE_DIR})
 
 list(APPEND capture_tools_sources
@@ -63,6 +62,7 @@ list(APPEND capture_tools_sources
     xrun_monitor_ff_impl.cc
     xrun_monitor_cc_impl.cc
     save_iq_for_failed_impl.cc
+    vector_source_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)
