@@ -17,13 +17,6 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-include(GrMiscUtils)
-GR_EXPAND_X_H(blocks vector_source_X    b s i f c)
-
-add_custom_target(blocks_generated_includes DEPENDS
-    ${generated_includes}
-)
-
 
 ########################################################################
 # Install public header files
@@ -66,5 +59,6 @@ install(FILES
     sync_and_strobe.h
     xrun_monitor_ff.h
     xrun_monitor_cc.h
+    vector_source.h
     save_iq_for_failed.h DESTINATION include/capture_tools
 )
