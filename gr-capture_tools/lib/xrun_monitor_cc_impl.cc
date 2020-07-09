@@ -255,7 +255,7 @@ namespace gr {
       produced += to_produce;
       consumed += to_produce;
       for(int k=0;k<inject_samples;k++) {
-        printf("Injecting %d samples\n", inject_samples);
+        printf("Injecting %d samples (%f)\n", inject_samples, fill_percentage);
         out[outpos+to_produce+k] = out[outpos+to_produce-1];
         produced++;
       }
@@ -290,7 +290,7 @@ namespace gr {
       }
       consumed += tosave;
       if (ninput_items_reduced < ninput_items[0]) {
-        printf("Dropping %d samples\n", drop_samples);
+        printf("Dropping %d samples (%f)\n", drop_samples, fill_percentage);
         consumed += drop_samples;
       }
 
