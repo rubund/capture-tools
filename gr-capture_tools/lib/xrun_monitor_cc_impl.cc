@@ -135,24 +135,35 @@ namespace gr {
       int toread;
       int outpos = 0;
 
+      int inject_samples = 0;
+      int noutput_items_reduced;
+      if (noutput_items > 0) {
+        if (fill_percentage < 65)
+          inject_samples = 2;
+        else if (fill_percentage < 75)
+          inject_samples = 1;
+      }
+
+      noutput_items_reduced = noutput_items - inject_samples;
+
       if (d_read_index < d_write_index) {
         toread = d_write_index - d_read_index;
-        to_produce_here = std::min(toread, noutput_items);
+        to_produce_here = std::min(toread, noutput_items_reduced);
         memcpy(out, d_buffer + d_read_index, sizeof(gr_complex) * to_produce_here);
         d_read_index += to_produce_here;
-        remaining = noutput_items - to_produce_here;
+        remaining = noutput_items_reduced - to_produce_here;
         outpos = to_produce_here;
         produced += to_produce_here;
       }
       else if (d_read_index == d_write_index){
-        remaining = noutput_items;
+        remaining = noutput_items_reduced;
         outpos = 0;
       }
       else {
         toread = d_length - d_read_index;
-        to_produce_here = std::min(toread, noutput_items);
+        to_produce_here = std::min(toread, noutput_items_reduced);
         memcpy(out, d_buffer + d_read_index, sizeof(gr_complex) * to_produce_here);
-        remaining = noutput_items - to_produce_here;
+        remaining = noutput_items_reduced - to_produce_here;
         produced += to_produce_here;
         if (remaining > 0) {
             int to_produce_here2 = std::min(d_write_index, remaining);
@@ -179,6 +190,10 @@ namespace gr {
       memcpy(out+outpos, in, sizeof(gr_complex) * to_produce);
       produced += to_produce;
       consumed += to_produce;
+      for(int k=0;k<inject_samples;k++) {
+        out[outpos+to_produce+k] = out[outpos+to_produce-1];
+        produced++;
+      }
       //if ((to_produce_here + to_produce) <= d_length) {
       //}
       //else {
