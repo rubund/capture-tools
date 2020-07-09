@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /* 
- * Copyright 2018 <+YOU OR YOUR COMPANY+>.
+ * Copyright 2018 Ruben Undheim <ruben.undheim@gmail.com>
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,6 +52,8 @@ namespace gr {
         d_first = true;
         d_starting = true;
         d_drop_when_full = false;
+        d_stop_until_tag = false;
+        d_report_fill = true;
     }
 
     /*
@@ -84,16 +86,34 @@ namespace gr {
                 current_fill = d_length - d_read_index + d_write_index;
 
             float fill_percentage = (((float)current_fill)/((float)d_length))*100;
-            if(fill_percentage > 30 || d_starting) {
+            if(fill_percentage > 10 || d_starting) {
                 ninput_items_required[0] = 0;
             }
             else {
                 ninput_items_required[0] = noutput_items;
                 d_starting = true;
-                printf("Fill fell below 30%% Starting again\n");
+                printf("Fill fell below 10%% Starting again\n");
             }
         }
 
+    }
+
+    void
+    xrun_monitor_cc_impl::set_report_fill(bool val)
+    {
+        d_report_fill = val;
+    }
+
+    void
+    xrun_monitor_cc_impl::stop_until_tag()
+    {
+        gr::thread::scoped_lock lock(common_mutex);
+        d_stop_until_tag = true;
+        d_n = 0;
+        d_write_index = 0;
+        d_read_index = 0;
+        d_first = true;
+        d_starting = true;
     }
 
     int
@@ -107,6 +127,29 @@ namespace gr {
         in  = (const gr_complex *) input_items[0];
       gr_complex *out = (gr_complex *) output_items[0];
 
+      gr::thread::scoped_lock lock(common_mutex);
+
+      int end_pos = -1;
+      if (d_stop_until_tag) {
+        std::vector<tag_t> tags;
+        get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + ninput_items[0], pmt::mp("audio_start"));
+        if (tags.size() > 0) {
+          end_pos = tags[0].offset - nitems_read(0);
+          d_stop_until_tag = false;
+        }
+        else {
+          consume_each(ninput_items[0]);
+          for(int i=0;i<noutput_items;i++) {
+            out[i] = 0;
+          }
+          return noutput_items;
+        }
+      }
+      if (end_pos > 0) {
+        consume_each(end_pos);
+        return 0;
+      }
+
       // Do <+signal processing+>
       int zeros_to_produce = 0;
       int current_fill;
@@ -119,7 +162,7 @@ namespace gr {
       }
       float fill_percentage;
       fill_percentage = (((float)current_fill)/((float)d_length))*100;
-      if (d_starting && fill_percentage < 50) {
+      if (d_starting && fill_percentage < 75) {
         zeros_to_produce = noutput_items;
         noutput_items = 0;
       }
@@ -127,6 +170,10 @@ namespace gr {
         d_starting = false;
       }
 
+      if (d_first && ninput_items[0] > 0) {
+        printf("xrun_monitor received first samples (%d). Waiting to fill up buffer..\n" , ninput_items[0]);
+        d_first = false;
+      }
 
       int produced = 0;
       int consumed = 0;
@@ -211,7 +258,6 @@ namespace gr {
       }
 
       if(tosave >= (d_length-current_fill)) {
-        printf("Buffer full!\n");
         tosave = d_length - current_fill - 1;
       }
 
@@ -239,7 +285,8 @@ namespace gr {
 
         if (d_n > 10000) {
             //printf("ninput_items: %d, noutput_items: %d\n", ninput_items[0], noutput_items);
-            printf("Fill: %f %\n", (((float)current_fill)/((float)d_length))*100);
+            if (d_report_fill)
+                printf("Fill: %f %\n", (((float)current_fill)/((float)d_length))*100);
             d_n = 0;
         }
 

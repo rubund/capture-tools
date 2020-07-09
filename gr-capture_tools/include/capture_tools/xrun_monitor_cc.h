@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /* 
- * Copyright 2018 <+YOU OR YOUR COMPANY+>.
+ * Copyright 2018 Ruben Undheim <ruben.undheim@gmail.com>
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,6 +49,8 @@ namespace gr {
       static sptr make(int length=500000);
 
       virtual void set_drop_when_full(bool val)=0;
+      virtual void stop_until_tag()=0;
+      virtual void set_report_fill(bool)=0;
     };
 
   } // namespace capture_tools

@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /* 
- * Copyright 2018 <+YOU OR YOUR COMPANY+>.
+ * Copyright 2018 Ruben Undheim <ruben.undheim@gmail.com>
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,10 @@ namespace gr {
       bool d_first;
       bool d_starting;
       bool d_drop_when_full;
+      bool d_stop_until_tag;
+      bool d_report_fill;
+
+      boost::mutex common_mutex;
 
      public:
       xrun_monitor_cc_impl(int length);
@@ -52,6 +56,8 @@ namespace gr {
          gr_vector_void_star &output_items);
 
       void set_drop_when_full(bool val);
+      void stop_until_tag();
+      void set_report_fill(bool val);
 
     };
 
