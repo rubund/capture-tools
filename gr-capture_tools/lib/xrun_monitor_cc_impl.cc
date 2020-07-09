@@ -183,12 +183,17 @@ namespace gr {
       int outpos = 0;
 
       int inject_samples = 0;
+      int drop_samples = 0;
       int noutput_items_reduced;
       if (noutput_items > 0) {
-        if (fill_percentage < 65)
-          inject_samples = 2;
-        else if (fill_percentage < 75)
-          inject_samples = 1;
+        if (fill_percentage < 55)
+          inject_samples = 8;
+        else if (fill_percentage < 65)
+          inject_samples = 4;
+        if (fill_percentage > 95)
+          drop_samples = 8;
+        else if (fill_percentage > 88)
+          drop_samples = 4;
       }
 
       noutput_items_reduced = noutput_items - inject_samples;
@@ -238,6 +243,7 @@ namespace gr {
       produced += to_produce;
       consumed += to_produce;
       for(int k=0;k<inject_samples;k++) {
+        printf("Injecting %d samples\n", inject_samples);
         out[outpos+to_produce+k] = out[outpos+to_produce-1];
         produced++;
       }
@@ -271,6 +277,10 @@ namespace gr {
         d_write_index = tosave - (d_length - d_write_index);
       }
       consumed += tosave;
+      if ((drop_samples > 0) && (consumed + drop_samples) <= ninput_items[0]) {
+        printf("Dropping %d samples\n", drop_samples);
+        consumed += drop_samples;
+      }
 
       d_n += noutput_items;
 
