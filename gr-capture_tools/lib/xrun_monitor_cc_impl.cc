@@ -130,6 +130,31 @@ namespace gr {
       gr::thread::scoped_lock lock(common_mutex);
 
       int end_pos = -1;
+
+      int current_fill;
+      if (d_read_index < d_write_index)
+        current_fill = d_write_index - d_read_index;
+      else if (d_read_index == d_write_index)
+        current_fill = 0;
+      else {
+        current_fill = d_length - d_read_index + d_write_index;
+      }
+      float fill_percentage;
+      fill_percentage = (((float)current_fill)/((float)d_length))*100;
+
+      int inject_samples = 0;
+      int drop_samples = 0;
+      if (!d_starting && noutput_items > 0) {
+        if (fill_percentage < 55)
+          inject_samples = 8;
+        else if (fill_percentage < 65)
+          inject_samples = 4;
+        if (fill_percentage > 95)
+          drop_samples = 8;
+        else if (fill_percentage > 88)
+          drop_samples = 4;
+      }
+
       if (d_stop_until_tag) {
         std::vector<tag_t> tags;
         get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + ninput_items[0], pmt::mp("audio_start"));
@@ -152,16 +177,6 @@ namespace gr {
 
       // Do <+signal processing+>
       int zeros_to_produce = 0;
-      int current_fill;
-      if (d_read_index < d_write_index)
-        current_fill = d_write_index - d_read_index;
-      else if (d_read_index == d_write_index)
-        current_fill = 0;
-      else {
-        current_fill = d_length - d_read_index + d_write_index;
-      }
-      float fill_percentage;
-      fill_percentage = (((float)current_fill)/((float)d_length))*100;
       if (d_starting && fill_percentage < 75) {
         zeros_to_produce = noutput_items;
         noutput_items = 0;
@@ -182,21 +197,12 @@ namespace gr {
       int toread;
       int outpos = 0;
 
-      int inject_samples = 0;
-      int drop_samples = 0;
       int noutput_items_reduced;
-      if (noutput_items > 0) {
-        if (fill_percentage < 55)
-          inject_samples = 8;
-        else if (fill_percentage < 65)
-          inject_samples = 4;
-        if (fill_percentage > 95)
-          drop_samples = 8;
-        else if (fill_percentage > 88)
-          drop_samples = 4;
-      }
 
-      noutput_items_reduced = noutput_items - inject_samples;
+      if (noutput_items >= inject_samples)
+        noutput_items_reduced = noutput_items - inject_samples;
+      else
+        noutput_items_reduced = noutput_items;
 
       if (d_read_index < d_write_index) {
         toread = d_write_index - d_read_index;
