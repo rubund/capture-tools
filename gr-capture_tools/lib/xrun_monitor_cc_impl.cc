@@ -155,6 +155,12 @@ namespace gr {
           drop_samples = 4;
       }
 
+      int ninput_items_reduced;
+      if (ninput_items[0] >= drop_samples)
+        ninput_items_reduced = ninput_items[0] - drop_samples;
+      else
+        ninput_items_reduced = ninput_items[0];
+
       if (d_stop_until_tag) {
         std::vector<tag_t> tags;
         get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + ninput_items[0], pmt::mp("audio_start"));
@@ -244,7 +250,7 @@ namespace gr {
         }
       }
 
-      int to_produce = std::min(ninput_items[0], remaining);
+      int to_produce = std::min(ninput_items_reduced, remaining);
       memcpy(out+outpos, in, sizeof(gr_complex) * to_produce);
       produced += to_produce;
       consumed += to_produce;
@@ -259,7 +265,7 @@ namespace gr {
       //    memcpy(out+to_produce_here, in, sizeof(gr_complex) * (d_length - (to_produce_here + to_produce)));
       //    memcpy(out+to_produce_here, in, sizeof(gr_complex) * (d_length - (to_produce_here + to_produce)));
       //}
-      int tosave = ninput_items[0] - (to_produce);
+      int tosave = ninput_items_reduced - (to_produce);
 
       if (d_read_index < d_write_index)
         current_fill = d_write_index - d_read_index;
@@ -283,7 +289,7 @@ namespace gr {
         d_write_index = tosave - (d_length - d_write_index);
       }
       consumed += tosave;
-      if ((drop_samples > 0) && (consumed + drop_samples) <= ninput_items[0]) {
+      if (ninput_items_reduced < ninput_items[0]) {
         printf("Dropping %d samples\n", drop_samples);
         consumed += drop_samples;
       }
