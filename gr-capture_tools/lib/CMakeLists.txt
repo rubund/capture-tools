@@ -63,6 +63,7 @@ list(APPEND capture_tools_sources
     xrun_monitor_cc_impl.cc
     save_iq_for_failed_impl.cc
     vector_source_impl.cc
+    print_tags_c_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)
