@@ -46,6 +46,7 @@ namespace gr {
               gr::blocks::file_sink_base(filename, true, append),
               d_itemsize(itemsize)
     {
+      d_fp_tags.open(tag_filename);
     }
 
     /*
@@ -53,6 +54,7 @@ namespace gr {
      */
     file_sink_store_tags_impl::~file_sink_store_tags_impl()
     {
+      d_fp_tags.close();
     }
 
     int
@@ -60,6 +62,8 @@ namespace gr {
         gr_vector_const_void_star &input_items,
         gr_vector_void_star &output_items)
     {
+      std::vector<tag_t> tags;
+
       char* inbuf = (char*)input_items[0];
       int nwritten = 0;
 
@@ -67,6 +71,13 @@ namespace gr {
 
       if (!d_fp)
           return noutput_items; // drop output on the floor
+
+
+      get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + noutput_items);
+      for(int i=0;i<tags.size();i++) {
+        d_fp_tags << "Found tag: " << pmt::symbol_to_string(tags[i].key);
+        d_fp_tags << " (index: " << tags[i].offset << ")" << std::endl;
+      }
 
       while (nwritten < noutput_items) {
           int count = fwrite(inbuf, d_itemsize, noutput_items - nwritten, d_fp);

@@ -22,6 +22,7 @@
 #define INCLUDED_CAPTURE_TOOLS_FILE_SINK_STORE_TAGS_IMPL_H
 
 #include <capture_tools/file_sink_store_tags.h>
+#include <fstream>
 
 namespace gr {
   namespace capture_tools {
@@ -30,6 +31,7 @@ namespace gr {
     {
      private:
      size_t d_itemsize;
+     std::ofstream d_fp_tags;
 
      public:
       file_sink_store_tags_impl(size_t itemsize, const char* filename, const char* tag_filename, bool append);
