@@ -76,3 +76,4 @@ GR_ADD_TEST(qa_sync_and_strobe ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/
 GR_ADD_TEST(qa_xrun_monitor_ff ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_xrun_monitor_ff.py)
 GR_ADD_TEST(qa_xrun_monitor_cc ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_xrun_monitor_cc.py)
 GR_ADD_TEST(qa_save_iq_for_failed ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_save_iq_for_failed.py)
+GR_ADD_TEST(qa_file_sink_store_tags ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_file_sink_store_tags.py)

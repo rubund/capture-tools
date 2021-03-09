@@ -64,6 +64,7 @@ list(APPEND capture_tools_sources
     save_iq_for_failed_impl.cc
     vector_source_impl.cc
     print_tags_c_impl.cc
+    file_sink_store_tags_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)

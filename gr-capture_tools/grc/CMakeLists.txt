@@ -53,5 +53,6 @@ install(FILES
     capture_tools_sync_and_strobe.block.yml
     capture_tools_xrun_monitor_ff.block.yml
     capture_tools_save_iq_for_failed.block.yml
-    capture_tools_print_tags_c.block.yml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_print_tags_c.block.yml
+    capture_tools_file_sink_store_tags.block.yml DESTINATION share/gnuradio/grc/blocks
 )

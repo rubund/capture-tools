@@ -46,6 +46,7 @@
 #include "capture_tools/xrun_monitor_cc.h"
 #include "capture_tools/save_iq_for_failed.h"
 #include "capture_tools/print_tags_c.h"
+#include "capture_tools/file_sink_store_tags.h"
 
 %}
 
@@ -135,3 +136,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, xrun_monitor_cc);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, save_iq_for_failed);
 %include "capture_tools/print_tags_c.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, print_tags_c);
+%include "capture_tools/file_sink_store_tags.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, file_sink_store_tags);
