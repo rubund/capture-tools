@@ -96,6 +96,8 @@ namespace gr {
         return true;
     }
 
+    void file_sink_store_tags_impl::set_unbuffered(bool unbuffered) { d_unbuffered = unbuffered; }
+
   } /* namespace capture_tools */
 } /* namespace gr */
 
