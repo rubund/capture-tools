@@ -48,7 +48,7 @@ namespace gr {
        */
       static sptr make(size_t itemsize, const char* filename, const char* tag_filename, bool append = false);
 
-      void set_unbuffered(bool unbuffered);
+      virtual void set_unbuffered(bool unbuffered)=0;
     };
 
   } // namespace capture_tools

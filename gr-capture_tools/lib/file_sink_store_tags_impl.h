@@ -46,7 +46,7 @@ namespace gr {
 
       bool stop() override;
 
-      void set_unbuffered(bool unbuffered);
+      void set_unbuffered(bool unbuffered) override;
     };
 
   } // namespace capture_tools
