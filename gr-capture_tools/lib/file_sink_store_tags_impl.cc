@@ -41,7 +41,7 @@ namespace gr {
      */
     file_sink_store_tags_impl::file_sink_store_tags_impl(size_t itemsize, const char* filename, const char* tag_filename, bool append)
       : gr::sync_block("file_sink_store_tags",
-              gr::io_signature::make(1, 1, sizeof(itemsize)),
+              gr::io_signature::make(1, 1, itemsize),
               gr::io_signature::make(0, 0, 0)),
               gr::blocks::file_sink_base(filename, true, append),
               d_itemsize(itemsize)
