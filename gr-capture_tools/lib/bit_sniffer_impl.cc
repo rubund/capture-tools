@@ -89,6 +89,7 @@ namespace gr {
         size_t packet_length = pmt::length(bit_msg);
         const uint8_t * bits = pmt::u8vector_elements(bit_msg, packet_length);
 
+        bool offset_handled = 0;
         float burst_frequency_mhz = 0;
         float burst_magnitude = 0;
         uint64_t burst_id = -1;
@@ -107,11 +108,34 @@ namespace gr {
 
         uint8_t * new_bits_diff = NULL;
         uint8_t * new_bits_invert = NULL;
+        uint8_t * new_bits_manchester = NULL;
 
 
         FILE *tmp = stdout;
         if (d_fp != NULL) tmp = d_fp;
-        // TODO: Add optional manchester decoding here before (manipulate packet_length/bits before code below)
+
+        if (d_special == 2 or d_special == 3) {
+            new_bits_manchester = new uint8_t[(packet_length/2) + 1];
+            int produced = 0;
+            offset_handled = 1;
+
+            for(int i=1+d_offset;i<packet_length;i+=2) {
+                if (bits[i-1] == 1 and bits[i] == 0) {
+                    if (d_special == 2) new_bits_manchester[produced] = 1;
+                    else                new_bits_manchester[produced] = 0;
+                }
+                else if (bits[i-1] == 0 and bits[i] == 1) {
+                    if (d_special == 2) new_bits_manchester[produced] = 0;
+                    else                new_bits_manchester[produced] = 1;
+                }
+                else {
+                    new_bits_manchester[produced] = 5;
+                }
+                produced++;
+            }
+            bits = new_bits_manchester;
+            packet_length = produced;
+        }
 
         if (d_diff) {
             std::ostringstream before;
@@ -242,7 +266,7 @@ namespace gr {
         for(int i=0;i<packet_length;i++) {
             uint8_t current_bit;
             current_bit = bits[i];
-            if (i < d_offset){
+            if (i < d_offset && offset_handled == 0){
                 bitcounter = 0;
                 continue;
             }
@@ -356,6 +380,7 @@ namespace gr {
 
         if (new_bits_diff != NULL) delete(new_bits_diff);
         if (new_bits_invert != NULL) delete(new_bits_invert);
+        if (new_bits_manchester != NULL) delete(new_bits_manchester);
 
 
         if(d_binary && d_hexadecimal)
