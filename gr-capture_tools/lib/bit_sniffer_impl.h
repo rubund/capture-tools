@@ -52,6 +52,7 @@ namespace gr {
         bool d_invert;
         bool d_info;
         bool d_show_magnitude;
+        std::vector<uint8_t> d_receive_buffer;
         FILE *d_fp;
 
      public:

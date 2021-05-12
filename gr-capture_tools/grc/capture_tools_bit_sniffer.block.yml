@@ -94,6 +94,11 @@ inputs:
 -   domain: message
     id: packets
 
+outputs:
+-   domain: message
+    id: formatted_packets
+    optional: true
+
 templates:
     imports: import capture_tools
     make: |-

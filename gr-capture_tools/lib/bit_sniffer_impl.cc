@@ -57,6 +57,7 @@ namespace gr {
         d_fp = NULL;
         message_port_register_in(pmt::mp("packets"));
         set_msg_handler(pmt::mp("packets"), boost::bind(&bit_sniffer_impl::handler, this, _1));
+        message_port_register_out(pmt::mp("formatted_packets"));
     }
 
     /*
@@ -109,6 +110,7 @@ namespace gr {
         if (pmt::dict_has_key(bit_meta, pmt::mp("source_name")))
             source_name = pmt::symbol_to_string(pmt::dict_ref(bit_meta, pmt::mp("source_name"), pmt::PMT_NIL));
 
+        d_receive_buffer.clear();
         uint8_t * new_bits_diff = NULL;
         uint8_t * new_bits_invert = NULL;
         uint8_t * new_bits_manchester = NULL;
@@ -242,7 +244,7 @@ namespace gr {
         std::ostringstream ascii_out;
 
         if(source_name.compare(""))
-            fprintf(tmp, " (%s)", source_name.c_str());
+            fprintf(tmp, " (%10s)", source_name.c_str());
         if(d_info) {
             fprintf(tmp, " Freq: %7.3f", burst_frequency_mhz);
             fprintf(tmp, ", Mag: %7.2f", burst_magnitude);
@@ -259,7 +261,7 @@ namespace gr {
             fprintf(tmp, ", Time: %04d-%02d-%02d %02d:%02d:%02d ", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         }
         else if (d_show_magnitude)
-            fprintf(tmp, " Mag: %7.2f", burst_magnitude);
+            fprintf(tmp, " Mag: %7.2f ", burst_magnitude);
 
         if (d_invert) {
             new_bits_invert = new uint8_t[packet_length+10]; // a little margin here
@@ -318,6 +320,7 @@ namespace gr {
             }
             d_last[i] = current_bit;
             if ((bitcounter % bits_per_word_practice) == (bits_per_word_practice - 1)) {
+                d_receive_buffer.push_back(current_byte);
                 if(d_hexadecimal || d_ascii) {
                     if(just_changed){
                         if (d_fp == NULL) {
@@ -358,6 +361,7 @@ namespace gr {
         }
         if(d_hexadecimal || d_ascii) {
             if (do_afterwards) {
+                d_receive_buffer.push_back(current_byte);
                 if(just_changed){
                     if (d_fp == NULL) {
                         hex_out << boost::format("\033[91;1m%02x..\033[0m") % ((int)current_byte);
@@ -402,6 +406,24 @@ namespace gr {
         if(d_scroll || d_fp != NULL)
             fprintf(tmp, "\n");
         fflush(tmp);
+
+        pmt::pmt_t pdu_meta = pmt::make_dict();
+        pmt::pmt_t pdu_vector = pmt::init_u8vector(d_receive_buffer.size(), d_receive_buffer);
+        if (burst_frequency_mhz != 0)
+            pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("freq"), pmt::from_float(burst_frequency_mhz));
+        if (burst_magnitude != 0)
+            pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("magnitude"), pmt::from_float(burst_magnitude));
+        if (burst_id != -1)
+            pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("id"), pmt::from_uint64(burst_id));
+        if (offset_addressmatch != 0)
+            pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("offset_addressmatch"), pmt::from_uint64(offset_addressmatch));
+        if (burst_sample_rate != 0)
+            pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("sample_rate"), pmt::from_float(burst_sample_rate));
+        if (source_name.compare(""))
+            pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("source_name"), pmt::string_to_symbol(d_name));
+        pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
+        message_port_pub(pmt::mp("formatted_packets"), out_msg);
+
 
         d_cnt++;
     }
