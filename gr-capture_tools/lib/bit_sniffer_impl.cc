@@ -95,6 +95,7 @@ namespace gr {
         uint64_t burst_id = -1;
         uint64_t offset_addressmatch = 0;
         float burst_sample_rate = 0;
+        std::string source_name = "";
         if (pmt::dict_has_key(bit_meta, pmt::mp("freq")))
             burst_frequency_mhz = pmt::to_float(pmt::dict_ref(bit_meta, pmt::mp("freq"), pmt::PMT_NIL));
         if (pmt::dict_has_key(bit_meta, pmt::mp("magnitude")))
@@ -105,6 +106,8 @@ namespace gr {
             offset_addressmatch = pmt::to_uint64(pmt::dict_ref(bit_meta, pmt::mp("offset_addressmatch"), pmt::PMT_NIL));
         if (pmt::dict_has_key(bit_meta, pmt::mp("sample_rate")))
             burst_sample_rate = pmt::to_float(pmt::dict_ref(bit_meta, pmt::mp("sample_rate"), pmt::PMT_NIL));
+        if (pmt::dict_has_key(bit_meta, pmt::mp("source_name")))
+            source_name = pmt::symbol_to_string(pmt::dict_ref(bit_meta, pmt::mp("source_name"), pmt::PMT_NIL));
 
         uint8_t * new_bits_diff = NULL;
         uint8_t * new_bits_invert = NULL;
@@ -238,6 +241,8 @@ namespace gr {
         std::ostringstream hex_out;
         std::ostringstream ascii_out;
 
+        if(source_name.compare(""))
+            fprintf(tmp, " (%s)", source_name.c_str());
         if(d_info) {
             fprintf(tmp, " Freq: %7.3f", burst_frequency_mhz);
             fprintf(tmp, ", Mag: %7.2f", burst_magnitude);
@@ -253,6 +258,8 @@ namespace gr {
             struct tm tm = *localtime(&t);
             fprintf(tmp, ", Time: %04d-%02d-%02d %02d:%02d:%02d ", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
         }
+        else if (d_show_magnitude)
+            fprintf(tmp, " Mag: %7.2f", burst_magnitude);
 
         if (d_invert) {
             new_bits_invert = new uint8_t[packet_length+10]; // a little margin here
@@ -464,6 +471,11 @@ namespace gr {
         void bit_sniffer_impl::set_info(bool val)
         {
             d_info = val;
+        }
+
+        void bit_sniffer_impl::set_show_magnitude(bool val)
+        {
+            d_show_magnitude = val;
         }
 
         void bit_sniffer_impl::set_output(const char *filename)

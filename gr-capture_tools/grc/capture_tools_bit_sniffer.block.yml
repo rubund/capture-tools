@@ -83,6 +83,12 @@ parameters:
     label: bitstuff
     dtype: raw
     default: 'False'
+-   id: show_magnitude
+    label: Show magnitude
+    dtype: bool
+    default: 'False'
+    options: ['True', 'False']
+    option_labels: ['Yes', 'No']
 
 inputs:
 -   domain: message
@@ -97,6 +103,7 @@ templates:
         self.${id}.set_invert(${invert})
         self.${id}.set_diff(${diff})
         self.${id}.set_bitstuff(${bitstuff})
+        self.${id}.set_show_magnitude(${show_magnitude})
     callbacks:
     - self.${id}.set_bitstuff(${bitstuff})
     - self.${id}.set_diff(${diff})
@@ -112,5 +119,6 @@ templates:
     - set_scroll(${scroll})
     - set_invert(${invert})
     - set_info(${info})
+    - set_show_magnitude(${show_magnitude})
 
 file_format: 1

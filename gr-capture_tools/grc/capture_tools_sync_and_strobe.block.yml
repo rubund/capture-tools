@@ -52,6 +52,10 @@ parameters:
     default: 'False'
     options: ['True', 'False']
     option_labels: ['Yes', 'No']
+-   id: name
+    label: 'Name'
+    dtype: string
+    default: ''
 
 inputs:
 -   domain: stream
@@ -86,6 +90,7 @@ templates:
         self.${id}.set_sync_word(${syncword})
         self.${id}.set_preamble_longer(${preamble_longer})
         self.${id}.set_also_match_inverted(${also_match_inverted})
+        self.${id}.set_name(${name})
     callbacks:
     - self.${id}.set_also_match_inverted(${also_match_inverted})
     - self.${id}.set_preamble_longer(${preamble_longer})

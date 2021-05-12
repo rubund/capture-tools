@@ -192,6 +192,12 @@ namespace gr {
         d_decim_in_front = val;
     }
 
+    void
+    sync_and_strobe_impl::set_name(std::string val)
+    {
+        d_name = val;
+    }
+
     int
     sync_and_strobe_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
@@ -399,6 +405,8 @@ namespace gr {
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("sample_rate"), pmt::from_float(d_current_burst_sample_rate));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("magnitude"), pmt::from_float(20*log10(d_mag_at_addressmatch)));
                         pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("address_cnt"), pmt::from_uint64(d_this_address_cnt));
+                        if (d_name.compare(""))
+                            pdu_meta = pmt::dict_add(pdu_meta, pmt::mp("source_name"), pmt::string_to_symbol(d_name));
                         pmt::pmt_t out_msg = pmt::cons(pdu_meta, pdu_vector);
                         message_port_pub(pmt::mp("packets"), out_msg);
 

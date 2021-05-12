@@ -78,6 +78,7 @@ namespace gr {
 		uint64_t d_cnt_at_addressmatch;
         float d_mag_at_addressmatch;
 		float d_current_burst_sample_rate;
+        std::string d_name;
 
         void sps_update();
 
@@ -101,6 +102,7 @@ namespace gr {
       void set_min_swing(float val);
       void set_preamble_longer(int val);
       void set_also_match_inverted(bool val);
+      void set_name(std::string val);
     };
 
   } // namespace capture_tools

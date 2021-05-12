@@ -51,6 +51,7 @@ namespace gr {
         bool d_scroll;
         bool d_invert;
         bool d_info;
+        bool d_show_magnitude;
         FILE *d_fp;
 
      public:
@@ -75,6 +76,7 @@ namespace gr {
         void set_scroll(bool);
         void set_invert(bool);
         void set_info(bool);
+        void set_show_magnitude(bool);
         void set_output(const char *filename);
       void set_diff(bool val);
       void set_bitstuff(bool val);

@@ -66,6 +66,7 @@ namespace gr {
       virtual void set_min_swing(float val)=0;
       virtual void set_preamble_longer(int val)=0;
       virtual void set_also_match_inverted(bool val)=0;
+      virtual void set_name(std::string val)=0;
     };
 
   } // namespace capture_tools

@@ -67,6 +67,7 @@ namespace gr {
         virtual void set_scroll(bool) = 0;
         virtual void set_invert(bool) = 0;
         virtual void set_info(bool) = 0;
+        virtual void set_show_magnitude(bool) = 0;
         virtual void set_output(const char *filename) = 0;
       virtual void set_diff(bool val)=0;
       virtual void set_bitstuff(bool val)=0;
