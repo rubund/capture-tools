@@ -65,6 +65,7 @@ list(APPEND capture_tools_sources
     vector_source_impl.cc
     print_tags_c_impl.cc
     file_sink_store_tags_impl.cc
+    zwave_field_parser_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)

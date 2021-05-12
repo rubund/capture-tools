@@ -47,6 +47,7 @@
 #include "capture_tools/save_iq_for_failed.h"
 #include "capture_tools/print_tags_c.h"
 #include "capture_tools/file_sink_store_tags.h"
+#include "capture_tools/zwave_field_parser.h"
 
 %}
 
@@ -138,3 +139,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, save_iq_for_failed);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, print_tags_c);
 %include "capture_tools/file_sink_store_tags.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, file_sink_store_tags);
+%include "capture_tools/zwave_field_parser.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, zwave_field_parser);

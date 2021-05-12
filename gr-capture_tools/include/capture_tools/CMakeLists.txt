@@ -62,5 +62,6 @@ install(FILES
     vector_source.h
     save_iq_for_failed.h
     print_tags_c.h
-    file_sink_store_tags.h DESTINATION include/capture_tools
+    file_sink_store_tags.h
+    zwave_field_parser.h DESTINATION include/capture_tools
 )
