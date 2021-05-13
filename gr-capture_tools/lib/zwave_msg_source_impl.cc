@@ -66,7 +66,7 @@ namespace gr {
     zwave_msg_source_impl::request_packet(pmt::pmt_t msg)
     {
         std::ostringstream packet_bits_stream;
-        std::string packet_bytes = "5555555555555555555555555555555555555555555555555555555555555555555555f0d66dec2c01410a0e042501ff9c8900000000";
+        std::string packet_bytes = "5555555555555555555555555555555555555555555555555555555555555555555555f0d66dec2c0141040e132501ff56a000000007956eb0ffffff";
         char current_byte_hex[3];
         //current_byte_hex[0] = "0";
         //current_byte_hex[1] = "x";
