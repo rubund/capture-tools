@@ -48,6 +48,7 @@
 #include "capture_tools/print_tags_c.h"
 #include "capture_tools/file_sink_store_tags.h"
 #include "capture_tools/zwave_field_parser.h"
+#include "capture_tools/zwave_msg_source.h"
 
 %}
 
@@ -141,3 +142,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, print_tags_c);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, file_sink_store_tags);
 %include "capture_tools/zwave_field_parser.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, zwave_field_parser);
+%include "capture_tools/zwave_msg_source.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, zwave_msg_source);

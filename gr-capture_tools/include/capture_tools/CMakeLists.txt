@@ -63,5 +63,6 @@ install(FILES
     save_iq_for_failed.h
     print_tags_c.h
     file_sink_store_tags.h
-    zwave_field_parser.h DESTINATION include/capture_tools
+    zwave_field_parser.h
+    zwave_msg_source.h DESTINATION include/capture_tools
 )
