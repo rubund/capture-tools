@@ -55,8 +55,10 @@ namespace gr {
         size_t packet_length = pmt::length(bit_msg);
         const uint8_t * bytes = pmt::u8vector_elements(bit_msg, packet_length);
         std::ostringstream string_out;
-        for(int i=0;i<packet_length;i++)
-          string_out << boost::format("%02x") % ((int)bytes[i]);
+        //for(int i=0;i<packet_length;i++)
+        //  string_out << boost::format("%02x") % ((int)bytes[i]);
+        unsigned int home_id = (bytes[3] << 0) | (bytes[2] << 8) | (bytes[1] << 16) | (bytes[0] << 24);
+        string_out << "Home ID: " << boost::format("%08x") % (home_id);
 
         fprintf(stdout, "Packet received: [%s]\n", string_out.str().c_str());
         fflush(stdout);
