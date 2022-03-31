@@ -49,6 +49,7 @@
 #include "capture_tools/file_sink_store_tags.h"
 #include "capture_tools/zwave_field_parser.h"
 #include "capture_tools/zwave_msg_source.h"
+#include "capture_tools/time_between_tags_cf.h"
 
 %}
 
@@ -144,3 +145,5 @@ GR_SWIG_BLOCK_MAGIC2(capture_tools, file_sink_store_tags);
 GR_SWIG_BLOCK_MAGIC2(capture_tools, zwave_field_parser);
 %include "capture_tools/zwave_msg_source.h"
 GR_SWIG_BLOCK_MAGIC2(capture_tools, zwave_msg_source);
+%include "capture_tools/time_between_tags_cf.h"
+GR_SWIG_BLOCK_MAGIC2(capture_tools, time_between_tags_cf);

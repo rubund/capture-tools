@@ -56,5 +56,6 @@ install(FILES
     capture_tools_print_tags_c.block.yml
     capture_tools_file_sink_store_tags.block.yml
     capture_tools_zwave_field_parser.block.yml
-    capture_tools_zwave_msg_source.block.yml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_zwave_msg_source.block.yml
+    capture_tools_time_between_tags_cf.block.yml DESTINATION share/gnuradio/grc/blocks
 )

@@ -67,6 +67,7 @@ list(APPEND capture_tools_sources
     file_sink_store_tags_impl.cc
     zwave_field_parser_impl.cc
     zwave_msg_source_impl.cc
+    time_between_tags_cf_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)

@@ -64,5 +64,6 @@ install(FILES
     print_tags_c.h
     file_sink_store_tags.h
     zwave_field_parser.h
-    zwave_msg_source.h DESTINATION include/capture_tools
+    zwave_msg_source.h
+    time_between_tags_cf.h DESTINATION include/capture_tools
 )
