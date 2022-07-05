@@ -22,7 +22,7 @@
 #ifndef INCLUDED_CAPTURE_TOOLS_MSG_TO_GFSK_C_H
 #define INCLUDED_CAPTURE_TOOLS_MSG_TO_GFSK_C_H
 
-#include <capture_tools/api.h>
+#include <gnuradio/capture_tools/api.h>
 #include <gnuradio/block.h>
 
 namespace gr {
@@ -40,7 +40,7 @@ namespace gr {
     class CAPTURE_TOOLS_API msg_to_gfsk_c : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<msg_to_gfsk_c> sptr;
+      typedef std::shared_ptr<msg_to_gfsk_c> sptr;
 
       /*!
        * \brief Return a shared_ptr to a new instance of capture_tools::msg_to_gfsk_c.

@@ -21,7 +21,7 @@
 #ifndef INCLUDED_CAPTURE_TOOLS_THRESHOLD_TAG_OTHER_STREAM_CC_IMPL_H
 #define INCLUDED_CAPTURE_TOOLS_THRESHOLD_TAG_OTHER_STREAM_CC_IMPL_H
 
-#include <capture_tools/threshold_tag_other_stream_cc.h>
+#include <gnuradio/capture_tools/threshold_tag_other_stream_cc.h>
 
 namespace gr {
   namespace capture_tools {

@@ -22,7 +22,7 @@
 #ifndef INCLUDED_CAPTURE_TOOLS_THRESHOLD_TAG_OTHER_STREAM_CC_H
 #define INCLUDED_CAPTURE_TOOLS_THRESHOLD_TAG_OTHER_STREAM_CC_H
 
-#include <capture_tools/api.h>
+#include <gnuradio/capture_tools/api.h>
 #include <gnuradio/sync_block.h>
 
 namespace gr {
@@ -39,7 +39,7 @@ namespace gr {
     class CAPTURE_TOOLS_API threshold_tag_other_stream_cc : virtual public gr::sync_block
     {
      public:
-      typedef boost::shared_ptr<threshold_tag_other_stream_cc> sptr;
+      typedef std::shared_ptr<threshold_tag_other_stream_cc> sptr;
 
       /*!
        * \brief Return a shared_ptr to a new instance of capture_tools::threshold_tag_other_stream_cc.

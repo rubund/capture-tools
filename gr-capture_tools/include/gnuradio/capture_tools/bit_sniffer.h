@@ -22,7 +22,7 @@
 #ifndef INCLUDED_CAPTURE_TOOLS_BIT_SNIFFER_H
 #define INCLUDED_CAPTURE_TOOLS_BIT_SNIFFER_H
 
-#include <capture_tools/api.h>
+#include <gnuradio/capture_tools/api.h>
 #include <gnuradio/sync_block.h>
 
 namespace gr {
@@ -43,7 +43,7 @@ namespace gr {
     class CAPTURE_TOOLS_API bit_sniffer : virtual public gr::sync_block
     {
      public:
-      typedef boost::shared_ptr<bit_sniffer> sptr;
+      typedef std::shared_ptr<bit_sniffer> sptr;
 
       /*!
        * \brief Return a shared_ptr to a new instance of capture_tools::bit_sniffer.

@@ -21,7 +21,7 @@
 #ifndef INCLUDED_CAPTURE_TOOLS_ANNOTATED_TO_MSG_F_IMPL_H
 #define INCLUDED_CAPTURE_TOOLS_ANNOTATED_TO_MSG_F_IMPL_H
 
-#include <capture_tools/annotated_to_msg_f.h>
+#include <gnuradio/capture_tools/annotated_to_msg_f.h>
 #include <vector>
 
 namespace gr {

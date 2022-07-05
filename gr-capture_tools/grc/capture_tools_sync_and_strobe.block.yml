@@ -56,6 +56,10 @@ parameters:
     label: 'Name'
     dtype: string
     default: ''
+-   id: min_mag
+    label: 'Minimum magnitude'
+    dtype: float
+    default: '0.0'
 
 inputs:
 -   domain: stream
@@ -77,7 +81,7 @@ outputs:
     optional: true
 
 templates:
-    imports: import capture_tools
+    imports: from gnuradio import capture_tools
     make: |-
         capture_tools.sync_and_strobe(${sps}, ${npreamb})
         self.${id}.set_strobe_offset(${strobe_offset})
@@ -91,6 +95,7 @@ templates:
         self.${id}.set_preamble_longer(${preamble_longer})
         self.${id}.set_also_match_inverted(${also_match_inverted})
         self.${id}.set_name(${name})
+        self.${id}.set_min_mag(${min_mag})
     callbacks:
     - self.${id}.set_also_match_inverted(${also_match_inverted})
     - self.${id}.set_preamble_longer(${preamble_longer})
@@ -103,5 +108,6 @@ templates:
     - self.${id}.set_hysteresis(${hysteresis})
     - self.${id}.set_decim_in_front(${decim_in_front})
     - self.${id}.set_min_swing(${min_swing})
+    - self.${id}.set_min_mag(${min_mag})
 
 file_format: 1

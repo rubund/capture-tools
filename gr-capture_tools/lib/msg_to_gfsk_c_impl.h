@@ -24,7 +24,7 @@
 #include <queue>
 #include <deque>
 #include <vector>
-#include <capture_tools/msg_to_gfsk_c.h>
+#include <gnuradio/capture_tools/msg_to_gfsk_c.h>
 #include <gnuradio/filter/fir_filter.h>
 
 namespace gr {

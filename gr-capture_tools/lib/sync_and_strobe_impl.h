@@ -21,7 +21,7 @@
 #ifndef INCLUDED_CAPTURE_TOOLS_SYNC_AND_STROBE_IMPL_H
 #define INCLUDED_CAPTURE_TOOLS_SYNC_AND_STROBE_IMPL_H
 
-#include <capture_tools/sync_and_strobe.h>
+#include <gnuradio/capture_tools/sync_and_strobe.h>
 
 namespace gr {
   namespace capture_tools {
@@ -67,6 +67,7 @@ namespace gr {
         int d_n_to_catch;
         uint64_t d_address_cnt;
         uint64_t d_this_address_cnt;
+        float d_min_mag;
 
         boost::mutex common_mutex;
 
@@ -103,6 +104,7 @@ namespace gr {
       void set_preamble_longer(int val);
       void set_also_match_inverted(bool val);
       void set_name(std::string val);
+      void set_min_mag(float val);
     };
 
   } // namespace capture_tools

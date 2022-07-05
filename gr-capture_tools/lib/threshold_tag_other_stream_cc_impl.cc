@@ -18,9 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include <gnuradio/io_signature.h>
 #include "threshold_tag_other_stream_cc_impl.h"
@@ -31,8 +28,8 @@ namespace gr {
     threshold_tag_other_stream_cc::sptr
     threshold_tag_other_stream_cc::make(float low_thresh, float high_thresh, int vlen)
     {
-      return gnuradio::get_initial_sptr
-        (new threshold_tag_other_stream_cc_impl(low_thresh, high_thresh, vlen));
+      return gnuradio::make_block_sptr<threshold_tag_other_stream_cc_impl>(
+        low_thresh, high_thresh, vlen);
     }
 
     /*

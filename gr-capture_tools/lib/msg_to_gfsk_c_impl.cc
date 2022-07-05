@@ -18,9 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include <vector>
 #include <cstring>
@@ -35,11 +32,16 @@
 namespace gr {
   namespace capture_tools {
 
+    //#pragma message("set the following appropriately and remove this warning")
+    //using input_type = float;
+    //#pragma message("set the following appropriately and remove this warning")
+    //using output_type = float;
+
     msg_to_gfsk_c::sptr
     msg_to_gfsk_c::make(int samples_per_symbol, float sensitivity, float bt)
     {
-      return gnuradio::get_initial_sptr
-        (new msg_to_gfsk_c_impl(samples_per_symbol, sensitivity, bt));
+      return gnuradio::make_block_sptr<msg_to_gfsk_c_impl>(
+        samples_per_symbol, sensitivity, bt);
     }
 
     /*
@@ -58,7 +60,7 @@ namespace gr {
     {
       srand(time(NULL));
       message_port_register_in(pmt::mp("packet"));
-      set_msg_handler(pmt::mp("packet"),boost::bind(&msg_to_gfsk_c_impl::add_packet_to_queue, this, _1));
+      set_msg_handler(pmt::mp("packet"), [this](pmt::pmt_t msg) { this->add_packet_to_queue(msg);});
       message_port_register_out(pmt::mp("ready"));
 
       d_filt_input = NULL;
@@ -248,16 +250,16 @@ namespace gr {
     {
       const char *in;
       if (ninput_items.size() > 0) {
-        in = (const char *) input_items[0];
+        in = static_cast<const char*>(input_items[0]);
       }
       else {
         in = NULL;
       }
-      gr_complex *out = (gr_complex *) output_items[0];
+      gr_complex *out = static_cast<gr_complex *>(output_items[0]);
 
       float *mod_out;
       if(output_items.size() >= 2)
-        mod_out = (float *) output_items[1];
+        mod_out = static_cast<float *>(output_items[1]);
       else
         mod_out = NULL;
 

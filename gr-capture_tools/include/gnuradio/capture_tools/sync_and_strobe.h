@@ -22,7 +22,7 @@
 #ifndef INCLUDED_CAPTURE_TOOLS_SYNC_AND_STROBE_H
 #define INCLUDED_CAPTURE_TOOLS_SYNC_AND_STROBE_H
 
-#include <capture_tools/api.h>
+#include <gnuradio/capture_tools/api.h>
 #include <gnuradio/sync_block.h>
 
 namespace gr {
@@ -43,7 +43,7 @@ namespace gr {
     class CAPTURE_TOOLS_API sync_and_strobe : virtual public gr::sync_block
     {
      public:
-      typedef boost::shared_ptr<sync_and_strobe> sptr;
+      typedef std::shared_ptr<sync_and_strobe> sptr;
 
       /*!
        * \brief Return a shared_ptr to a new instance of capture_tools::sync_and_strobe.
@@ -67,6 +67,7 @@ namespace gr {
       virtual void set_preamble_longer(int val)=0;
       virtual void set_also_match_inverted(bool val)=0;
       virtual void set_name(std::string val)=0;
+      virtual void set_min_mag(float val)=0;
     };
 
   } // namespace capture_tools

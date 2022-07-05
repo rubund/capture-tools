@@ -18,10 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <gnuradio/io_signature.h>
 #include "sync_and_strobe_impl.h"
 
@@ -31,8 +27,8 @@ namespace gr {
     sync_and_strobe::sptr
     sync_and_strobe::make(float sps, int npreamb)
     {
-      return gnuradio::get_initial_sptr
-        (new sync_and_strobe_impl(sps, npreamb));
+      return gnuradio::make_block_sptr<sync_and_strobe_impl>(
+        sps, npreamb);
     }
 
     /*
@@ -78,6 +74,7 @@ namespace gr {
         d_current_burst_frequency_mhz = 0;
         d_current_burst_magnitude     = 0;
         d_current_burst_id            = 0;
+        d_min_mag = 0;
 		d_current_burst_sample_rate   = 0;
 		d_cnt_since_burst_start       = 0;
         sps_update();
@@ -198,6 +195,12 @@ namespace gr {
         d_name = val;
     }
 
+    void
+    sync_and_strobe_impl::set_min_mag(float val)
+    {
+        d_min_mag = val;
+    }
+
     int
     sync_and_strobe_impl::work(int noutput_items,
         gr_vector_const_void_star &input_items,
@@ -314,7 +317,7 @@ namespace gr {
                 }
                 d_last_crossing_cnt = 0;
 
-                if(d_crossings >= d_npreamb) {
+                if(d_crossings >= d_npreamb && (in_mag == NULL || in_mag[i] > d_min_mag)) {
                     nstate = 1;
                     d_symbol_cnt = 0;
                     d_residue = 0;

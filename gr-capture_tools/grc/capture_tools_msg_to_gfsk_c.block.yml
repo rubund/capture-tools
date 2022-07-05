@@ -95,7 +95,7 @@ outputs:
     optional: true
 
 templates:
-    imports: import capture_tools
+    imports: from gnuradio import capture_tools
     make: |-
         capture_tools.msg_to_gfsk_c(${samples_per_symbol}, ${sensitivity}, ${bt})
         self.${id}.set_rampup_alpha(${rampup_alpha})

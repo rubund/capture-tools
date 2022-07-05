@@ -21,7 +21,7 @@
 #ifndef INCLUDED_CAPTURE_TOOLS_BIT_SNIFFER_IMPL_H
 #define INCLUDED_CAPTURE_TOOLS_BIT_SNIFFER_IMPL_H
 
-#include <capture_tools/bit_sniffer.h>
+#include <gnuradio/capture_tools/bit_sniffer.h>
 
 namespace gr {
   namespace capture_tools {

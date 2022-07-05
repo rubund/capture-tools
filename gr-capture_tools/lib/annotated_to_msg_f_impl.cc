@@ -18,9 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #include <gnuradio/io_signature.h>
 #include "annotated_to_msg_f_impl.h"
@@ -31,8 +28,8 @@ namespace gr {
     annotated_to_msg_f::sptr
     annotated_to_msg_f::make()
     {
-      return gnuradio::get_initial_sptr
-        (new annotated_to_msg_f_impl());
+      return gnuradio::make_block_sptr<annotated_to_msg_f_impl>(
+        );
     }
 
     /*

@@ -100,7 +100,7 @@ outputs:
     optional: true
 
 templates:
-    imports: import capture_tools
+    imports: from gnuradio import capture_tools
     make: |-
         capture_tools.bit_sniffer(${fade_out}, ${hexadecimal}, ${offset}, ${bits_per_word}, ${lsb}, ${parity}, ${ascii}, ${binary}, ${special}, ${scroll})
         self.${id}.set_info(${info})

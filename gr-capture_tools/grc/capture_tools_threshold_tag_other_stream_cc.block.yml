@@ -41,7 +41,7 @@ outputs:
     vlen: ${ vlen }
 
 templates:
-    imports: import capture_tools
+    imports: from gnuradio import capture_tools
     make: |-
         capture_tools.threshold_tag_other_stream_cc(${low_thresh}, ${high_thresh}, ${vlen})
         self.${id}.set_going_high_tag(${going_high_tag})

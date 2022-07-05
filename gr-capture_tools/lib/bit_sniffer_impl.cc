@@ -18,10 +18,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <ctime>
 #include <gnuradio/io_signature.h>
 #include <sstream>
@@ -33,8 +29,8 @@ namespace gr {
     bit_sniffer::sptr
     bit_sniffer::make(int fade_out, bool hexadecimal, int offset, int bits_per_word, bool lsb, bool parity, bool ascii, bool binary, int special, bool scroll)
     {
-      return gnuradio::get_initial_sptr
-        (new bit_sniffer_impl(fade_out, hexadecimal, offset, bits_per_word, lsb, parity, ascii, binary, special, scroll));
+      return gnuradio::make_block_sptr<bit_sniffer_impl>(
+        fade_out, hexadecimal, offset, bits_per_word, lsb, parity, ascii, binary, special, scroll);
     }
 
     /*
@@ -56,7 +52,7 @@ namespace gr {
         d_info = false;
         d_fp = NULL;
         message_port_register_in(pmt::mp("packets"));
-        set_msg_handler(pmt::mp("packets"), boost::bind(&bit_sniffer_impl::handler, this, _1));
+        set_msg_handler(pmt::mp("packets"), [this](pmt::pmt_t msg) { this->handler(msg);});
         message_port_register_out(pmt::mp("formatted_packets"));
     }
 

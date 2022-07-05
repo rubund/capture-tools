@@ -22,7 +22,7 @@
 #ifndef INCLUDED_CAPTURE_TOOLS_ANNOTATED_TO_MSG_F_H
 #define INCLUDED_CAPTURE_TOOLS_ANNOTATED_TO_MSG_F_H
 
-#include <capture_tools/api.h>
+#include <gnuradio/capture_tools/api.h>
 #include <gnuradio/sync_block.h>
 #include <gnuradio/msg_queue.h>
 
@@ -40,7 +40,7 @@ namespace gr {
     class CAPTURE_TOOLS_API annotated_to_msg_f : virtual public gr::sync_block
     {
      public:
-      typedef boost::shared_ptr<annotated_to_msg_f> sptr;
+      typedef std::shared_ptr<annotated_to_msg_f> sptr;
 
       /*!
        * \brief Return a shared_ptr to a new instance of capture_tools::annotated_to_msg_f.
