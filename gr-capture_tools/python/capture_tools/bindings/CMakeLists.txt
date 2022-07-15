@@ -33,7 +33,8 @@ list(APPEND capture_tools_python_files
     threshold_tag_other_stream_cc_python.cc
     sync_and_strobe_python.cc
     bit_sniffer_python.cc
-    annotated_to_msg_f_python.cc python_bindings.cc)
+    annotated_to_msg_f_python.cc
+    sync_two_streams_on_tag_python.cc python_bindings.cc)
 
 GR_PYBIND_MAKE_OOT(capture_tools
    ../../..

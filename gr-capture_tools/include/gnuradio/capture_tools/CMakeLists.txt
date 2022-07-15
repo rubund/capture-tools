@@ -15,5 +15,6 @@ install(FILES
     threshold_tag_other_stream_cc.h
     sync_and_strobe.h
     bit_sniffer.h
-    annotated_to_msg_f.h DESTINATION include/gnuradio/capture_tools
+    annotated_to_msg_f.h
+    sync_two_streams_on_tag.h DESTINATION include/gnuradio/capture_tools
 )

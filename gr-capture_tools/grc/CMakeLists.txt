@@ -11,5 +11,6 @@ install(FILES
     capture_tools_threshold_tag_other_stream_cc.block.yml
     capture_tools_sync_and_strobe.block.yml
     capture_tools_bit_sniffer.block.yml
-    capture_tools_annotated_to_msg_f.block.yml DESTINATION share/gnuradio/grc/blocks
+    capture_tools_annotated_to_msg_f.block.yml
+    capture_tools_sync_two_streams_on_tag.block.yml DESTINATION share/gnuradio/grc/blocks
 )

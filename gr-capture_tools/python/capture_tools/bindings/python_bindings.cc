@@ -26,6 +26,7 @@ namespace py = pybind11;
     void bind_sync_and_strobe(py::module& m);
     void bind_bit_sniffer(py::module& m);
     void bind_annotated_to_msg_f(py::module& m);
+    void bind_sync_two_streams_on_tag(py::module& m);
 // ) END BINDING_FUNCTION_PROTOTYPES
 
 
@@ -59,5 +60,6 @@ PYBIND11_MODULE(capture_tools_python, m)
     bind_sync_and_strobe(m);
     bind_bit_sniffer(m);
     bind_annotated_to_msg_f(m);
+    bind_sync_two_streams_on_tag(m);
     // ) END BINDING_FUNCTION_CALLS
 }

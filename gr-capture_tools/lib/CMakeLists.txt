@@ -17,6 +17,7 @@ list(APPEND capture_tools_sources
     sync_and_strobe_impl.cc
     bit_sniffer_impl.cc
     annotated_to_msg_f_impl.cc
+    sync_two_streams_on_tag_impl.cc
 )
 
 set(capture_tools_sources "${capture_tools_sources}" PARENT_SCOPE)
