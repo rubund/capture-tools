@@ -45,6 +45,7 @@ namespace gr {
         d_vlen = vlen;
         d_going_high_tag = pmt::intern("going_high");
         d_going_low_tag = pmt::intern("going_low");
+        set_tag_propagation_policy(TPP_CUSTOM);
     }
 
     /*
@@ -113,6 +114,13 @@ namespace gr {
           }
         }
       }
+
+      std::vector<tag_t> tags;
+      get_tags_in_range(tags, 0, nitems_read(0), nitems_read(0) + noutput_items);
+      for(int i=0;i<tags.size();i++) {
+        add_item_tag(0, tags[i].offset, tags[i].key, tags[i].value, tags[i].srcid);
+      }
+
       memcpy(out, in, sizeof(gr_complex)*d_vlen*noutput_items);
 
       // Tell runtime system how many output items we produced.
